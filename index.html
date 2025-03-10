@@ -570,7 +570,7 @@
             </div>
 
             <!-- MCP-MTender-Server Project -->
-            <div class="project-card">
+            <div class="project-card" id="yoda-digital/mcp-mtender-server" data-repo-owner="yoda-digital" data-repo-name="mcp-mtender-server">
                 <div class="project-header">
                     <i class="fas fa-file-contract project-icon"></i>
                     <div data-lang="ro">
@@ -677,11 +677,11 @@
                         <!-- You can dynamically fetch stars/forks info from GitHub using an API approach if you want. For static site, put placeholders or real data. -->
                         <div class="github-stat">
                             <i class="fas fa-star"></i>
-                            <span>1</span>
+                            <span class="stat-stars">0</span>
                         </div>
                         <div class="github-stat">
                             <i class="fas fa-code-branch"></i>
-                            <span>1</span>
+                            <span class="stat-forks">0</span>
                         </div>
                     </div>
                     <a href="https://github.com/yoda-digital/mcp-mtender-server" target="_blank" class="btn">
@@ -830,6 +830,34 @@
                 document.querySelectorAll(`[data-lang="${selectedLang}"]`).forEach(el => {
                     el.style.display = 'block';
                 });
+            });
+        });
+
+        async function fetchGitHubStats(repoOwner, repoName, cardElement) {
+            const url = `https://api.github.com/repos/${repoOwner}/${repoName}`;
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("GitHub API request failed");
+
+                const data = await response.json();
+                
+                // Update the card with fetched data
+                cardElement.querySelector(".stat-stars").innerText = data.stargazers_count;
+                cardElement.querySelector(".stat-forks").innerText = data.forks_count;
+            } catch (error) {
+                console.error(`Failed to fetch GitHub stats for ${repoOwner}/${repoName}:`, error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".project-card").forEach(card => {
+                const repoOwner = card.getAttribute("data-repo-owner");
+                const repoName = card.getAttribute("data-repo-name");
+
+                if (repoOwner && repoName) {
+                    fetchGitHubStats(repoOwner, repoName, card);
+                }
             });
         });
     </script>
