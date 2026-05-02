@@ -65,3 +65,20 @@ export async function loadCatalog(): Promise<Catalog | null> {
     return null;
   }
 }
+
+// README sources, loaded eagerly as raw strings via Vite's `?raw` query.
+const readmeModules = import.meta.glob<string>("./readmes/*.md", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+});
+
+const readmesBySlug: Record<string, string> = {};
+for (const [path, content] of Object.entries(readmeModules)) {
+  const slug = path.replace(/^\.\/readmes\//, "").replace(/\.md$/, "");
+  readmesBySlug[slug] = content;
+}
+
+export function readmeFor(slug: string): string | null {
+  return readmesBySlug[slug] ?? null;
+}

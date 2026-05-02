@@ -127,6 +127,12 @@ const softwareSourceCode = {
         {t(locale, "cta.install")} →
       </a>
       <a
+        href={absoluteUrl(locale, `/docs/${repo.slug}/readme/`)}
+        class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] no-underline text-[var(--color-ink)]"
+      >
+        {t(locale, "cta.readDocs")}
+      </a>
+      <a
         href={`https://github.com/${repo.owner}/${repo.repo}`}
         class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] no-underline text-[var(--color-ink)]"
       >

@@ -1,0 +1,159 @@
+---
+import ProjectCard from "~/components/ProjectCard.astro";
+import { type PillarSlug, pillarFor, pillars } from "~/data/pillars";
+import { type Locale, repos } from "~/data/repos";
+import { absoluteUrl, localizedPath, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+interface Props {
+  locale: Locale;
+  pillar: PillarSlug;
+}
+const { locale, pillar } = Astro.props;
+const cfg = pillarFor(pillar);
+const copy = cfg.copy[locale];
+
+const reposBySlug = Object.fromEntries(repos.map((r) => [r.slug, r]));
+const projects = cfg.projectSlugs.map((slug) => reposBySlug[slug]).filter((r) => r !== undefined);
+
+const breadcrumb = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t(locale, "site.title"),
+      item: absoluteUrl(locale, "/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: copy.h1,
+      item: absoluteUrl(locale, `/${cfg.slug}/`),
+    },
+  ],
+};
+
+const article = {
+  "@type": "Article",
+  headline: copy.h1,
+  description: copy.lead,
+  inLanguage: locale === "ro" ? "ro-MD" : locale === "ru" ? "ru-RU" : "en-US",
+  url: absoluteUrl(locale, `/${cfg.slug}/`),
+  author: { "@type": "Organization", name: "Yoda Digital", url: "https://yoda.digital" },
+  publisher: { "@type": "Organization", name: "Yoda Digital", url: "https://yoda.digital" },
+};
+
+const itemList = {
+  "@type": "ItemList",
+  itemListElement: projects.map((repo, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: repo.slug,
+    url: absoluteUrl(locale, `/projects/${repo.slug}/`),
+    description: repo.positioning[locale].productAngle,
+  })),
+};
+---
+
+<BaseLayout
+  locale={locale}
+  pathname={`/${cfg.slug}/`}
+  title={`${copy.h1} | ${t(locale, "site.title")}`}
+  description={copy.lead.slice(0, 200)}
+  ogType="article"
+  jsonLd={[breadcrumb, article, itemList]}
+>
+  <article>
+    <header
+      class="relative overflow-hidden border-b border-[var(--color-line)]"
+    >
+      <div
+        class="absolute inset-0 pointer-events-none"
+        style="background:
+          radial-gradient(700px circle at 0% 0%, rgba(175,149,104,0.08), transparent 60%),
+          radial-gradient(700px circle at 100% 100%, rgba(79,105,149,0.08), transparent 60%);"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="relative max-w-4xl mx-auto px-4 py-16 md:py-24">
+        <p class="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--color-accent)] mb-5 flex items-center gap-3">
+          <span class="inline-block w-8 h-px bg-[var(--color-accent)]" aria-hidden="true"></span>
+          {copy.eyebrow}
+        </p>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] mb-6 tracking-tight">
+          {copy.h1}
+        </h1>
+        <p class="text-lg md:text-xl text-[var(--color-muted)] leading-relaxed max-w-3xl">
+          {copy.lead}
+        </p>
+      </div>
+    </header>
+
+    <section class="max-w-6xl mx-auto px-4 py-16">
+      <h2 class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-accent)] mb-6">
+        {t(locale, "section.relatedProjects")}
+      </h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {projects.map((repo) => <ProjectCard locale={locale} repo={repo} />)}
+      </div>
+    </section>
+
+    <section class="max-w-3xl mx-auto px-4 pb-16">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-8">
+        {locale === "ro" ? "De ce contează" : locale === "ru" ? "Почему это важно" : "Why this matters"}
+      </h2>
+      <div class="space-y-5 text-[var(--color-ink)] leading-relaxed">
+        {copy.whyMatters.map((para) => <p>{para}</p>)}
+      </div>
+    </section>
+
+    <section class="max-w-3xl mx-auto px-4 pb-16">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-8">
+        {locale === "ro" ? "Cum începi" : locale === "ru" ? "Как начать" : "How to start"}
+      </h2>
+      <ol class="space-y-4 text-[var(--color-ink)]">
+        {copy.howToStart.map((s, i) => (
+          <li class="flex gap-4">
+            <span class="font-mono text-[var(--color-accent)] shrink-0">{String(i + 1).padStart(2, "0")}</span>
+            <div class="leading-relaxed">
+              <Fragment set:html={s.step.replace(/`([^`]+)`/g, '<code class="font-mono text-[var(--color-accent)] text-sm bg-[var(--color-surface)] px-1.5 py-0.5 rounded border border-[var(--color-line)]">$1</code>')} />
+              {s.cta && (
+                <a
+                  href={s.cta.href}
+                  class="inline-block mt-2 text-sm text-[var(--color-accent)] hover:underline"
+                >
+                  {s.cta.label} →
+                </a>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="max-w-3xl mx-auto px-4 pb-16">
+      <p class="text-[var(--color-muted)] leading-relaxed italic">
+        {copy.closing}
+      </p>
+    </section>
+
+    {cfg.relatedPillars.length > 0 && (
+      <section class="max-w-6xl mx-auto px-4 pb-16">
+        <h2 class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-accent)] mb-4">
+          {locale === "ro" ? "Vezi și" : locale === "ru" ? "См. также" : "See also"}
+        </h2>
+        <div class="flex flex-wrap gap-3">
+          {cfg.relatedPillars.map((p) => (
+            <a
+              href={localizedPath(locale, `/${pillars[p].slug}/`)}
+              class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] no-underline text-[var(--color-ink)] text-sm"
+            >
+              {pillars[p].copy[locale].h1}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>
