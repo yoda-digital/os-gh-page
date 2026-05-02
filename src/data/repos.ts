@@ -339,14 +339,15 @@ export const repos: RepoEntry[] = [
     slug: "mycelium",
     owner: "yoda-digital",
     repo: "mycelium",
-    packageName: null,
-    packageScope: null,
-    binName: null,
+    packageName: "@yoda.digital/mycelium",
+    packageScope: "@yoda.digital",
+    binName: "mycelium-peer",
     category: "agent-infrastructure",
     priority: 88,
     hasMcpServer: true,
     hasCli: false,
     hasDocker: false,
+    mcpSpecVersion: "2025-11-25",
     positioning: {
       ro: {
         productAngle:
