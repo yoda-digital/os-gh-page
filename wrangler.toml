@@ -1,15 +1,12 @@
 # Cloudflare Pages config for opensource.yoda.digital
 #
-# Bindings (KV namespace WEBHOOK_KV, R2 bucket BUILD_CACHE) are managed
-# from the CF dashboard:
-#   Pages → opensource-portal → Settings → Functions → Bindings
+# Bindings here override anything set via the dashboard. CF Pages locks
+# dashboard binding management whenever wrangler.toml exists.
 #
-# Reason: wrangler.toml requires concrete namespace/bucket IDs at deploy
-# time. Before those resources exist in your account, the dashboard route
-# is the cleaner path. Once IDs exist, you can move them back into this
-# file (uncomment the blocks below and fill in the IDs).
+# Required env vars (set via Pages dashboard → Settings → Environment
+# variables, OR via `wrangler pages secret put NAME --project-name
+# yoda-opensource`):
 #
-# Required env vars (also set via Pages → Settings → Environment variables):
 #   GITHUB_TOKEN            — fine-grained PAT for the prebuild scripts
 #   GITHUB_WEBHOOK_SECRET   — shared secret with the GitHub App
 #   CF_PAGES_DEPLOY_HOOK    — Pages deploy hook URL (production branch)
@@ -20,11 +17,21 @@ name = "yoda-opensource"
 compatibility_date = "2026-04-01"
 pages_build_output_dir = "dist"
 
-# [[kv_namespaces]]
-# binding = "WEBHOOK_KV"
-# id = "<your KV namespace id>"
-# preview_id = "<your KV preview namespace id>"
+[[kv_namespaces]]
+binding = "WEBHOOK_KV"
+id = "b63f20c0e9554b5798134c4a2260e2b8"
+preview_id = "86646c342db04ed4b86c1487bb348945"
 
+# R2 build cache is intentionally NOT bound. It would serve as a fallback
+# for last-good GitHub/npm responses when those APIs are unreachable mid-
+# build. Until R2 is enabled on the account (paid opt-in via dashboard),
+# the prebuild scripts use src/generated/<dir>/<slug>.json snapshots as a
+# local cache instead. To enable later:
+#   1. Dashboard → R2 → Enable, add payment method.
+#   2. wrangler r2 bucket create yoda-os-build-cache
+#   3. wrangler r2 bucket create yoda-os-build-cache-preview
+#   4. Uncomment + push:
+#
 # [[r2_buckets]]
 # binding = "BUILD_CACHE"
 # bucket_name = "yoda-os-build-cache"
