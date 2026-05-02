@@ -1,9 +1,9 @@
 ---
-import type { Locale } from "~/data/repos";
 import JsonLd from "~/components/JsonLd.astro";
 import LangSwitcher from "~/components/LangSwitcher.astro";
 import SeoHead from "~/components/SeoHead.astro";
-import { htmlLang, localizedPath, t, SITE_URL } from "~/i18n/ui";
+import type { Locale } from "~/data/repos";
+import { SITE_URL, htmlLang, localizedPath, t } from "~/i18n/ui";
 import "~/styles/global.css";
 
 interface Props {
@@ -32,10 +32,7 @@ const orgJsonLd = {
   "@type": "Organization",
   name: "Yoda Digital",
   url: "https://yoda.digital",
-  sameAs: [
-    "https://github.com/yoda-digital",
-    "https://github.com/nalyk",
-  ],
+  sameAs: ["https://github.com/yoda-digital", "https://github.com/nalyk"],
 };
 
 const websiteJsonLd = {

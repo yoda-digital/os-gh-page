@@ -3,8 +3,7 @@ import type { Locale } from "~/data/repos";
 export const ui: Record<Locale, Record<string, string>> = {
   ro: {
     "site.title": "Yoda Digital Open Source",
-    "site.tagline":
-      "Infrastructură open-source pentru operațiuni native AI.",
+    "site.tagline": "Infrastructură open-source pentru operațiuni native AI.",
     "site.description":
       "Servere MCP, CLI-uri, inteligență de achiziții publice, automatizare SEO și coordonare agentică criptată — construite de Yoda Digital pentru oamenii care vor ca mașinile să facă munca reală.",
     "nav.projects": "Proiecte",
@@ -66,8 +65,7 @@ export const ui: Record<Locale, Record<string, string>> = {
   },
   ru: {
     "site.title": "Yoda Digital Open Source",
-    "site.tagline":
-      "Open-source инфраструктура для AI-native операций.",
+    "site.tagline": "Open-source инфраструктура для AI-native операций.",
     "site.description":
       "MCP-серверы, CLI-системы, аналитика госзакупок, автоматизация SEO и шифрованная координация агентов — от Yoda Digital для тех, кто хочет, чтобы машины делали реальную работу.",
     "nav.projects": "Проекты",

@@ -55,8 +55,7 @@ export const repos: RepoEntry[] = [
     mcpSpecVersion: "2025-11-25",
     positioning: {
       ro: {
-        productAngle:
-          "Server MCP pentru GitLab cu 86 de unelte — control complet din agenții AI.",
+        productAngle: "Server MCP pentru GitLab cu 86 de unelte — control complet din agenții AI.",
         audience: "Echipe DevOps, ingineri platform, automatizatori AI.",
         valueProps: [
           "86 de unelte GitLab într-un singur server MCP",
@@ -66,8 +65,7 @@ export const repos: RepoEntry[] = [
         ],
       },
       en: {
-        productAngle:
-          "GitLab MCP server with 86 tools — full GitLab control from any AI agent.",
+        productAngle: "GitLab MCP server with 86 tools — full GitLab control from any AI agent.",
         audience: "DevOps teams, platform engineers, AI automators.",
         valueProps: [
           "86 GitLab tools in one MCP server",
@@ -77,8 +75,7 @@ export const repos: RepoEntry[] = [
         ],
       },
       ru: {
-        productAngle:
-          "MCP-сервер для GitLab с 86 инструментами — полный контроль через AI-агенты.",
+        productAngle: "MCP-сервер для GitLab с 86 инструментами — полный контроль через AI-агенты.",
         audience: "DevOps-команды, платформенные инженеры, AI-автоматизаторы.",
         valueProps: [
           "86 инструментов GitLab в одном MCP-сервере",
@@ -178,8 +175,7 @@ export const repos: RepoEntry[] = [
       ro: {
         productAngle:
           "CLI complet pentru Google Analytics 4 + server MCP — automatizare GA4 pentru oameni și agenți.",
-        audience:
-          "Specialiști SEO, ingineri de date, autori AI care raportează din GA4.",
+        audience: "Specialiști SEO, ingineri de date, autori AI care raportează din GA4.",
         valueProps: [
           "Data API + Admin API",
           "Autentificare OAuth sau Service Account",
@@ -201,8 +197,7 @@ export const repos: RepoEntry[] = [
       ru: {
         productAngle:
           "Полнофункциональный CLI для Google Analytics 4 + MCP-сервер — production-автоматизация GA4 для людей и агентов.",
-        audience:
-          "SEO-специалисты, дата-инженеры, AI-авторы, работающие с GA4.",
+        audience: "SEO-специалисты, дата-инженеры, AI-авторы, работающие с GA4.",
         valueProps: [
           "Покрытие Data API + Admin API",
           "Аутентификация через OAuth или Service Account",
@@ -261,8 +256,7 @@ export const repos: RepoEntry[] = [
       ru: {
         productAngle:
           "CLI senior-уровня для Google Search Console + Indexing API — production-рабочие потоки SEO.",
-        audience:
-          "Технические SEO-операторы, контент-инженеры, AI SEO-агенты.",
+        audience: "Технические SEO-операторы, контент-инженеры, AI SEO-агенты.",
         valueProps: [
           "Search Analytics с авто-пагинацией за пределами лимита 25k",
           "Batch URL Inspection + сравнение период-к-периоду",
@@ -299,8 +293,7 @@ export const repos: RepoEntry[] = [
       ro: {
         productAngle:
           "Server MCP pentru MTender — date OCDS 1.1.5 din achizițiile publice ale Moldovei, citite de agenți.",
-        audience:
-          "Analiști achiziții, jurnaliști de investigație, instituții de control.",
+        audience: "Analiști achiziții, jurnaliști de investigație, instituții de control.",
         valueProps: [
           "17 unelte: căutare tendere, contracte, planuri, bugete; agregări pe cumpărător/furnizor",
           "8 prompts curate: audit furnizor, investigație single-bid, pipeline overview",
@@ -311,8 +304,7 @@ export const repos: RepoEntry[] = [
       en: {
         productAngle:
           "MCP server for MTender — Moldova's OCDS 1.1.5 public-procurement data, agent-readable.",
-        audience:
-          "Procurement analysts, investigative journalists, oversight bodies.",
+        audience: "Procurement analysts, investigative journalists, oversight bodies.",
         valueProps: [
           "17 tools: search tenders, contracts, plans, budgets; aggregate by buyer/supplier",
           "8 curated prompts: supplier audit, single-bid investigation, pipeline overview",
@@ -323,8 +315,7 @@ export const repos: RepoEntry[] = [
       ru: {
         productAngle:
           "MCP-сервер для MTender — данные госзакупок Молдовы (OCDS 1.1.5), доступные агентам.",
-        audience:
-          "Аналитики закупок, журналисты-расследователи, надзорные органы.",
+        audience: "Аналитики закупок, журналисты-расследователи, надзорные органы.",
         valueProps: [
           "17 инструментов: поиск тендеров, контрактов, планов, бюджетов; агрегация по покупателю/поставщику",
           "8 готовых промптов: аудит поставщика, расследование single-bid, обзор пайплайна",
@@ -372,8 +363,7 @@ export const repos: RepoEntry[] = [
       en: {
         productAngle:
           "End-to-end encrypted messaging between Claude Code instances — secure agent-to-agent coordination.",
-        audience:
-          "Teams orchestrating multiple AI instances, agent-infrastructure engineers.",
+        audience: "Teams orchestrating multiple AI instances, agent-infrastructure engineers.",
         valueProps: [
           "Curve25519 ephemeral keys — forward secrecy",
           "Ed25519 identity pinning (TOFU + STS)",

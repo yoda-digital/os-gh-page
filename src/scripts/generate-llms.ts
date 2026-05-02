@@ -10,7 +10,7 @@
 
 import { resolve } from "node:path";
 import { repos } from "~/data/repos";
-import { installCommandFor, SITE_URL } from "~/i18n/ui";
+import { SITE_URL, installCommandFor } from "~/i18n/ui";
 import { GENERATED_DIR, PUBLIC_DIR, readJson, writeText } from "./lib/fs";
 import { log } from "./lib/log";
 import type { GithubRepoSnapshot, McpToolSnapshot, NpmPackageSnapshot } from "./types";
@@ -23,12 +23,8 @@ interface Bundle {
 
 async function loadBundle(slug: string, isMcp: boolean): Promise<Bundle> {
   return {
-    gh: await readJson<GithubRepoSnapshot>(
-      resolve(GENERATED_DIR, "github", `${slug}.json`),
-    ),
-    npm: await readJson<NpmPackageSnapshot>(
-      resolve(GENERATED_DIR, "npm", `${slug}.json`),
-    ),
+    gh: await readJson<GithubRepoSnapshot>(resolve(GENERATED_DIR, "github", `${slug}.json`)),
+    npm: await readJson<NpmPackageSnapshot>(resolve(GENERATED_DIR, "npm", `${slug}.json`)),
     mcp: isMcp
       ? await readJson<McpToolSnapshot>(resolve(GENERATED_DIR, "tools", `${slug}.json`))
       : null,
@@ -51,7 +47,9 @@ function renderIndex(bundles: Map<string, Bundle>): string {
     lines.push(`- [${repo.slug}](${SITE_URL}/projects/${repo.slug}/)${versionTag}: ${angle}`);
   }
   lines.push("", "## Machine-readable", "");
-  lines.push(`- [catalog.json](${SITE_URL}/catalog.json): full project catalog with install commands, versions, MCP tool counts.`);
+  lines.push(
+    `- [catalog.json](${SITE_URL}/catalog.json): full project catalog with install commands, versions, MCP tool counts.`,
+  );
   lines.push(`- [mcp-catalog.json](${SITE_URL}/mcp-catalog.json): MCP-only subset.`);
   lines.push(`- [llms-full.txt](${SITE_URL}/llms-full.txt): concatenated project descriptions.`);
   return `${lines.join("\n")}\n`;
@@ -89,7 +87,10 @@ function renderFull(bundles: Map<string, Bundle>): string {
     for (const v of positioning.valueProps) lines.push(`- ${v}`);
 
     if (b?.mcp && b.mcp.toolCount > 0) {
-      lines.push("", `MCP: ${b.mcp.toolCount} tools, ${b.mcp.promptCount} prompts, ${b.mcp.resourceCount} resources.`);
+      lines.push(
+        "",
+        `MCP: ${b.mcp.toolCount} tools, ${b.mcp.promptCount} prompts, ${b.mcp.resourceCount} resources.`,
+      );
     }
 
     sections.push(lines.join("\n"));

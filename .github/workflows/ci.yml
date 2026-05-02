@@ -1,0 +1,100 @@
+name: CI
+
+# Validates every PR and every push to main. Three gates:
+#   1. Type / Astro check (astro check + tsc --noEmit)
+#   2. Lint (Biome)
+#   3. Build (runs the prebuild pipeline against live GitHub + npm, then
+#      `astro build`). Requires GITHUB_TOKEN to comfortably stay under the
+#      anonymous 60 req/h limit on busy days; the workflow's built-in token
+#      is enough.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Type & Astro check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+
+  lint:
+    name: Lint (Biome)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  build:
+    name: Build (prebuild + astro)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [check, lint]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Verify expected artifacts shipped
+        run: |
+          set -euo pipefail
+          for path in \
+            dist/index.html \
+            dist/en/index.html \
+            dist/ru/index.html \
+            dist/projects/index.html \
+            dist/projects/gsccli/index.html \
+            dist/sitemap-index.xml \
+            dist/catalog.json \
+            dist/mcp-catalog.json \
+            dist/llms.txt \
+            dist/robots.txt \
+            dist/og/default.svg \
+            dist/_routes.json \
+            dist/_worker.js/index.js \
+            dist/rss-ro.xml \
+            dist/rss-en.xml \
+            dist/rss-ru.xml
+          do
+            if [ ! -e "$path" ]; then
+              echo "::error file=$path::missing expected build artifact"
+              exit 1
+            fi
+          done
+          echo "all expected artifacts present"
+      - name: Upload build artifacts
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ github.run_id }}
+          path: dist/
+          retention-days: 7

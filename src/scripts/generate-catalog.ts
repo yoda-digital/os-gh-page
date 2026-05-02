@@ -8,7 +8,7 @@
 
 import { resolve } from "node:path";
 import { repos } from "~/data/repos";
-import { categoryLabels, installCommandFor, SITE_URL } from "~/i18n/ui";
+import { SITE_URL, categoryLabels, installCommandFor } from "~/i18n/ui";
 import { GENERATED_DIR, PUBLIC_DIR, readJson, writeJson } from "./lib/fs";
 import { log } from "./lib/log";
 import type {
@@ -36,9 +36,7 @@ export async function generateCatalog(): Promise<Catalog> {
       resolve(GENERATED_DIR, "npm", `${repo.slug}.json`),
     );
     const mcp = repo.hasMcpServer
-      ? await readJson<McpToolSnapshot>(
-          resolve(GENERATED_DIR, "tools", `${repo.slug}.json`),
-        )
+      ? await readJson<McpToolSnapshot>(resolve(GENERATED_DIR, "tools", `${repo.slug}.json`))
       : null;
 
     const topics = gh?.topics ?? [];

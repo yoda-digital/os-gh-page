@@ -33,7 +33,10 @@ function findSection(markdown: string, names: readonly string[]): string | null 
     if (headerMatch) {
       const [, hashes, title] = headerMatch;
       const level = hashes.length;
-      const norm = title.toLowerCase().replace(/[^a-z\s]/g, "").trim();
+      const norm = title
+        .toLowerCase()
+        .replace(/[^a-z\s]/g, "")
+        .trim();
       if (!inSection) {
         if (names.some((n) => norm === n || norm.startsWith(`${n} `))) {
           inSection = true;
@@ -132,9 +135,7 @@ async function extractOne(slug: string): Promise<McpToolSnapshot> {
   const prompts = parseEntities(findSection(markdown, SECTION_NAMES.prompts));
   const resources = parseResources(findSection(markdown, SECTION_NAMES.resources));
 
-  const strategy: McpToolSnapshot["strategy"] = tools.length
-    ? "readme-table"
-    : "fallback-empty";
+  const strategy: McpToolSnapshot["strategy"] = tools.length ? "readme-table" : "fallback-empty";
 
   const snapshot: McpToolSnapshot = {
     slug,
@@ -148,7 +149,9 @@ async function extractOne(slug: string): Promise<McpToolSnapshot> {
   };
 
   await writeJson(resolve(GENERATED_DIR, "tools", `${slug}.json`), snapshot);
-  log.ok(`mcp ${slug}: ${tools.length} tools, ${prompts.length} prompts, ${resources.length} resources`);
+  log.ok(
+    `mcp ${slug}: ${tools.length} tools, ${prompts.length} prompts, ${resources.length} resources`,
+  );
   return snapshot;
 }
 

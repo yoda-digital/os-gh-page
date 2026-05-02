@@ -45,10 +45,9 @@ interface RestRelease {
 }
 
 async function fetchRepo(owner: string, repo: string): Promise<RestRepo> {
-  const res = await fetchWithRetry(
-    `https://api.github.com/repos/${owner}/${repo}`,
-    { headers: githubHeaders() },
-  );
+  const res = await fetchWithRetry(`https://api.github.com/repos/${owner}/${repo}`, {
+    headers: githubHeaders(),
+  });
   if (!res.ok) throw new Error(`repo ${owner}/${repo}: HTTP ${res.status}`);
   return (await res.json()) as RestRepo;
 }
@@ -66,10 +65,7 @@ async function fetchLatestCommit(
   return (await res.json()) as RestCommit;
 }
 
-async function fetchLatestRelease(
-  owner: string,
-  repo: string,
-): Promise<RestRelease | null> {
+async function fetchLatestRelease(owner: string, repo: string): Promise<RestRelease | null> {
   const res = await fetchWithRetry(
     `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
     { headers: githubHeaders() },
@@ -78,11 +74,7 @@ async function fetchLatestRelease(
   return (await res.json()) as RestRelease;
 }
 
-async function fetchReadme(
-  owner: string,
-  repo: string,
-  branch: string,
-): Promise<string | null> {
+async function fetchReadme(owner: string, repo: string, branch: string): Promise<string | null> {
   const candidates = ["README.md", "README.MD", "Readme.md", "readme.md"];
   for (const name of candidates) {
     const res = await fetchWithRetry(
@@ -94,11 +86,7 @@ async function fetchReadme(
   return null;
 }
 
-async function snapshotOne(
-  slug: string,
-  owner: string,
-  repo: string,
-): Promise<GithubRepoSnapshot> {
+async function snapshotOne(slug: string, owner: string, repo: string): Promise<GithubRepoSnapshot> {
   const cachePath = resolve(GENERATED_DIR, "github", `${slug}.json`);
   const readmePath = resolve(GENERATED_DIR, "readmes", `${slug}.md`);
   const cached = await readJson<GithubRepoSnapshot>(cachePath);
@@ -119,9 +107,7 @@ async function snapshotOne(
       homepage: r.homepage,
       topics: r.topics ?? [],
       defaultBranch: r.default_branch,
-      license: r.license
-        ? { spdxId: r.license.spdx_id, name: r.license.name }
-        : null,
+      license: r.license ? { spdxId: r.license.spdx_id, name: r.license.name } : null,
       language: r.language,
       stars: r.stargazers_count,
       forks: r.forks_count,
@@ -150,7 +136,9 @@ async function snapshotOne(
 
     await writeJson(cachePath, snapshot);
     if (readme) await writeText(readmePath, readme);
-    log.ok(`github ${slug}: ★${snapshot.stars} ⑂${snapshot.forks}${snapshot.latestRelease ? ` rel=${snapshot.latestRelease.tag}` : ""}`);
+    log.ok(
+      `github ${slug}: ★${snapshot.stars} ⑂${snapshot.forks}${snapshot.latestRelease ? ` rel=${snapshot.latestRelease.tag}` : ""}`,
+    );
     return snapshot;
   } catch (err) {
     if (cached) {
@@ -159,7 +147,9 @@ async function snapshotOne(
         source: "cache",
       };
       await writeJson(cachePath, fallback);
-      log.warn(`github ${slug}: live fetch failed (${(err as Error).message}); using cache from ${cached.fetchedAt}`);
+      log.warn(
+        `github ${slug}: live fetch failed (${(err as Error).message}); using cache from ${cached.fetchedAt}`,
+      );
       return fallback;
     }
     throw new Error(`github ${slug}: ${(err as Error).message} (no cache fallback)`);
@@ -167,7 +157,9 @@ async function snapshotOne(
 }
 
 export async function collectGithub(): Promise<GithubRepoSnapshot[]> {
-  log.info(`github: fetching ${repos.length} repos${process.env.GITHUB_TOKEN ? " (authenticated)" : " (anonymous)"}`);
+  log.info(
+    `github: fetching ${repos.length} repos${process.env.GITHUB_TOKEN ? " (authenticated)" : " (anonymous)"}`,
+  );
   const snapshots: GithubRepoSnapshot[] = [];
   for (const r of repos) {
     snapshots.push(await snapshotOne(r.slug, r.owner, r.repo));

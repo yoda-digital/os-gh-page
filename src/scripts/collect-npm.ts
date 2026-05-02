@@ -44,10 +44,7 @@ function normalizeBin(
   return bin;
 }
 
-async function snapshotOne(
-  slug: string,
-  packageName: string | null,
-): Promise<NpmPackageSnapshot> {
+async function snapshotOne(slug: string, packageName: string | null): Promise<NpmPackageSnapshot> {
   const cachePath = resolve(GENERATED_DIR, "npm", `${slug}.json`);
   const cached = await readJson<NpmPackageSnapshot>(cachePath);
 
@@ -80,7 +77,7 @@ async function snapshotOne(
     const latest = doc["dist-tags"]?.latest ?? null;
     const versions = doc.versions ? Object.keys(doc.versions) : [];
     const latestVersion = latest && doc.versions ? doc.versions[latest] : null;
-    const publishedAt = latest && doc.time ? doc.time[latest] ?? null : null;
+    const publishedAt = latest && doc.time ? (doc.time[latest] ?? null) : null;
 
     const snapshot: NpmPackageSnapshot = {
       slug,
@@ -98,7 +95,9 @@ async function snapshotOne(
     };
 
     await writeJson(cachePath, snapshot);
-    log.ok(`npm ${slug}: v${snapshot.latestVersion} (${snapshot.versionCount} versions${snapshot.hasProvenance ? ", provenance ✓" : ""})`);
+    log.ok(
+      `npm ${slug}: v${snapshot.latestVersion} (${snapshot.versionCount} versions${snapshot.hasProvenance ? ", provenance ✓" : ""})`,
+    );
     return snapshot;
   } catch (err) {
     if (cached) {

@@ -12,10 +12,7 @@ export interface FetchOptions {
   attempts?: number;
 }
 
-async function fetchOnce(
-  url: string,
-  opts: FetchOptions,
-): Promise<Response> {
+async function fetchOnce(url: string, opts: FetchOptions): Promise<Response> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), opts.timeoutMs ?? DEFAULT_TIMEOUT_MS);
   try {
@@ -25,10 +22,7 @@ async function fetchOnce(
   }
 }
 
-export async function fetchWithRetry(
-  url: string,
-  opts: FetchOptions = {},
-): Promise<Response> {
+export async function fetchWithRetry(url: string, opts: FetchOptions = {}): Promise<Response> {
   const attempts = Math.max(1, opts.attempts ?? 2);
   let lastErr: unknown;
   for (let i = 0; i < attempts; i++) {
@@ -37,20 +31,17 @@ export async function fetchWithRetry(
       if (res.status >= 500 && i < attempts - 1) {
         lastErr = new Error(`HTTP ${res.status}`);
         await new Promise((r) => setTimeout(r, 500 * (i + 1)));
-        continue;
+      } else {
+        return res;
       }
-      return res;
     } catch (err) {
       lastErr = err;
       if (i < attempts - 1) {
         await new Promise((r) => setTimeout(r, 500 * (i + 1)));
-        continue;
       }
     }
   }
-  throw lastErr instanceof Error
-    ? lastErr
-    : new Error(`fetch failed for ${url}`);
+  throw lastErr instanceof Error ? lastErr : new Error(`fetch failed for ${url}`);
 }
 
 export function githubHeaders(): Record<string, string> {

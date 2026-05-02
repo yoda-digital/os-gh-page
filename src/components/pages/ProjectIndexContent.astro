@@ -1,8 +1,8 @@
 ---
-import BaseLayout from "~/layouts/BaseLayout.astro";
 import ProjectCard from "~/components/ProjectCard.astro";
 import { type Locale, repos } from "~/data/repos";
 import { absoluteUrl, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
 
 interface Props {
   locale: Locale;
@@ -24,8 +24,18 @@ const collection = {
 const breadcrumb = {
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: t(locale, "site.title"), item: absoluteUrl(locale, "/") },
-    { "@type": "ListItem", position: 2, name: t(locale, "nav.projects"), item: absoluteUrl(locale, "/projects/") },
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t(locale, "site.title"),
+      item: absoluteUrl(locale, "/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: t(locale, "nav.projects"),
+      item: absoluteUrl(locale, "/projects/"),
+    },
   ],
 };
 ---

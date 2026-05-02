@@ -51,9 +51,7 @@ async function verifySignature(
     ["sign"],
   );
   const mac = await crypto.subtle.sign("HMAC", key, enc.encode(raw));
-  const hex = [...new Uint8Array(mac)]
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+  const hex = [...new Uint8Array(mac)].map((b) => b.toString(16).padStart(2, "0")).join("");
   const expected = `sha256=${hex}`;
   if (expected.length !== signature.length) return false;
   let diff = 0;
@@ -120,10 +118,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   );
   locals.runtime.ctx.waitUntil(fire);
 
-  return Response.json(
-    { ok: true, event, delivery, repo: fullName },
-    { status: 202 },
-  );
+  return Response.json({ ok: true, event, delivery, repo: fullName }, { status: 202 });
 };
 
 export const GET: APIRoute = () =>
