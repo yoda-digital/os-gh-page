@@ -1,0 +1,97 @@
+---
+import McpClientConfig from "~/components/McpClientConfig.astro";
+import RepoMetrics from "~/components/RepoMetrics.astro";
+import type { Locale, RepoEntry } from "~/data/repos";
+import { absoluteUrl, categoryLabels, installCommandFor, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+interface Props {
+  locale: Locale;
+  repo: RepoEntry;
+}
+const { locale, repo } = Astro.props;
+const positioning = repo.positioning[locale];
+const installCmd = installCommandFor(repo);
+
+const breadcrumb = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t(locale, "site.title"),
+      item: absoluteUrl(locale, "/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: repo.slug,
+      item: absoluteUrl(locale, `/projects/${repo.slug}/`),
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: t(locale, "page.install.title"),
+      item: absoluteUrl(locale, `/install/${repo.slug}/`),
+    },
+  ],
+};
+
+const article = {
+  "@type": "Article",
+  headline: `Install ${repo.slug}`,
+  inLanguage: locale === "ro" ? "ro-MD" : locale === "ru" ? "ru-RU" : "en-US",
+  url: absoluteUrl(locale, `/install/${repo.slug}/`),
+  about: { "@type": "SoftwareApplication", name: repo.slug },
+  author: { "@type": "Organization", name: "Yoda Digital", url: "https://yoda.digital" },
+};
+---
+
+<BaseLayout
+  locale={locale}
+  pathname={`/install/${repo.slug}/`}
+  title={`${t(locale, "page.install.title")} ${repo.slug}`}
+  description={`${t(locale, "page.install.intro")} — ${repo.slug}: ${installCmd}`}
+  ogType="article"
+  jsonLd={[breadcrumb, article]}
+>
+  <article class="max-w-4xl mx-auto px-4 py-16">
+    <p class="font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-accent)] mb-3">
+      {categoryLabels[locale][repo.category]} · {t(locale, "page.install.title")}
+    </p>
+    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">{repo.slug}</h1>
+    <p class="text-xl text-[var(--color-muted)] leading-relaxed mb-8 max-w-2xl">
+      {positioning.productAngle}
+    </p>
+
+    <div class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] p-5 mb-8">
+      <RepoMetrics locale={locale} repo={repo} variant="page" />
+    </div>
+
+    <div class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] p-5 mb-10">
+      <div class="text-xs uppercase tracking-wide text-[var(--color-muted)] mb-2">
+        {t(locale, "tab.shell")}
+      </div>
+      <code class="font-mono text-[var(--color-accent)] text-sm md:text-base block">
+        {installCmd}
+      </code>
+    </div>
+
+    <McpClientConfig locale={locale} repo={repo} />
+
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a
+        href={absoluteUrl(locale, `/projects/${repo.slug}/`)}
+        class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] no-underline text-[var(--color-ink)]"
+      >
+        ← {repo.slug}
+      </a>
+      <a
+        href={`https://github.com/${repo.owner}/${repo.repo}`}
+        class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] no-underline text-[var(--color-ink)]"
+      >
+        {t(locale, "cta.viewOnGithub")}
+      </a>
+    </div>
+  </article>
+</BaseLayout>

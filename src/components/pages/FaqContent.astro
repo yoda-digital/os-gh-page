@@ -1,0 +1,133 @@
+---
+import type { Locale } from "~/data/repos";
+import { absoluteUrl, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
+const faqs: Record<Locale, FaqItem[]> = {
+  ro: [
+    {
+      q: "Cu ce sunt diferite proiectele Yoda Digital față de alte servere MCP?",
+      a: "Toate proiectele sunt construite pentru utilizare reală în producție: server MCP-ul GitLab acoperă 86 de unelte, ANSC și MTender expun date civice oficiale ale Moldovei, gacli/gsccli oferă fluxuri SEO complete, mycelium adaugă mesagerie criptată între instanțe Claude Code. Nimic decorativ.",
+    },
+    {
+      q: "Cum se actualizează acest site?",
+      a: "Fiecare commit pe oricare din cele 6 depozite trimite un webhook GitHub spre o funcție Cloudflare Pages, care declanșează un build complet. Există și un cron de rezervă la fiecare 6 ore în caz de webhook ratat.",
+    },
+    {
+      q: "Pot folosi datele pe propriul agent AI?",
+      a: "Da. /catalog.json și /mcp-catalog.json sunt manifeste machine-readable, /llms.txt este un index curat pentru LLM-uri, iar fiecare pagină conține JSON-LD complet (SoftwareApplication, SoftwareSourceCode, BreadcrumbList).",
+    },
+    {
+      q: "Sunt proiectele open-source cu adevărat?",
+      a: "Da. Cele mai multe sunt MIT (mtender este ISC). Fiecare pagină de proiect afișează licența reală extrasă din depozit la build-time.",
+    },
+    {
+      q: "Unde raportez probleme sau cer un proiect nou?",
+      a: "Issues pe depozitul corespunzător din github.com/yoda-digital sau github.com/nalyk. Pull request-urile sunt binevenite — vezi CONTRIBUTING.md în fiecare repo.",
+    },
+  ],
+  en: [
+    {
+      q: "How are Yoda Digital's projects different from other MCP servers?",
+      a: "Every project is built for real production use: the GitLab MCP server covers 86 tools, ANSC and MTender expose Moldova's official civic data, gacli/gsccli ship full SEO workflows, mycelium adds encrypted messaging between Claude Code instances. No decorative work.",
+    },
+    {
+      q: "How does this site stay up to date?",
+      a: "Every commit on any of the six tracked repos posts a webhook to a Cloudflare Pages Function, which fires a fresh build. A 6-hour cron is the safety net for any missed delivery.",
+    },
+    {
+      q: "Can I consume this data from my own AI agent?",
+      a: "Yes. /catalog.json and /mcp-catalog.json are machine-readable manifests, /llms.txt is a curated LLM index, and every page emits full JSON-LD (SoftwareApplication, SoftwareSourceCode, BreadcrumbList).",
+    },
+    {
+      q: "Are these projects really open source?",
+      a: "Yes. Most are MIT (mtender is ISC). Each project page displays the real license fetched from the repo at build time.",
+    },
+    {
+      q: "Where do I report issues or request a project?",
+      a: "Open an issue on the relevant repo at github.com/yoda-digital or github.com/nalyk. Pull requests welcome — see CONTRIBUTING.md in each repo.",
+    },
+  ],
+  ru: [
+    {
+      q: "Чем проекты Yoda Digital отличаются от других MCP-серверов?",
+      a: "Все проекты сделаны для реального использования в продакшене: GitLab MCP-сервер покрывает 86 инструментов, ANSC и MTender открывают официальные гражданские данные Молдовы, gacli/gsccli дают полные SEO-потоки, mycelium добавляет шифрованную связь между экземплярами Claude Code. Ничего декоративного.",
+    },
+    {
+      q: "Как этот сайт остаётся актуальным?",
+      a: "Каждый коммит в один из 6 отслеживаемых репозиториев отправляет webhook в Cloudflare Pages Function, которая запускает свежую сборку. Шестичасовой cron — страховка на случай пропуска webhook.",
+    },
+    {
+      q: "Можно ли потреблять эти данные из собственного AI-агента?",
+      a: "Да. /catalog.json и /mcp-catalog.json — машиночитаемые манифесты, /llms.txt — курируемый индекс для LLM, каждая страница содержит полный JSON-LD (SoftwareApplication, SoftwareSourceCode, BreadcrumbList).",
+    },
+    {
+      q: "Эти проекты действительно open source?",
+      a: "Да. Большинство под MIT (mtender — ISC). Каждая страница проекта показывает реальную лицензию, прочитанную из репозитория во время сборки.",
+    },
+    {
+      q: "Куда сообщать о проблемах или просить новый проект?",
+      a: "Откройте issue в соответствующем репозитории на github.com/yoda-digital или github.com/nalyk. Pull request приветствуются — см. CONTRIBUTING.md в каждом repo.",
+    },
+  ],
+};
+
+const faqJsonLd = {
+  "@type": "FAQPage",
+  mainEntity: faqs[locale].map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const breadcrumb = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t(locale, "site.title"),
+      item: absoluteUrl(locale, "/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: t(locale, "page.faq.title"),
+      item: absoluteUrl(locale, "/faq/"),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  locale={locale}
+  pathname="/faq/"
+  title={t(locale, "page.faq.title")}
+  description={faqs[locale][0].a}
+  jsonLd={[breadcrumb, faqJsonLd]}
+>
+  <section class="max-w-3xl mx-auto px-4 py-16">
+    <h1 class="text-4xl md:text-5xl font-bold mb-10">{t(locale, "page.faq.title")}</h1>
+    <dl class="space-y-8">
+      {
+        faqs[locale].map((f) => (
+          <div>
+            <dt class="text-xl font-semibold text-[var(--color-ink)] mb-2">{f.q}</dt>
+            <dd class="text-[var(--color-muted)] leading-relaxed">{f.a}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import RepoMetrics from "~/components/RepoMetrics.astro";
+import type { Locale, RepoEntry } from "~/data/repos";
+import { categoryLabels, installCommandFor, localizedPath, t } from "~/i18n/ui";
+
+interface Props {
+  locale: Locale;
+  repo: RepoEntry;
+}
+const { locale, repo } = Astro.props;
+const angle = repo.positioning[locale].productAngle;
+const installCmd = installCommandFor(repo);
+---
+
+<a
+  href={localizedPath(locale, `/projects/${repo.slug}/`)}
+  class="group block rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] p-5 no-underline transition-all hover:border-[var(--color-accent)] hover:-translate-y-0.5"
+>
+  <div class="flex items-baseline justify-between gap-3 mb-3">
+    <h3 class="font-mono text-[var(--color-ink)] text-lg font-semibold">{repo.slug}</h3>
+    <span class="text-xs text-[var(--color-muted)] uppercase tracking-wide">
+      {categoryLabels[locale][repo.category]}
+    </span>
+  </div>
+  <p class="text-[var(--color-muted)] text-sm leading-relaxed mb-4">{angle}</p>
+  <RepoMetrics locale={locale} repo={repo} variant="card" />
+  <div class="mt-4 flex items-center justify-between text-xs text-[var(--color-muted)]">
+    <code class="font-mono text-[var(--color-accent)] truncate">{installCmd}</code>
+    <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[var(--color-cool)]">
+      →
+    </span>
+  </div>
+  {
+    !repo.packageName && (
+      <div class="mt-2 text-[10px] uppercase tracking-wider text-[var(--color-accent)]">
+        {t(locale, "label.unpublished")}
+      </div>
+    )
+  }
+</a>

@@ -1,0 +1,50 @@
+---
+import type { Category, Locale } from "~/data/repos";
+import { reposByCategory } from "~/data/repos";
+import { categoryLabels, localizedPath, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+
+const categories: Category[] = [
+  "ai-devtools-mcp",
+  "moldova-public-procurement",
+  "seo-analytics",
+  "agent-infrastructure",
+];
+---
+
+<BaseLayout
+  locale={locale}
+  pathname="/categories/"
+  title={`${t(locale, "nav.categories")} — ${t(locale, "site.title")}`}
+  description={t(locale, "page.category.intro")}
+>
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <h1 class="text-4xl md:text-5xl font-bold mb-3">{t(locale, "nav.categories")}</h1>
+    <p class="text-[var(--color-muted)] max-w-2xl mb-10">{t(locale, "page.category.intro")}</p>
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        categories.map((cat) => {
+          const items = reposByCategory(cat);
+          return (
+            <a
+              href={localizedPath(locale, `/categories/${cat}/`)}
+              class="block rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] p-6 no-underline hover:border-[var(--color-accent)]"
+            >
+              <div class="text-xs uppercase tracking-wide text-[var(--color-accent)] mb-2">
+                {categoryLabels[locale][cat]}
+              </div>
+              <ul class="text-sm text-[var(--color-muted)] space-y-1">
+                {items.map((r) => <li>· {r.slug}</li>)}
+              </ul>
+            </a>
+          );
+        })
+      }
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,12 @@
+---
+import DocsReadmeContent from "~/components/pages/DocsReadmeContent.astro";
+import { repos } from "~/data/repos";
+
+export async function getStaticPaths() {
+  return repos.map((repo) => ({ params: { slug: repo.slug }, props: { repo } }));
+}
+
+const { repo } = Astro.props;
+---
+
+<DocsReadmeContent locale="ru" repo={repo} />

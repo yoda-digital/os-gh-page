@@ -1,0 +1,35 @@
+name: Refresh portal (cron fallback)
+
+# GitHub webhooks are not retried automatically. This cron fires the Cloudflare
+# Pages Deploy Hook every 6 hours (jittered) so any missed webhook still results
+# in an updated portal within a known bound. Manual run via workflow_dispatch.
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: refresh-portal
+  cancel-in-progress: false
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fire deploy hook
+        env:
+          DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_PAGES_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "::error::CLOUDFLARE_PAGES_DEPLOY_HOOK secret is not set"
+            exit 1
+          fi
+          status=$(curl -fsS -o /tmp/body -w '%{http_code}' -X POST "$DEPLOY_HOOK")
+          echo "deploy hook responded HTTP $status"
+          cat /tmp/body || true
+          test "$status" -ge 200 && test "$status" -lt 300

@@ -1,0 +1,12 @@
+---
+import InstallPageContent from "~/components/pages/InstallPageContent.astro";
+import { repos } from "~/data/repos";
+
+export async function getStaticPaths() {
+  return repos.map((repo) => ({ params: { slug: repo.slug }, props: { repo } }));
+}
+
+const { repo } = Astro.props;
+---
+
+<InstallPageContent locale="en" repo={repo} />

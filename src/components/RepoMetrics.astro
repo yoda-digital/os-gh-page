@@ -1,0 +1,59 @@
+---
+import type { Locale, RepoEntry } from "~/data/repos";
+import { githubFor, mcpFor, npmFor } from "~/generated";
+import { t } from "~/i18n/ui";
+
+interface Props {
+  locale: Locale;
+  repo: RepoEntry;
+  variant?: "card" | "page";
+}
+const { locale, repo, variant = "card" } = Astro.props;
+
+const gh = githubFor(repo.slug);
+const npm = npmFor(repo.slug);
+const mcp = repo.hasMcpServer ? mcpFor(repo.slug) : null;
+
+const metrics: Array<{ label: string; value: string }> = [];
+if (gh) {
+  metrics.push({ label: t(locale, "label.stars"), value: String(gh.stars) });
+  metrics.push({ label: t(locale, "label.forks"), value: String(gh.forks) });
+}
+if (npm?.latestVersion) {
+  metrics.push({ label: t(locale, "label.version"), value: `v${npm.latestVersion}` });
+}
+const license = npm?.license ?? gh?.license?.spdxId ?? gh?.license?.name;
+if (license) {
+  metrics.push({ label: t(locale, "label.license"), value: license });
+}
+if (mcp && mcp.toolCount > 0) {
+  metrics.push({ label: t(locale, "label.tools"), value: String(mcp.toolCount) });
+}
+if (gh?.latestCommit && variant === "page") {
+  const date = new Date(gh.latestCommit.date);
+  metrics.push({
+    label: t(locale, "label.lastUpdated"),
+    value: date.toISOString().slice(0, 10),
+  });
+}
+---
+
+{
+  metrics.length > 0 && (
+    <dl class:list={[
+      "grid gap-x-6 gap-y-2 text-xs",
+      variant === "card"
+        ? "grid-cols-3"
+        : "grid-cols-2 sm:grid-cols-3 md:grid-cols-6",
+    ]}>
+      {metrics.map((m) => (
+        <div class="flex flex-col">
+          <dt class="text-[var(--color-muted)] uppercase tracking-wide text-[10px]">
+            {m.label}
+          </dt>
+          <dd class="font-mono text-[var(--color-ink)] mt-0.5">{m.value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}

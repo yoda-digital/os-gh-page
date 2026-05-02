@@ -1,0 +1,75 @@
+---
+import type { Locale } from "~/data/repos";
+import { absoluteUrl, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+
+const copy: Record<Locale, { lead: string; body: string[]; sig: string }> = {
+  ro: {
+    lead: "Yoda Digital construiește infrastructură open-source pentru operațiuni native AI.",
+    body: [
+      "Acest portal unifică șase proiecte care rezolvă probleme reale: control GitLab pentru agenți AI, inteligență de achiziții publice pentru Moldova, automatizare GA4 / Search Console și mesagerie criptată între instanțe Claude Code.",
+      "Tot ce vezi aici este derivat din depozitele sursă. Adăugarea unui proiect nou înseamnă o singură intrare în manifest — restul site-ului se reconstruiește automat din date GitHub și npm.",
+      "Dacă vrei să citezi un proiect, să-l integrezi într-un agent sau să raportezi o problemă: linkurile spre depozite, npm și CONTRIBUTING.md sunt pe fiecare pagină.",
+    ],
+    sig: "Construit de Ion Calmîș · Yoda Digital",
+  },
+  en: {
+    lead: "Yoda Digital builds open-source infrastructure for AI-native operations.",
+    body: [
+      "This portal unifies six projects that solve real problems: GitLab control for AI agents, public-procurement intelligence for Moldova, GA4 / Search Console automation, and encrypted messaging between Claude Code instances.",
+      "Everything you see here is derived from the source repositories. Adding a new project is one manifest entry — the rest of the site rebuilds itself from GitHub + npm data.",
+      "If you want to cite a project, integrate it into an agent, or report an issue: links to the repos, npm packages and CONTRIBUTING.md are on every page.",
+    ],
+    sig: "Built by Ion Calmîș · Yoda Digital",
+  },
+  ru: {
+    lead: "Yoda Digital создаёт open-source инфраструктуру для AI-native операций.",
+    body: [
+      "Портал объединяет шесть проектов, решающих реальные задачи: управление GitLab для AI-агентов, аналитика госзакупок Молдовы, автоматизация GA4 / Search Console и шифрованная связь между экземплярами Claude Code.",
+      "Всё, что вы видите, выводится из исходных репозиториев. Добавить новый проект — одна запись в манифесте, всё остальное собирается автоматически из данных GitHub и npm.",
+      "Если хотите процитировать проект, встроить его в агента или сообщить о проблеме — ссылки на репозитории, npm и CONTRIBUTING.md есть на каждой странице.",
+    ],
+    sig: "Сделано Ion Calmîș · Yoda Digital",
+  },
+};
+
+const breadcrumb = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t(locale, "site.title"),
+      item: absoluteUrl(locale, "/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: t(locale, "page.about.title"),
+      item: absoluteUrl(locale, "/about/"),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  locale={locale}
+  pathname="/about/"
+  title={t(locale, "page.about.title")}
+  description={copy[locale].lead}
+  jsonLd={[breadcrumb]}
+>
+  <section class="max-w-3xl mx-auto px-4 py-16">
+    <h1 class="text-4xl md:text-5xl font-bold mb-6">{t(locale, "page.about.title")}</h1>
+    <p class="text-xl text-[var(--color-muted)] leading-relaxed mb-8">{copy[locale].lead}</p>
+    <div class="space-y-5 text-[var(--color-ink)] leading-relaxed">
+      {copy[locale].body.map((p) => <p>{p}</p>)}
+    </div>
+    <p class="mt-12 text-sm text-[var(--color-muted)] font-mono">{copy[locale].sig}</p>
+  </section>
+</BaseLayout>

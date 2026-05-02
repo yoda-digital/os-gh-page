@@ -1,0 +1,153 @@
+---
+import RepoMetrics from "~/components/RepoMetrics.astro";
+import type { Locale, RepoEntry } from "~/data/repos";
+import { mcpFor, npmFor } from "~/generated";
+import { absoluteUrl, categoryLabels, installCommandFor, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+interface Props {
+  locale: Locale;
+  repo: RepoEntry;
+}
+const { locale, repo } = Astro.props;
+const positioning = repo.positioning[locale];
+const installCmd = installCommandFor(repo);
+const npm = npmFor(repo.slug);
+const mcp = repo.hasMcpServer ? mcpFor(repo.slug) : null;
+
+const breadcrumb = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t(locale, "site.title"),
+      item: absoluteUrl(locale, "/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: t(locale, "nav.projects"),
+      item: absoluteUrl(locale, "/projects/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: repo.slug,
+      item: absoluteUrl(locale, `/projects/${repo.slug}/`),
+    },
+  ],
+};
+
+const softwareApplication = {
+  "@type": "SoftwareApplication",
+  name: repo.slug,
+  description: positioning.productAngle,
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Cross-platform",
+  url: absoluteUrl(locale, `/projects/${repo.slug}/`),
+  codeRepository: `https://github.com/${repo.owner}/${repo.repo}`,
+  ...(repo.packageName && { downloadUrl: `https://www.npmjs.com/package/${repo.packageName}` }),
+  ...(repo.mcpSpecVersion && {
+    additionalProperty: [
+      { "@type": "PropertyValue", name: "mcp:specVersion", value: repo.mcpSpecVersion },
+      { "@type": "PropertyValue", name: "mcp:transports", value: "stdio,http" },
+      ...(mcp
+        ? [
+            { "@type": "PropertyValue", name: "mcp:tools", value: String(mcp.toolCount) },
+            { "@type": "PropertyValue", name: "mcp:prompts", value: String(mcp.promptCount) },
+            { "@type": "PropertyValue", name: "mcp:resources", value: String(mcp.resourceCount) },
+          ]
+        : []),
+    ],
+  }),
+  ...(npm?.latestVersion && { softwareVersion: npm.latestVersion }),
+  publisher: { "@type": "Organization", name: "Yoda Digital", url: "https://yoda.digital" },
+};
+
+const softwareSourceCode = {
+  "@type": "SoftwareSourceCode",
+  name: repo.slug,
+  codeRepository: `https://github.com/${repo.owner}/${repo.repo}`,
+  programmingLanguage: "TypeScript",
+  url: absoluteUrl(locale, `/projects/${repo.slug}/`),
+};
+---
+
+<BaseLayout
+  locale={locale}
+  pathname={`/projects/${repo.slug}/`}
+  title={`${repo.slug} — ${positioning.productAngle.split(".")[0]}`}
+  description={positioning.productAngle}
+  jsonLd={[breadcrumb, softwareApplication, softwareSourceCode]}
+>
+  <article class="max-w-4xl mx-auto px-4 py-16">
+    <p class="font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-accent)] mb-3">
+      {categoryLabels[locale][repo.category]}
+    </p>
+    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">{repo.slug}</h1>
+    <p class="text-xl text-[var(--color-muted)] leading-relaxed mb-8 max-w-2xl">
+      {positioning.productAngle}
+    </p>
+
+    <div class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] p-5 mb-8">
+      <RepoMetrics locale={locale} repo={repo} variant="page" />
+    </div>
+
+    <div class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] p-5 mb-8">
+      <div class="text-xs uppercase tracking-wide text-[var(--color-muted)] mb-2">
+        {t(locale, "cta.install")}
+      </div>
+      <code class="font-mono text-[var(--color-accent)] text-sm md:text-base block">
+        {installCmd}
+      </code>
+    </div>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-semibold mb-4">{t(locale, "section.audience")}</h2>
+      <p class="text-[var(--color-muted)] leading-relaxed">{positioning.audience}</p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-2xl font-semibold mb-4">{t(locale, "section.capabilities")}</h2>
+      <ul class="space-y-2 text-[var(--color-ink)]">
+        {positioning.valueProps.map((vp) => (
+          <li class="flex gap-3">
+            <span class="text-[var(--color-accent)]">▸</span><span>{vp}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="flex flex-wrap gap-3">
+      <a
+        href={absoluteUrl(locale, `/install/${repo.slug}/`)}
+        class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-accent)] bg-[var(--color-accent)]/10 hover:bg-[var(--color-accent)]/20 no-underline text-[var(--color-accent)] font-semibold"
+      >
+        {t(locale, "cta.install")} →
+      </a>
+      <a
+        href={absoluteUrl(locale, `/docs/${repo.slug}/readme/`)}
+        class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] no-underline text-[var(--color-ink)]"
+      >
+        {t(locale, "cta.readDocs")}
+      </a>
+      <a
+        href={`https://github.com/${repo.owner}/${repo.repo}`}
+        class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] no-underline text-[var(--color-ink)]"
+      >
+        {t(locale, "cta.viewOnGithub")}
+      </a>
+      {
+        repo.packageName && (
+          <a
+            href={`https://www.npmjs.com/package/${repo.packageName}`}
+            class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] no-underline text-[var(--color-ink)]"
+          >
+            {t(locale, "cta.viewOnNpm")}
+          </a>
+        )
+      }
+    </section>
+  </article>
+</BaseLayout>
