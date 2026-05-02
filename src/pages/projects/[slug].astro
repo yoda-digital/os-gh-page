@@ -1,0 +1,12 @@
+---
+import ProjectPageContent from "~/components/pages/ProjectPageContent.astro";
+import { repos } from "~/data/repos";
+
+export async function getStaticPaths() {
+  return repos.map((repo) => ({ params: { slug: repo.slug }, props: { repo } }));
+}
+
+const { repo } = Astro.props;
+---
+
+<ProjectPageContent locale="ro" repo={repo} />

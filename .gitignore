@@ -1,0 +1,38 @@
+# Build output
+dist/
+.astro/
+
+# Generated data (rebuilt every build)
+src/generated/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Cloudflare
+.wrangler/
+
+# Coverage
+coverage/
+
+# Local tooling
+.serena/

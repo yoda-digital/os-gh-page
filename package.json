@@ -1,0 +1,43 @@
+{
+  "name": "opensource-portal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "opensource.yoda.digital — open-source command center for the Yoda Digital ecosystem.",
+  "homepage": "https://opensource.yoda.digital",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/yoda-digital/os-gh-page.git"
+  },
+  "license": "MIT",
+  "author": "Yoda Digital",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check && tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format --write ."
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.5.0",
+    "@astrojs/mdx": "^4.2.0",
+    "@astrojs/react": "^4.2.0",
+    "@astrojs/sitemap": "^3.3.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "astro": "^5.7.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.1.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@biomejs/biome": "^1.9.4",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.9.3"
+  }
+}
