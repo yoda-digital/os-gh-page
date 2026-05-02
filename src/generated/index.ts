@@ -12,7 +12,6 @@
  */
 
 import type {
-  Catalog,
   GithubRepoSnapshot,
   McpToolSnapshot,
   NpmPackageSnapshot,
@@ -55,15 +54,6 @@ export function npmFor(slug: string): NpmPackageSnapshot | null {
 
 export function mcpFor(slug: string): McpToolSnapshot | null {
   return toolsBySlug[slug] ?? null;
-}
-
-export async function loadCatalog(): Promise<Catalog | null> {
-  try {
-    const mod = (await import("./catalog.json")) as unknown as { default: Catalog };
-    return mod.default;
-  } catch {
-    return null;
-  }
 }
 
 // README sources, loaded eagerly as raw strings via Vite's `?raw` query.
