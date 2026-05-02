@@ -1,7 +1,18 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "files": {
-    "ignore": ["dist", ".astro", "src/generated", "node_modules", "public/og"]
+    "ignore": [
+      "dist",
+      ".astro",
+      "src/generated",
+      "node_modules",
+      "public/og",
+      "public/brand",
+      "public/catalog.json",
+      "public/mcp-catalog.json",
+      "public/llms.txt",
+      "public/llms-full.txt"
+    ]
   },
   "formatter": {
     "enabled": true,

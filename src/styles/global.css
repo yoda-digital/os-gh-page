@@ -25,7 +25,10 @@
 
 @layer base {
   :root {
-    color-scheme: dark light;
+    /* Pinned to dark — every component token resolves to a dark-mode color.
+       A scheme-aware token system (light counterparts wired everywhere) is
+       Phase 7 work; until then, light-mode would leave most text invisible. */
+    color-scheme: dark;
   }
 
   html {
@@ -35,13 +38,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-  }
-
-  @media (prefers-color-scheme: light) {
-    html {
-      background: var(--color-bg-light);
-      color: var(--color-ink-light);
-    }
   }
 
   body {

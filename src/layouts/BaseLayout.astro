@@ -76,9 +76,23 @@ if (jsonLd) {
   <body class="min-h-dvh flex flex-col">
     <header class="border-b border-[var(--color-line)] bg-[var(--color-bg)]/90 backdrop-blur sticky top-0 z-10">
       <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-        <a href={localizedPath(locale, "/")} class="font-mono font-semibold text-[var(--color-ink)] no-underline">
-          <span class="text-[var(--color-accent)]">yoda</span>.digital
-          <span class="text-[var(--color-muted)] ml-2 text-sm">/ open source</span>
+        <a
+          href={localizedPath(locale, "/")}
+          class="flex items-center gap-3 font-mono font-semibold text-[var(--color-ink)] no-underline"
+        >
+          <img
+            src="/brand/yoda_opensource_logo_white.svg"
+            alt=""
+            width="32"
+            height="32"
+            class="block w-8 h-8 shrink-0"
+            loading="eager"
+            decoding="async"
+          />
+          <span class="leading-none">
+            <span class="text-[var(--color-accent)]">yoda</span>.digital
+            <span class="text-[var(--color-muted)] ml-2 text-sm">/ open source</span>
+          </span>
         </a>
         <nav class="hidden md:flex gap-6 text-sm">
           <a href={localizedPath(locale, "/projects/")}>{t(locale, "nav.projects")}</a>
