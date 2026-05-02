@@ -1,5 +1,6 @@
 ---
 import type { Locale, RepoEntry } from "~/data/repos";
+import RepoMetrics from "~/components/RepoMetrics.astro";
 import { categoryLabels, installCommandFor, localizedPath, t } from "~/i18n/ui";
 
 interface Props {
@@ -22,7 +23,8 @@ const installCmd = installCommandFor(repo);
     </span>
   </div>
   <p class="text-[var(--color-muted)] text-sm leading-relaxed mb-4">{angle}</p>
-  <div class="flex items-center justify-between text-xs text-[var(--color-muted)]">
+  <RepoMetrics locale={locale} repo={repo} variant="card" />
+  <div class="mt-4 flex items-center justify-between text-xs text-[var(--color-muted)]">
     <code class="font-mono text-[var(--color-accent)] truncate">{installCmd}</code>
     <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[var(--color-cool)]">
       →

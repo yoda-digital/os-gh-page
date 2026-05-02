@@ -16,11 +16,18 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "tsx src/scripts/run-prebuild.ts",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check && tsc --noEmit",
     "lint": "biome check .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "data:github": "tsx src/scripts/collect-github.ts",
+    "data:npm": "tsx src/scripts/collect-npm.ts",
+    "data:mcp": "tsx src/scripts/extract-mcp-tools.ts",
+    "data:catalog": "tsx src/scripts/generate-catalog.ts",
+    "data:llms": "tsx src/scripts/generate-llms.ts",
+    "data:all": "tsx src/scripts/run-prebuild.ts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.5.0",
@@ -38,6 +45,7 @@
     "@biomejs/biome": "^1.9.4",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
+import RepoMetrics from "~/components/RepoMetrics.astro";
 import type { Locale, RepoEntry } from "~/data/repos";
+import { mcpFor, npmFor } from "~/generated";
 import { absoluteUrl, categoryLabels, installCommandFor, t } from "~/i18n/ui";
 
 interface Props {
@@ -10,6 +12,8 @@ interface Props {
 const { locale, repo } = Astro.props;
 const positioning = repo.positioning[locale];
 const installCmd = installCommandFor(repo);
+const npm = npmFor(repo.slug);
+const mcp = repo.hasMcpServer ? mcpFor(repo.slug) : null;
 
 const breadcrumb = {
   "@type": "BreadcrumbList",
@@ -33,8 +37,14 @@ const softwareApplication = {
     additionalProperty: [
       { "@type": "PropertyValue", name: "mcp:specVersion", value: repo.mcpSpecVersion },
       { "@type": "PropertyValue", name: "mcp:transports", value: "stdio,http" },
+      ...(mcp ? [
+        { "@type": "PropertyValue", name: "mcp:tools", value: String(mcp.toolCount) },
+        { "@type": "PropertyValue", name: "mcp:prompts", value: String(mcp.promptCount) },
+        { "@type": "PropertyValue", name: "mcp:resources", value: String(mcp.resourceCount) },
+      ] : []),
     ],
   }),
+  ...(npm?.latestVersion && { softwareVersion: npm.latestVersion }),
   publisher: { "@type": "Organization", name: "Yoda Digital", url: "https://yoda.digital" },
 };
 
@@ -62,6 +72,10 @@ const softwareSourceCode = {
     <p class="text-xl text-[var(--color-muted)] leading-relaxed mb-8 max-w-2xl">
       {positioning.productAngle}
     </p>
+
+    <div class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] p-5 mb-8">
+      <RepoMetrics locale={locale} repo={repo} variant="page" />
+    </div>
 
     <div class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] p-5 mb-8">
       <div class="text-xs uppercase tracking-wide text-[var(--color-muted)] mb-2">

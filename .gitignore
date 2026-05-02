@@ -2,8 +2,14 @@
 dist/
 .astro/
 
-# Generated data (rebuilt every build)
-src/generated/
+# Generated data (rebuilt every build by src/scripts/run-prebuild.ts)
+src/generated/*
+!src/generated/index.ts
+!src/generated/.gitkeep
+public/catalog.json
+public/mcp-catalog.json
+public/llms.txt
+public/llms-full.txt
 
 # Dependencies
 node_modules/
