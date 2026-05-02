@@ -1,6 +1,7 @@
 ---
 import { type Locale, allLocales } from "~/data/repos";
 import { absoluteUrl, htmlLang, ogLocale, t } from "~/i18n/ui";
+import { ogPathFor } from "~/lib/og-path";
 
 interface Props {
   locale: Locale;
@@ -23,7 +24,10 @@ const {
 } = Astro.props;
 
 const canonical = absoluteUrl(locale, pathname);
-const finalOg = ogImage ?? `${absoluteUrl(locale, "/og/default.svg")}`;
+// Per-page OG: ogPathFor maps the pathname to the matching satori-rendered
+// SVG. Pages can override via the `ogImage` prop; otherwise fall back to the
+// per-page image (and finally to /og/default.svg if no rule matches).
+const finalOg = ogImage ?? `https://opensource.yoda.digital${ogPathFor(pathname)}`;
 const siteName = t(locale, "site.title");
 const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 ---

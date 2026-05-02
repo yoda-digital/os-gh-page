@@ -16,6 +16,7 @@ import { collectNpm } from "./collect-npm";
 import { extractMcpTools } from "./extract-mcp-tools";
 import { generateCatalog } from "./generate-catalog";
 import { generateLlms } from "./generate-llms";
+import { generateOg } from "./generate-og";
 import { log } from "./lib/log";
 
 async function main(): Promise<void> {
@@ -32,6 +33,7 @@ async function main(): Promise<void> {
   await extractMcpTools();
   await generateCatalog();
   await generateLlms();
+  await generateOg();
 
   log.ok(`prebuild: complete in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
 }
