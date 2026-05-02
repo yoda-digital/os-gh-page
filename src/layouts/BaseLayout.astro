@@ -110,16 +110,74 @@ if (jsonLd) {
       <slot />
     </main>
 
-    <footer class="border-t border-[var(--color-line)] mt-16">
-      <div class="max-w-6xl mx-auto px-4 py-8 text-sm text-[var(--color-muted)] flex flex-col md:flex-row gap-4 justify-between">
-        <div>
-          © {new Date().getFullYear()} Yoda Digital — MIT licensed unless noted otherwise.
+    <footer class="border-t border-[var(--color-line)] mt-20 bg-[var(--color-surface)]/30">
+      <div class="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-4 text-sm">
+        <div class="md:col-span-1">
+          <div class="flex items-center gap-2 mb-3">
+            <img
+              src="/brand/yoda_opensource_logo_white.svg"
+              alt=""
+              width="24"
+              height="24"
+              class="block w-6 h-6"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="font-mono font-semibold text-[var(--color-ink)]">
+              <span class="text-[var(--color-accent)]">yoda</span>.digital
+            </span>
+          </div>
+          <p class="text-[var(--color-muted)] text-xs leading-relaxed">
+            {t(locale, "site.tagline")}
+          </p>
         </div>
-        <div class="flex gap-4">
-          <a href="/llms.txt">llms.txt</a>
-          <a href="/catalog.json">catalog.json</a>
-          <a href="/mcp-catalog.json">mcp-catalog.json</a>
-          <a href="https://github.com/yoda-digital">GitHub</a>
+
+        <nav class="md:col-span-1" aria-label={t(locale, "nav.projects")}>
+          <h3 class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent)] mb-3">
+            {t(locale, "nav.projects")}
+          </h3>
+          <ul class="space-y-2 text-[var(--color-muted)]">
+            <li><a href={localizedPath(locale, "/projects/")} class="hover:text-[var(--color-ink)] no-underline">{t(locale, "section.allProjects")}</a></li>
+            <li><a href={localizedPath(locale, "/categories/")} class="hover:text-[var(--color-ink)] no-underline">{t(locale, "nav.categories")}</a></li>
+            <li><a href={localizedPath(locale, "/faq/")} class="hover:text-[var(--color-ink)] no-underline">{t(locale, "nav.faq")}</a></li>
+            <li><a href={localizedPath(locale, "/about/")} class="hover:text-[var(--color-ink)] no-underline">{t(locale, "nav.about")}</a></li>
+          </ul>
+        </nav>
+
+        <nav class="md:col-span-1" aria-label="Topic clusters">
+          <h3 class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent)] mb-3">
+            {locale === "ro" ? "Subiecte" : locale === "ru" ? "Темы" : "Topics"}
+          </h3>
+          <ul class="space-y-2 text-[var(--color-muted)]">
+            <li><a href={localizedPath(locale, "/mcp/")} class="hover:text-[var(--color-ink)] no-underline">MCP servers</a></li>
+            <li><a href={localizedPath(locale, "/cli/")} class="hover:text-[var(--color-ink)] no-underline">CLI</a></li>
+            <li><a href={localizedPath(locale, "/moldova-public-procurement-ai/")} class="hover:text-[var(--color-ink)] no-underline">Moldova procurement AI</a></li>
+            <li><a href={localizedPath(locale, "/seo-automation-cli/")} class="hover:text-[var(--color-ink)] no-underline">SEO automation</a></li>
+            <li><a href={localizedPath(locale, "/agent-infrastructure/")} class="hover:text-[var(--color-ink)] no-underline">Agent infrastructure</a></li>
+          </ul>
+        </nav>
+
+        <nav class="md:col-span-1" aria-label="Machine-readable">
+          <h3 class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent)] mb-3">
+            {locale === "ro" ? "Pentru agenți" : locale === "ru" ? "Для агентов" : "For agents"}
+          </h3>
+          <ul class="space-y-2 text-[var(--color-muted)] font-mono text-xs">
+            <li><a href="/llms.txt" class="hover:text-[var(--color-ink)] no-underline">/llms.txt</a></li>
+            <li><a href="/llms-full.txt" class="hover:text-[var(--color-ink)] no-underline">/llms-full.txt</a></li>
+            <li><a href="/catalog.json" class="hover:text-[var(--color-ink)] no-underline">/catalog.json</a></li>
+            <li><a href="/mcp-catalog.json" class="hover:text-[var(--color-ink)] no-underline">/mcp-catalog.json</a></li>
+            <li><a href={`/rss-${locale}.xml`} class="hover:text-[var(--color-ink)] no-underline">/rss-{locale}.xml</a></li>
+            <li><a href="https://github.com/yoda-digital" class="hover:text-[var(--color-ink)] no-underline">GitHub →</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="border-t border-[var(--color-line)]">
+        <div class="max-w-6xl mx-auto px-4 py-4 text-xs text-[var(--color-muted)] flex flex-col md:flex-row gap-2 justify-between">
+          <div>© {new Date().getFullYear()} Yoda Digital — MIT licensed unless noted otherwise.</div>
+          <div class="font-mono">
+            {locale === "ro" ? "Construit de Ion Calmîș" : locale === "ru" ? "Сделано Ion Calmîș" : "Built by Ion Calmîș"} · opensource.yoda.digital
+          </div>
         </div>
       </div>
     </footer>

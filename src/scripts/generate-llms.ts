@@ -31,6 +31,17 @@ async function loadBundle(slug: string, isMcp: boolean): Promise<Bundle> {
   };
 }
 
+const PILLARS_FOR_LLMS = [
+  { slug: "mcp", title: "MCP servers built for real work" },
+  { slug: "cli", title: "Terminal commands for serious work" },
+  {
+    slug: "moldova-public-procurement-ai",
+    title: "AI intelligence for Moldova's public procurement",
+  },
+  { slug: "seo-automation-cli", title: "CLI and MCP for production SEO workflows" },
+  { slug: "agent-infrastructure", title: "Coordination and control for AI agents" },
+];
+
 function renderIndex(bundles: Map<string, Bundle>): string {
   const lines: string[] = [
     "# Yoda Digital Open Source",
@@ -46,12 +57,23 @@ function renderIndex(bundles: Map<string, Bundle>): string {
     const versionTag = b?.npm?.latestVersion ? ` (v${b.npm.latestVersion})` : "";
     lines.push(`- [${repo.slug}](${SITE_URL}/projects/${repo.slug}/)${versionTag}: ${angle}`);
   }
+  lines.push("", "## Topic clusters", "");
+  for (const p of PILLARS_FOR_LLMS) {
+    lines.push(`- [${p.title}](${SITE_URL}/${p.slug}/)`);
+  }
+  lines.push("", "## Documentation", "");
+  for (const repo of repos) {
+    lines.push(
+      `- [${repo.slug} README](${SITE_URL}/docs/${repo.slug}/readme/): rendered README with the project's tool list, install snippets, and configuration guide.`,
+    );
+  }
   lines.push("", "## Machine-readable", "");
   lines.push(
     `- [catalog.json](${SITE_URL}/catalog.json): full project catalog with install commands, versions, MCP tool counts.`,
   );
   lines.push(`- [mcp-catalog.json](${SITE_URL}/mcp-catalog.json): MCP-only subset.`);
   lines.push(`- [llms-full.txt](${SITE_URL}/llms-full.txt): concatenated project descriptions.`);
+  lines.push(`- [sitemap.xml](${SITE_URL}/sitemap-index.xml): full URL index with hreflang.`);
   return `${lines.join("\n")}\n`;
 }
 
