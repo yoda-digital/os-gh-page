@@ -1,0 +1,112 @@
+---
+import type { Locale, RepoEntry } from "~/data/repos";
+import { npmFor } from "~/generated";
+import { t } from "~/i18n/ui";
+
+interface Props {
+  locale: Locale;
+  repo: RepoEntry;
+}
+const { locale, repo } = Astro.props;
+const npm = npmFor(repo.slug);
+const binCommand = npm?.bin ? Object.values(npm.bin)[0] : (repo.binName ?? repo.slug);
+const serverKey = repo.binName ?? repo.slug;
+const npxRunner = repo.packageName?.startsWith("@")
+  ? repo.packageName
+  : (repo.packageName ?? "<package>");
+
+const claudeDesktopJson = repo.packageName
+  ? JSON.stringify(
+      {
+        mcpServers: {
+          [serverKey]: {
+            command: "npx",
+            args: ["-y", repo.packageName],
+          },
+        },
+      },
+      null,
+      2,
+    )
+  : "// Not yet on npm — install from source";
+
+const cursorJson = repo.packageName
+  ? JSON.stringify(
+      {
+        mcpServers: {
+          [serverKey]: {
+            command: "npx",
+            args: ["-y", repo.packageName],
+          },
+        },
+      },
+      null,
+      2,
+    )
+  : claudeDesktopJson;
+
+const zedJson = repo.packageName
+  ? JSON.stringify(
+      {
+        context_servers: {
+          [serverKey]: {
+            command: { path: "npx", args: ["-y", repo.packageName] },
+            settings: {},
+          },
+        },
+      },
+      null,
+      2,
+    )
+  : claudeDesktopJson;
+
+const vscodeJson = repo.packageName
+  ? JSON.stringify(
+      {
+        servers: {
+          [serverKey]: {
+            command: "npx",
+            args: ["-y", repo.packageName],
+            type: "stdio",
+          },
+        },
+      },
+      null,
+      2,
+    )
+  : claudeDesktopJson;
+
+const shellCmd = repo.packageName
+  ? `npx -y ${repo.packageName}`
+  : "git clone && bun install && bun run start";
+
+const tabs = [
+  { label: t(locale, "tab.claudeDesktop"), code: claudeDesktopJson, lang: "json" },
+  { label: t(locale, "tab.cursor"), code: cursorJson, lang: "json" },
+  { label: t(locale, "tab.zed"), code: zedJson, lang: "json" },
+  { label: t(locale, "tab.vscode"), code: vscodeJson, lang: "json" },
+  { label: t(locale, "tab.shell"), code: shellCmd, lang: "bash" },
+];
+---
+
+<div class="space-y-4">
+  <div class="text-xs uppercase tracking-wide text-[var(--color-muted)]">
+    {t(locale, "section.installFor")}
+  </div>
+  <div class="space-y-6">
+    {
+      tabs.map((tab) => (
+        <details class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] overflow-hidden" open>
+          <summary class="cursor-pointer px-4 py-3 text-sm font-medium text-[var(--color-ink)] flex items-center justify-between">
+            <span>{tab.label}</span>
+            <span class="font-mono text-xs text-[var(--color-muted)]">{tab.lang}</span>
+          </summary>
+          <pre class="!m-0 !rounded-none !border-0 !border-t !border-[var(--color-line)] text-xs leading-relaxed"><code>{tab.code}</code></pre>
+        </details>
+      ))
+    }
+  </div>
+  <p class="text-xs text-[var(--color-muted)]">
+    <code class="font-mono">{binCommand}</code> · <code class="font-mono">{npxRunner}</code>
+  </p>
+</div>

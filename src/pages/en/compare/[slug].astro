@@ -1,0 +1,12 @@
+---
+import ComparePageContent from "~/components/pages/ComparePageContent.astro";
+import { repos } from "~/data/repos";
+
+export async function getStaticPaths() {
+  return repos.map((repo) => ({ params: { slug: repo.slug }, props: { repo } }));
+}
+
+const { repo } = Astro.props;
+---
+
+<ComparePageContent locale="en" repo={repo} />

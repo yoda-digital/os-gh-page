@@ -1,0 +1,18 @@
+---
+import CategoryContent from "~/components/pages/CategoryContent.astro";
+import type { Category } from "~/data/repos";
+
+export async function getStaticPaths() {
+  const categories: Category[] = [
+    "ai-devtools-mcp",
+    "moldova-public-procurement",
+    "seo-analytics",
+    "agent-infrastructure",
+  ];
+  return categories.map((category) => ({ params: { category }, props: { category } }));
+}
+
+const { category } = Astro.props;
+---
+
+<CategoryContent locale="ru" category={category} />

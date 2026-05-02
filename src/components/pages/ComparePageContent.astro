@@ -1,0 +1,129 @@
+---
+import RepoMetrics from "~/components/RepoMetrics.astro";
+import type { Locale, RepoEntry } from "~/data/repos";
+import { absoluteUrl, categoryLabels, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+interface Props {
+  locale: Locale;
+  repo: RepoEntry;
+}
+const { locale, repo } = Astro.props;
+const positioning = repo.positioning[locale];
+const competitors = repo.comparison.competitors;
+
+const breadcrumb = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t(locale, "site.title"),
+      item: absoluteUrl(locale, "/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: repo.slug,
+      item: absoluteUrl(locale, `/projects/${repo.slug}/`),
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: t(locale, "section.compareWith"),
+      item: absoluteUrl(locale, `/compare/${repo.slug}/`),
+    },
+  ],
+};
+
+const article = {
+  "@type": "Article",
+  headline: `${repo.slug} — ${t(locale, "section.compareWith")}`,
+  inLanguage: locale === "ro" ? "ro-MD" : locale === "ru" ? "ru-RU" : "en-US",
+  url: absoluteUrl(locale, `/compare/${repo.slug}/`),
+  about: { "@type": "SoftwareApplication", name: repo.slug },
+  author: { "@type": "Organization", name: "Yoda Digital", url: "https://yoda.digital" },
+};
+
+const itemList = {
+  "@type": "ItemList",
+  itemListElement: competitors.map((c, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: c.name,
+    url: c.url || undefined,
+    description: c.differentiator,
+  })),
+};
+---
+
+<BaseLayout
+  locale={locale}
+  pathname={`/compare/${repo.slug}/`}
+  title={`${repo.slug} vs alternatives — ${t(locale, "site.title")}`}
+  description={`${positioning.productAngle} ${t(locale, "section.compareWith")}.`}
+  ogType="article"
+  jsonLd={[breadcrumb, article, itemList]}
+>
+  <article class="max-w-4xl mx-auto px-4 py-16">
+    <p class="font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-accent)] mb-3">
+      {categoryLabels[locale][repo.category]} · {t(locale, "section.compareWith")}
+    </p>
+    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">{repo.slug}</h1>
+    <p class="text-xl text-[var(--color-muted)] leading-relaxed mb-8 max-w-2xl">
+      {positioning.productAngle}
+    </p>
+
+    <div class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] p-5 mb-10">
+      <RepoMetrics locale={locale} repo={repo} variant="page" />
+    </div>
+
+    <h2 class="text-2xl font-semibold mb-6">{t(locale, "section.compareWith")}</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="border-b border-[var(--color-line)] text-left text-[var(--color-muted)] uppercase text-xs tracking-wide">
+            <th scope="col" class="py-3 pr-4">{t(locale, "label.competitor")}</th>
+            <th scope="col" class="py-3 pr-4">{t(locale, "label.differentiator")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            competitors.map((c) => (
+              <tr class="border-b border-[var(--color-line)] align-top">
+                <td class="py-4 pr-4">
+                  {c.url ? (
+                    <a
+                      href={c.url}
+                      class="font-mono text-[var(--color-accent)] no-underline hover:underline"
+                    >
+                      {c.name}
+                    </a>
+                  ) : (
+                    <span class="font-mono text-[var(--color-ink)]">{c.name}</span>
+                  )}
+                </td>
+                <td class="py-4 text-[var(--color-muted)] leading-relaxed">{c.differentiator}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a
+        href={absoluteUrl(locale, `/projects/${repo.slug}/`)}
+        class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] hover:border-[var(--color-accent)] no-underline text-[var(--color-ink)]"
+      >
+        ← {repo.slug}
+      </a>
+      <a
+        href={absoluteUrl(locale, `/install/${repo.slug}/`)}
+        class="px-4 py-2 rounded-[var(--radius-card)] border border-[var(--color-accent)] bg-[var(--color-accent)]/10 hover:bg-[var(--color-accent)]/20 no-underline text-[var(--color-accent)] font-semibold"
+      >
+        {t(locale, "cta.install")} →
+      </a>
+    </div>
+  </article>
+</BaseLayout>

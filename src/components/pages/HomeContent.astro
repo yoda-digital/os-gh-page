@@ -1,4 +1,5 @@
 ---
+import HeroConstellation from "~/components/HeroConstellation.astro";
 import ProjectCard from "~/components/ProjectCard.astro";
 import { type Locale, repos } from "~/data/repos";
 import { t } from "~/i18n/ui";
@@ -43,6 +44,7 @@ const installRotation = [
           ))
         }
       </div>
+      <HeroConstellation locale={locale} />
     </div>
   </section>
 
