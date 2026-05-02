@@ -1,0 +1,32 @@
+# Cloudflare Pages bindings for opensource.yoda.digital
+#
+# These bindings are required by src/pages/api/github-webhook.ts. Cloudflare
+# Pages reads this file at deploy time when the project is configured for
+# wrangler-managed bindings. For dashboard-managed projects, the same
+# bindings must be created via the Pages → Settings → Functions → Bindings UI.
+#
+# IDs below are placeholders — replace before deploying.
+
+name = "yoda-opensource"
+compatibility_date = "2026-04-01"
+pages_build_output_dir = "dist"
+
+[[kv_namespaces]]
+binding = "WEBHOOK_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+preview_id = "REPLACE_WITH_KV_NAMESPACE_PREVIEW_ID"
+
+[[r2_buckets]]
+binding = "BUILD_CACHE"
+bucket_name = "yoda-os-build-cache"
+preview_bucket_name = "yoda-os-build-cache-preview"
+
+# Required environment variables (set via dashboard or `wrangler pages secret put`):
+#
+#   GITHUB_WEBHOOK_SECRET   — shared secret with the GitHub App
+#   CF_PAGES_DEPLOY_HOOK    — Pages deploy hook URL (production branch)
+#   PUBLIC_SITE_URL         — https://opensource.yoda.digital
+#
+# Optional (used only by the prebuild scripts in CI, not at edge runtime):
+#
+#   GITHUB_TOKEN            — installation token from the GitHub App
