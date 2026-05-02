@@ -12,6 +12,7 @@
 
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { Resvg } from "@resvg/resvg-js";
 import satori from "satori";
 
 export type Accent = "warm" | "cool";
@@ -172,4 +173,24 @@ export async function renderOgSvg(opts: OgOptions): Promise<string> {
       { name: "Inter", data: fonts.bold, weight: 700, style: "normal" },
     ],
   });
+}
+
+/**
+ * Rasterize the satori SVG to PNG. Facebook + Twitter + LinkedIn reject
+ * SVG as og:image and require JPEG/PNG/GIF; this rasterizer produces the
+ * 1200x630 PNG those platforms actually consume.
+ */
+export async function renderOgPng(opts: OgOptions): Promise<Buffer> {
+  const svg = await renderOgSvg(opts);
+  const resvg = new Resvg(svg, {
+    fitTo: { mode: "width", value: 1200 },
+    background: "#0b0d12",
+    font: {
+      // resvg can't read OS fonts in CF Pages build env; tell it to ignore
+      // any font directives in the SVG since satori already converted text
+      // to <path> elements with the embedded font glyphs.
+      loadSystemFonts: false,
+    },
+  });
+  return resvg.render().asPng();
 }

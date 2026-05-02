@@ -21,13 +21,14 @@
  * src/lib/og-path.ts.
  */
 
+import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { allPillarSlugs, pillars } from "~/data/pillars";
 import { repos } from "~/data/repos";
 import { categoryLabels, installCommandFor } from "~/i18n/ui";
 import { GENERATED_DIR, PUBLIC_DIR, readJson, writeText } from "./lib/fs";
 import { log } from "./lib/log";
-import { type Accent, renderOgSvg } from "./lib/og-template";
+import { type Accent, renderOgPng, renderOgSvg } from "./lib/og-template";
 import type { GithubRepoSnapshot, McpToolSnapshot, NpmPackageSnapshot } from "./types";
 
 // Read snapshots from disk — we can't use ~/generated (which uses
@@ -118,6 +119,15 @@ function specsForCategories(): OgSpec[] {
 function specsForGeneric(): OgSpec[] {
   return [
     {
+      outPath: "default.svg",
+      kicker: "YODA DIGITAL · OPEN SOURCE",
+      title: "Open-source command center",
+      subtitle:
+        "MCP servers, CLIs, public-procurement intelligence, SEO automation, and encrypted agent coordination.",
+      metaLine: "opensource.yoda.digital",
+      accent: "warm",
+    },
+    {
       outPath: "home.svg",
       kicker: "YODA DIGITAL · OPEN SOURCE",
       title: "Open-source infrastructure for AI-native operations.",
@@ -172,20 +182,27 @@ export async function generateOg(): Promise<void> {
     ...specsForCategories(),
   ];
 
-  log.info(`og: rendering ${specs.length} satori SVGs`);
+  log.info(`og: rendering ${specs.length} satori OGs (SVG + PNG)`);
   let count = 0;
   for (const spec of specs) {
-    const svg = await renderOgSvg({
+    const opts = {
       kicker: spec.kicker,
       title: spec.title,
       subtitle: spec.subtitle,
       metaLine: spec.metaLine,
       accent: spec.accent,
-    });
-    await writeText(resolve(PUBLIC_DIR, "og", spec.outPath), svg);
+    };
+    // SVG ships for fast preview / debug; PNG is what FB / Twitter / LinkedIn
+    // consume since they reject SVG og:image.
+    const svg = await renderOgSvg(opts);
+    const png = await renderOgPng(opts);
+    const svgPath = resolve(PUBLIC_DIR, "og", spec.outPath);
+    const pngPath = svgPath.replace(/\.svg$/, ".png");
+    await writeText(svgPath, svg);
+    await writeFile(pngPath, png);
     count++;
   }
-  log.ok(`og: ${count} SVGs written to public/og/`);
+  log.ok(`og: ${count} OGs written to public/og/ (svg + png)`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
