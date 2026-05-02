@@ -35,6 +35,15 @@ export default defineConfig({
     locales: ["ro", "en", "ru"],
     routing: { prefixDefaultLocale: false },
   },
+  // Astro 5 enables a CSRF-style Origin check on all non-GET requests by
+  // default. /api/github-webhook is a cross-origin POST receiver (GitHub
+  // posts from its own infrastructure), so the default check 403s every
+  // delivery. Disable it — the route has its own HMAC-SHA256 signature
+  // verification (see src/pages/api/github-webhook.ts) which is stricter
+  // than an Origin header check.
+  security: {
+    checkOrigin: false,
+  },
   vite: {
     plugins: [tailwindcss()],
   },
