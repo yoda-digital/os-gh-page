@@ -1,0 +1,201 @@
+---
+/**
+ * Mission Board — replaces the broken constellation hero.
+ *
+ * Four-column status board, one column per category. Each project is a
+ * clickable tile showing live data from the prebuild snapshots: version,
+ * stars, MCP tool / prompt counts, "coming to npm" badge for unpublished
+ * work. The header carries a pulsing status indicator + sector / station
+ * count, the footer carries the auto-rebuild messaging.
+ *
+ * Static-first (no JS); the only motion is a CSS `animate-ping` halo on
+ * the live indicator and a per-tile hover state. Crawler-friendly: every
+ * tile is an <a> with full text content.
+ */
+import { type Category, type Locale, repos, reposByCategory } from "~/data/repos";
+import { githubFor, mcpFor, npmFor } from "~/generated";
+import { categoryLabels, localizedPath, t } from "~/i18n/ui";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+
+interface SectorMeta {
+  code: string;
+  tone: "warm" | "cool";
+}
+
+const sectorMeta: Record<Category, SectorMeta> = {
+  "ai-devtools-mcp": { code: "MCP", tone: "warm" },
+  "moldova-public-procurement": { code: "OCDS", tone: "cool" },
+  "seo-analytics": { code: "SEO", tone: "cool" },
+  "agent-infrastructure": { code: "AGENT", tone: "warm" },
+};
+
+const categoryOrder: Category[] = [
+  "ai-devtools-mcp",
+  "moldova-public-procurement",
+  "seo-analytics",
+  "agent-infrastructure",
+];
+
+const sectors = categoryOrder.map((cat) => ({
+  category: cat,
+  label: categoryLabels[locale][cat],
+  meta: sectorMeta[cat],
+  projects: reposByCategory(cat),
+}));
+
+const liveLabel: Record<Locale, string> = {
+  ro: "Live · auto-actualizat",
+  en: "Live · auto-refreshed",
+  ru: "Live · авто-обновление",
+};
+const captionLabel: Record<Locale, string> = {
+  ro: `${categoryOrder.length} sectoare · ${repos.length} proiecte`,
+  en: `${categoryOrder.length} sectors · ${repos.length} stations`,
+  ru: `${categoryOrder.length} секторов · ${repos.length} проектов`,
+};
+const footerLabel: Record<Locale, string> = {
+  ro: "Rebuild la fiecare push GitHub · cron de rezervă la 6h",
+  en: "Rebuilt on every GitHub push · 6 h cron fallback",
+  ru: "Пересборка на каждый push в GitHub · cron-страховка каждые 6 ч",
+};
+const allProjectsLabel: Record<Locale, string> = {
+  ro: "toate proiectele",
+  en: "all projects",
+  ru: "все проекты",
+};
+---
+
+<section
+  class="relative overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)]/40 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.7)]"
+  aria-label="Yoda Digital open-source mission board"
+>
+  <div
+    class="absolute inset-0 opacity-[0.05] pointer-events-none"
+    style="background-image: linear-gradient(var(--color-ink) 1px, transparent 1px), linear-gradient(90deg, var(--color-ink) 1px, transparent 1px); background-size: 36px 36px;"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--color-accent)] to-transparent opacity-60"
+    aria-hidden="true"
+  >
+  </div>
+
+  <header
+    class="relative flex flex-wrap items-center justify-between gap-3 border-b border-[var(--color-line)] px-5 py-3 font-mono text-[11px]"
+  >
+    <div class="flex items-center gap-3">
+      <span class="relative inline-flex h-2 w-2" aria-hidden="true">
+        <span
+          class="absolute inline-flex h-full w-full rounded-full bg-[var(--color-accent)] opacity-75 animate-ping"
+        ></span>
+        <span class="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-accent)]"></span>
+      </span>
+      <span class="uppercase tracking-[0.2em] text-[var(--color-muted)]">{liveLabel[locale]}</span>
+    </div>
+    <div class="uppercase tracking-[0.2em] text-[var(--color-muted)]">
+      {captionLabel[locale]}
+    </div>
+  </header>
+
+  <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    {
+      sectors.map((sector, sIdx) => (
+        <article
+          class:list={[
+            "relative",
+            sIdx > 0 && "border-t border-[var(--color-line)] md:border-t-0",
+            sIdx > 0 && sIdx % 2 === 0 && "md:border-t md:border-[var(--color-line)]",
+            sIdx > 0 && "lg:border-t-0 lg:border-l lg:border-[var(--color-line)]",
+          ]}
+        >
+          <header class="px-5 pt-5 pb-3 flex items-baseline justify-between gap-3">
+            <div class="font-mono text-[11px] uppercase tracking-[0.25em]">
+              <span
+                class={
+                  sector.meta.tone === "warm"
+                    ? "text-[var(--color-accent)]"
+                    : "text-[var(--color-cool)]"
+                }
+              >
+                {sector.meta.code}
+              </span>
+              <span class="text-[var(--color-muted)] ml-2">
+                {String(sector.projects.length).padStart(2, "0")}
+              </span>
+            </div>
+          </header>
+          <p class="px-5 pb-3 text-sm text-[var(--color-muted)] leading-snug">{sector.label}</p>
+
+          <div class="border-t border-[var(--color-line)]">
+            {sector.projects.map((repo) => {
+              const gh = githubFor(repo.slug);
+              const npm = npmFor(repo.slug);
+              const mcp = repo.hasMcpServer ? mcpFor(repo.slug) : null;
+              const badges: string[] = [];
+              if (npm?.latestVersion) badges.push(`v${npm.latestVersion}`);
+              if (gh && gh.stars > 0) badges.push(`★${gh.stars}`);
+              if (mcp && mcp.toolCount > 0) badges.push(`${mcp.toolCount}T`);
+              if (mcp && mcp.promptCount > 0) badges.push(`${mcp.promptCount}P`);
+              if (mcp && mcp.resourceCount > 0) badges.push(`${mcp.resourceCount}R`);
+              const license = npm?.license ?? gh?.license?.spdxId;
+
+              return (
+                <a
+                  href={localizedPath(locale, `/projects/${repo.slug}/`)}
+                  class="group relative block px-5 py-4 border-b border-[var(--color-line)] last:border-b-0 hover:bg-[var(--color-bg)] transition-colors"
+                >
+                  <span
+                    class:list={[
+                      "absolute inset-y-0 left-0 w-[2px] origin-top scale-y-0 group-hover:scale-y-100 transition-transform",
+                      sector.meta.tone === "warm"
+                        ? "bg-[var(--color-accent)]"
+                        : "bg-[var(--color-cool)]",
+                    ]}
+                    aria-hidden="true"
+                  />
+                  <div class="flex items-baseline justify-between gap-3">
+                    <span class="font-mono text-sm font-semibold text-[var(--color-ink)] truncate group-hover:text-[var(--color-accent)] transition-colors">
+                      {repo.slug}
+                    </span>
+                    <span class="font-mono text-[10px] text-[var(--color-muted)] opacity-0 group-hover:opacity-100 transition-opacity">
+                      ↗
+                    </span>
+                  </div>
+                  <p class="text-xs text-[var(--color-muted)] leading-snug mt-1 line-clamp-2">
+                    {repo.positioning[locale].productAngle}
+                  </p>
+                  <div class="mt-2 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[10px] uppercase tracking-wide text-[var(--color-muted)]">
+                    {badges.map((b) => (
+                      <span class="text-[var(--color-ink)]">{b}</span>
+                    ))}
+                    {license && <span>{license}</span>}
+                    {!repo.packageName && (
+                      <span class="text-[var(--color-accent)]">⌛ {t(locale, "label.unpublished")}</span>
+                    )}
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <footer
+    class="relative border-t border-[var(--color-line)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-muted)] flex flex-wrap items-center justify-between gap-3"
+  >
+    <span>{footerLabel[locale]}</span>
+    <a
+      href={localizedPath(locale, "/projects/")}
+      class="text-[var(--color-accent)] hover:underline"
+    >
+      {allProjectsLabel[locale]} →
+    </a>
+  </footer>
+</section>
