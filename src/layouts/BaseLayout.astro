@@ -1,4 +1,6 @@
 ---
+import Analytics from "~/components/Analytics.astro";
+import ConsentBanner from "~/components/ConsentBanner.astro";
 import JsonLd from "~/components/JsonLd.astro";
 import LangSwitcher from "~/components/LangSwitcher.astro";
 import SeoHead from "~/components/SeoHead.astro";
@@ -58,6 +60,7 @@ if (jsonLd) {
 <html lang={htmlLang(locale)}>
   <head>
     <meta charset="utf-8" />
+    <Analytics />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f8f8f6" media="(prefers-color-scheme: light)" />
@@ -175,11 +178,31 @@ if (jsonLd) {
       <div class="border-t border-[var(--color-line)]">
         <div class="max-w-6xl mx-auto px-4 py-4 text-xs text-[var(--color-muted)] flex flex-col md:flex-row gap-2 justify-between">
           <div>© {new Date().getFullYear()} Yoda Digital — MIT licensed unless noted otherwise.</div>
-          <div class="font-mono">
-            {locale === "ro" ? "Construit de Ion Calmîș" : locale === "ru" ? "Сделано Ion Calmîș" : "Built by Ion Calmîș"} · opensource.yoda.digital
+          <div class="font-mono flex items-center gap-3">
+            <button
+              type="button"
+              data-open-consent
+              class="underline decoration-dotted underline-offset-4 hover:text-[var(--color-ink)]"
+            >
+              {t(locale, "consent.banner.manage")}
+            </button>
+            <span>·</span>
+            <span>
+              {locale === "ro" ? "Construit de Ion Calmîș" : locale === "ru" ? "Сделано Ion Calmîș" : "Built by Ion Calmîș"} · opensource.yoda.digital
+            </span>
           </div>
         </div>
       </div>
     </footer>
+    <ConsentBanner locale={locale} />
+    <script is:inline>
+      document.addEventListener('click', function (e) {
+        const t = e.target.closest('[data-open-consent]');
+        if (t && typeof window.openConsentBanner === 'function') {
+          e.preventDefault();
+          window.openConsentBanner();
+        }
+      });
+    </script>
   </body>
 </html>

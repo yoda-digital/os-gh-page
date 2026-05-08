@@ -11,6 +11,8 @@
 #   GITHUB_WEBHOOK_SECRET   — shared secret with the GitHub App
 #   CF_PAGES_DEPLOY_HOOK    — Pages deploy hook URL (production branch)
 #   PUBLIC_SITE_URL         — https://opensource.yoda.digital
+#   PUBLIC_GA_ID            — GA4 measurement ID (optional; defaults to
+#                             G-88WRY15JN3 in src/components/Analytics.astro)
 #   NODE_VERSION            — 24
 
 name = "yoda-opensource"

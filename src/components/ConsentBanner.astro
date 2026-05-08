@@ -1,0 +1,101 @@
+---
+import type { Locale } from "~/data/repos";
+import { t } from "~/i18n/ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const enabled = import.meta.env.PROD;
+---
+{
+  enabled && (
+    <>
+      <div
+        id="consent-banner"
+        role="region"
+        aria-label={t(locale, "consent.banner.title")}
+        hidden
+        class="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--color-line)] bg-[var(--color-bg)]/95 backdrop-blur shadow-lg"
+      >
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+          <div class="text-sm text-[var(--color-muted)] max-w-3xl leading-relaxed">
+            <strong class="text-[var(--color-ink)] block mb-1 font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-accent)]">
+              {t(locale, "consent.banner.title")}
+            </strong>
+            <span>{t(locale, "consent.banner.body")}</span>
+          </div>
+          <div class="flex gap-2 shrink-0">
+            <button
+              type="button"
+              data-consent="reject"
+              class="px-4 py-2 text-sm border border-[var(--color-line)] rounded text-[var(--color-ink)] hover:bg-[var(--color-surface)] transition-colors"
+            >
+              {t(locale, "consent.banner.reject")}
+            </button>
+            <button
+              type="button"
+              data-consent="accept"
+              class="px-4 py-2 text-sm border border-[var(--color-accent)] rounded text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-bg)] transition-colors font-medium"
+            >
+              {t(locale, "consent.banner.accept")}
+            </button>
+          </div>
+        </div>
+      </div>
+      <script is:inline>
+        (function () {
+          const KEY = 'ga_consent_v2';
+          const TTL = 180 * 86400 * 1000;
+          const banner = document.getElementById('consent-banner');
+          if (!banner) return;
+
+          function save(state) {
+            try {
+              localStorage.setItem(KEY, JSON.stringify({ v: 2, state, ts: Date.now() }));
+            } catch (_) {}
+          }
+          function read() {
+            try {
+              const raw = localStorage.getItem(KEY);
+              if (!raw) return null;
+              const v = JSON.parse(raw);
+              if (Date.now() - (v.ts || 0) > TTL) return null;
+              return v;
+            } catch (_) {
+              return null;
+            }
+          }
+          function update(granted) {
+            if (typeof window.gtag !== 'function') return;
+            const value = granted ? 'granted' : 'denied';
+            window.gtag('consent', 'update', {
+              ad_storage: value,
+              ad_user_data: value,
+              ad_personalization: value,
+              analytics_storage: value,
+            });
+          }
+
+          banner.addEventListener('click', function (e) {
+            const target = e.target.closest('[data-consent]');
+            if (!target) return;
+            const granted = target.getAttribute('data-consent') === 'accept';
+            save(granted ? 'granted' : 'denied');
+            update(granted);
+            banner.hidden = true;
+          });
+
+          window.openConsentBanner = function () { banner.hidden = false; };
+
+          if (navigator.globalPrivacyControl === true) {
+            if (!read()) save('denied');
+          } else if (!read()) {
+            banner.hidden = false;
+          }
+        })();
+      </script>
+    </>
+  )
+}

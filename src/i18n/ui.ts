@@ -51,6 +51,12 @@ export const ui: Record<Locale, Record<string, string>> = {
     "lang.ro": "Română",
     "lang.en": "English",
     "lang.ru": "Русский",
+    "consent.banner.title": "Cookies & analize",
+    "consent.banner.body":
+      "Folosim Google Analytics pentru a înțelege traficul agregat. Niciun identificator nu este setat până nu accepți. Poți schimba alegerea oricând din subsol.",
+    "consent.banner.accept": "Acceptă",
+    "consent.banner.reject": "Refuză",
+    "consent.banner.manage": "Cookies",
   },
   en: {
     "site.title": "Yoda Digital Open Source",
@@ -101,6 +107,12 @@ export const ui: Record<Locale, Record<string, string>> = {
     "lang.ro": "Română",
     "lang.en": "English",
     "lang.ru": "Русский",
+    "consent.banner.title": "Cookies & analytics",
+    "consent.banner.body":
+      "We use Google Analytics to understand aggregate traffic. No identifiers are stored until you accept. You can change your mind any time from the footer.",
+    "consent.banner.accept": "Accept",
+    "consent.banner.reject": "Reject",
+    "consent.banner.manage": "Cookies",
   },
   ru: {
     "site.title": "Yoda Digital Open Source",
@@ -151,6 +163,12 @@ export const ui: Record<Locale, Record<string, string>> = {
     "lang.ro": "Română",
     "lang.en": "English",
     "lang.ru": "Русский",
+    "consent.banner.title": "Куки и аналитика",
+    "consent.banner.body":
+      "Мы используем Google Analytics для общей статистики. Никакие идентификаторы не сохраняются до вашего согласия. Изменить решение можно в подвале сайта.",
+    "consent.banner.accept": "Принять",
+    "consent.banner.reject": "Отклонить",
+    "consent.banner.manage": "Куки",
   },
 };
 
