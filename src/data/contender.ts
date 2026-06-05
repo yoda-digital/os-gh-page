@@ -10,6 +10,79 @@ import type { Locale } from "~/data/repos";
 
 export const CONTENDER_APP_URL = "https://contender.yoda.digital";
 export const CONTENDER_MCP_URL = "https://contender.yoda.digital/mcp";
+export const CREATOR_URL = "https://nalyk.dev";
+
+/**
+ * Downloadable resource PDFs (the official guide + capability doc + the five
+ * persona scenario booklets), rendered as cover cards. Language-agnostic
+ * (file/thumb/accent); each locale supplies title + desc in the same order.
+ */
+export const resourceFiles: {
+  id: string;
+  file: string;
+  thumb: string;
+  accent: string;
+  kind: "guide" | "persona";
+}[] = [
+  {
+    id: "ghid",
+    file: "/contender/docs/ghid-chatgpt.pdf",
+    thumb: "/contender/docs/thumb-ghid-chatgpt.png",
+    accent: "#af9568",
+    kind: "guide",
+  },
+  {
+    id: "capabilitati",
+    file: "/contender/docs/capabilitati-complete.pdf",
+    thumb: "/contender/docs/thumb-capabilitati-complete.png",
+    accent: "#4f6995",
+    kind: "guide",
+  },
+  {
+    id: "jurnalist",
+    file: "/contender/docs/persona-jurnalist.pdf",
+    thumb: "/contender/docs/thumb-persona-jurnalist.png",
+    accent: "#d2533f",
+    kind: "persona",
+  },
+  {
+    id: "avocat",
+    file: "/contender/docs/persona-avocat.pdf",
+    thumb: "/contender/docs/thumb-persona-avocat.png",
+    accent: "#5a83c4",
+    kind: "persona",
+  },
+  {
+    id: "operator",
+    file: "/contender/docs/persona-operator.pdf",
+    thumb: "/contender/docs/thumb-persona-operator.png",
+    accent: "#2faa72",
+    kind: "persona",
+  },
+  {
+    id: "autoritate",
+    file: "/contender/docs/persona-autoritate.pdf",
+    thumb: "/contender/docs/thumb-persona-autoritate.png",
+    accent: "#9a7bd0",
+    kind: "persona",
+  },
+  {
+    id: "societate",
+    file: "/contender/docs/persona-societate.pdf",
+    thumb: "/contender/docs/thumb-persona-societate.png",
+    accent: "#caa53e",
+    kind: "persona",
+  },
+];
+
+/** Per-step setup screenshots (step 1 is pure navigation → no shot). */
+export const setupShots: (string | null)[] = [
+  null,
+  "/contender/setup/step2.png",
+  "/contender/setup/step3.png",
+  "/contender/setup/step4.png",
+  "/contender/setup/step5.png",
+];
 
 /** Per-persona signature colors (used for card accents + glow). */
 export const personaMeta: Record<string, { color: string; rgb: string }> = {
@@ -113,8 +186,17 @@ export interface ContenderCopy {
     story: string;
     yodaRole: string;
     esemplaRole: string;
-    creatorDesc: string;
+    creatorName: string;
+    creatorRole: string;
     firstAppNote: string;
+  };
+  resources: {
+    heading: string;
+    intro: string;
+    downloadLabel: string;
+    guidesLabel: string;
+    scenariosLabel: string;
+    items: { title: string; desc: string }[];
   };
   closing: { heading: string; body: string; ctaLabel: string };
   /** Labels for partner/credit microcopy rendered around the lockup. */
@@ -467,11 +549,49 @@ contenderCopy.ro = {
     yodaRole:
       "Yoda Digital (yoda.digital) — studio de infrastructură AI-nativă și inginerie civic-tech. Întreține cele două servere open-source pe care stă CONTender, ansc-mcp-server și mtender-mcp-server, care împachetează sursele oficiale ca servicii MCP. Pentru că sunt open-source, stratul de integritate este auditabil și reutilizabil, nu o cutie neagră.",
     esemplaRole:
-      "esempla systems (esempla.com) — companie gov-tech din Chișinău, fondată în 2009, care construiește servicii publice digitale, interoperabilitate de date și cloud pentru guverne. Peste cincisprezece ani de experiență în felul în care sunt cablate sistemele publice moldovenești; printre realizări, serviciul eAPP de apostilă electronică al Moldovei.",
-    creatorDesc:
-      "Creator: Ion Calmîș (handle „nalyk”), site personal nalyk.dev, fondatorul Yoda Digital.",
+      "esempla systems (esempla.com) — companie gov-tech din Chișinău, activă din 2009, care construiește platforme de e-guvernare și interoperabilitate de date pentru statul moldovenesc. A dezvoltat e-licitatie.md, una dintre platformele de tranzacționare ale sistemului MTender, și a asigurat interoperabilitatea acestuia cu alte registre de stat; tot ei au livrat eApostille, eIntegrity (declarații de avere și interese) și eGuarantee. Cunosc din interior chiar infrastructura de achiziții pe care CONTender o interoghează.",
+    creatorName: "Ion Calmîș",
+    creatorRole: "CTO la Yoda Digital",
     firstAppNote:
       "Primul ChatGPT App din Republica Moldova: o echipă mică a ajuns pe o suprafață globală de distribuție nou-nouță în același moment cu toți ceilalți și a plantat acolo civic-tech.",
+  },
+  resources: {
+    heading: "Documentație și ghiduri",
+    intro:
+      "Tot ce ai nevoie ca să înțelegi și să folosești CONTender, în PDF-uri gata de descărcat: ghidul de instalare pas cu pas, documentația completă a capabilităților și cinci scenarii reale, câte unul pentru fiecare profil.",
+    downloadLabel: "Descarcă PDF",
+    guidesLabel: "Ghiduri",
+    scenariosLabel: "Scenarii pe profil",
+    items: [
+      {
+        title: "Ghid pas cu pas pentru ChatGPT",
+        desc: "Cum adaugi aplicația în ChatGPT în câteva minute, cu imagini. Nivel începător, fără termeni complicați.",
+      },
+      {
+        title: "Capabilități complete",
+        desc: "Toate instrumentele, widgeturile, prompturile și baza legală, explicate pe scurt și pe înțeles.",
+      },
+      {
+        title: "Jurnalistul de investigație",
+        desc: "Semnale roșii, profiluri de furnizor și grafuri de relații — probe vizuale în secunde.",
+      },
+      {
+        title: "Avocatul / juristul",
+        desc: "Termene exacte, bază legală citată corect și pachetul de contestație gata de depus.",
+      },
+      {
+        title: "Operatorul economic",
+        desc: "Poziția pe piață, evaluarea concurenței și decizia de a contesta, bazate pe date.",
+      },
+      {
+        title: "Autoritatea contractantă",
+        desc: "Auto-evaluare proactivă: rulează analizele unui contestatar înainte să o facă el.",
+      },
+      {
+        title: "Societatea civilă / cercetătorul",
+        desc: "Analiză sistemică pe ani întregi, agregare și tierul civic pentru pachete gratuite.",
+      },
+    ],
   },
   closing: {
     heading: "Datele sunt deja deschise. Pune-le întrebări.",
@@ -825,11 +945,49 @@ contenderCopy.en = {
     yodaRole:
       "Yoda Digital (yoda.digital) — an AI-native infrastructure and civic-tech engineering studio. It maintains the two open-source servers CONTender stands on, ansc-mcp-server and mtender-mcp-server, which wrap the official sources as MCP services. Because they are open source, the integrity layer is auditable and reusable, not a black box.",
     esemplaRole:
-      "esempla systems (esempla.com) — a Chișinău gov-tech company, founded in 2009, building digital public services, data interoperability and cloud for governments. More than fifteen years of experience in how Moldova's public systems are wired; among its work, Moldova's eAPP electronic apostille service.",
-    creatorDesc:
-      'Creator: Ion Calmîș (handle "nalyk"), personal site nalyk.dev, founder of Yoda Digital.',
+      "esempla systems (esempla.com) — a Chișinău gov-tech company, active since 2009, building e-government platforms and data interoperability for the Moldovan state. It developed e-licitatie.md, one of the trading platforms on the MTender system, and wired MTender's interoperability with other state registries; it also delivered eApostille, eIntegrity (asset and interest declarations) and eGuarantee. They know first-hand the very procurement infrastructure CONTender queries.",
+    creatorName: "Ion Calmîș",
+    creatorRole: "CTO at Yoda Digital",
     firstAppNote:
       "The first ChatGPT App from the Republic of Moldova: a small team reached a brand-new global distribution surface at the same moment as everyone else and planted civic-tech there.",
+  },
+  resources: {
+    heading: "Documentation and guides",
+    intro:
+      "Everything you need to understand and use CONTender, as ready-to-download PDFs: the step-by-step setup guide, the full capability documentation, and five real scenarios — one for each profile.",
+    downloadLabel: "Download PDF",
+    guidesLabel: "Guides",
+    scenariosLabel: "Scenarios by profile",
+    items: [
+      {
+        title: "Step-by-step ChatGPT guide",
+        desc: "How to add the app to ChatGPT in a few minutes, with screenshots. Beginner level, no jargon.",
+      },
+      {
+        title: "Full capabilities",
+        desc: "Every tool, widget, prompt and the legal corpus, explained briefly and in plain language.",
+      },
+      {
+        title: "The investigative journalist",
+        desc: "Red flags, supplier profiles and relationship graphs — visual evidence in seconds.",
+      },
+      {
+        title: "The lawyer / legal counsel",
+        desc: "Exact deadlines, a correctly cited legal basis, and the appeal pack ready to file.",
+      },
+      {
+        title: "The economic operator",
+        desc: "Market position, competitor sizing, and the decision to contest — grounded in data.",
+      },
+      {
+        title: "The contracting authority",
+        desc: "Proactive self-assessment: run a challenger's analyses before they do.",
+      },
+      {
+        title: "Civil society / the researcher",
+        desc: "Systemic analysis across whole years, aggregation, and the civic tier for free packs.",
+      },
+    ],
   },
   closing: {
     heading: "The data is already open. Ask it questions.",
@@ -1185,11 +1343,49 @@ contenderCopy.ru = {
     yodaRole:
       "Yoda Digital (yoda.digital) — студия AI-нативной инфраструктуры и civic-tech-инженерии. Поддерживает два open-source-сервера, на которых стоит CONTender, ansc-mcp-server и mtender-mcp-server, которые упаковывают официальные источники как MCP-сервисы. Поскольку они open-source, слой добросовестности можно проверять и переиспользовать, это не чёрный ящик.",
     esemplaRole:
-      "esempla systems (esempla.com) — gov-tech-компания из Кишинёва, основанная в 2009 году, которая строит цифровые публичные сервисы, интероперабельность данных и облако для государств. Более пятнадцати лет опыта в том, как устроены молдавские государственные системы; среди реализаций — сервис электронного апостиля eAPP Молдовы.",
-    creatorDesc:
-      "Создатель: Ион Калмыш (handle «nalyk»), личный сайт nalyk.dev, основатель Yoda Digital.",
+      "esempla systems (esempla.com) — gov-tech-компания из Кишинёва, работающая с 2009 года, которая строит платформы электронного правительства и интероперабельность данных для молдавского государства. Она разработала e-licitatie.md — одну из торговых площадок системы MTender — и обеспечила её взаимодействие с другими государственными реестрами; ею же реализованы eApostille, eIntegrity (декларации об имуществе и интересах) и eGuarantee. Они знают изнутри ту самую закупочную инфраструктуру, которую запрашивает CONTender.",
+    creatorName: "Ион Калмыш",
+    creatorRole: "CTO в Yoda Digital",
     firstAppNote:
       "Первое приложение ChatGPT из Республики Молдова: небольшая команда вышла на совершенно новую глобальную площадку распространения одновременно со всеми остальными и поставила там civic-tech.",
+  },
+  resources: {
+    heading: "Документация и руководства",
+    intro:
+      "Всё, что нужно, чтобы понять и использовать CONTender, в готовых к скачиванию PDF: пошаговое руководство по установке, полная документация возможностей и пять реальных сценариев — по одному на каждый профиль.",
+    downloadLabel: "Скачать PDF",
+    guidesLabel: "Руководства",
+    scenariosLabel: "Сценарии по профилям",
+    items: [
+      {
+        title: "Пошаговое руководство для ChatGPT",
+        desc: "Как добавить приложение в ChatGPT за несколько минут, со скриншотами. Начальный уровень, без сложных терминов.",
+      },
+      {
+        title: "Полные возможности",
+        desc: "Все инструменты, виджеты, промпты и правовая база, объяснённые кратко и понятно.",
+      },
+      {
+        title: "Журналист-расследователь",
+        desc: "Красные флаги, профили поставщиков и графы связей — наглядные доказательства за секунды.",
+      },
+      {
+        title: "Адвокат / юрист",
+        desc: "Точные сроки, корректно процитированное правовое основание и пакет жалобы для подачи.",
+      },
+      {
+        title: "Экономический оператор",
+        desc: "Позиция на рынке, оценка конкурентов и решение об обжаловании — на основе данных.",
+      },
+      {
+        title: "Закупающий орган",
+        desc: "Проактивная самопроверка: запустите анализ заявителя раньше, чем это сделает он.",
+      },
+      {
+        title: "Гражданское общество / исследователь",
+        desc: "Системный анализ за целые годы, агрегация и гражданский тариф для бесплатных пакетов.",
+      },
+    ],
   },
   closing: {
     heading: "Данные уже открыты. Задавайте им вопросы.",
@@ -1200,5 +1396,36 @@ contenderCopy.ru = {
     yoda: "Yoda Digital",
     esempla: "esempla systems",
     inPartnership: "в партнёрстве с",
+  },
+};
+
+/** Featured promo for the home page — CONTender gets top billing. */
+export const contenderHomeFeature: Record<
+  Locale,
+  { eyebrow: string; title: string; desc: string; cta: string; tagFree: string; tagSources: string }
+> = {
+  ro: {
+    eyebrow: "Lansare · Primul ChatGPT App din Moldova",
+    title: "CONTender — integritatea achizițiilor publice, în ChatGPT",
+    desc: "Unește MTender și ANSC într-o singură conversație: scor de integritate, semnale roșii, cronologii cu termene legale și pachet de contestație. 99% gratuit și anonim.",
+    cta: "Descoperă CONTender",
+    tagFree: "99% gratuit",
+    tagSources: "MTender + ANSC",
+  },
+  en: {
+    eyebrow: "Launch · The first ChatGPT App from Moldova",
+    title: "CONTender — public-procurement integrity, in ChatGPT",
+    desc: "MTender and ANSC united in one conversation: integrity scores, red flags, timelines with legal deadlines, and an appeal pack. 99% free and anonymous.",
+    cta: "Discover CONTender",
+    tagFree: "99% free",
+    tagSources: "MTender + ANSC",
+  },
+  ru: {
+    eyebrow: "Запуск · Первое приложение ChatGPT из Молдовы",
+    title: "CONTender — добросовестность госзакупок, в ChatGPT",
+    desc: "MTender и ANSC в одном диалоге: оценка добросовестности, красные флаги, хронологии с юридическими сроками и пакет жалобы. 99% бесплатно и анонимно.",
+    cta: "Открыть CONTender",
+    tagFree: "99% бесплатно",
+    tagSources: "MTender + ANSC",
   },
 };

@@ -1,5 +1,6 @@
 ---
 import MissionBoard from "~/components/MissionBoard.astro";
+import { contenderHomeFeature } from "~/data/contender";
 import type { Locale } from "~/data/repos";
 import { localizedPath, t } from "~/i18n/ui";
 import BaseLayout from "~/layouts/BaseLayout.astro";
@@ -26,6 +27,8 @@ const ctaSecondary: Record<Locale, string> = {
   en: "View on GitHub",
   ru: "Открыть на GitHub",
 };
+
+const feat = contenderHomeFeature[locale];
 ---
 
 <BaseLayout
@@ -94,7 +97,86 @@ const ctaSecondary: Record<Locale, string> = {
     </div>
   </section>
 
-  <section class="max-w-6xl mx-auto px-4 -mt-8 md:-mt-10 mb-16 relative z-[1]">
+  <section class="max-w-6xl mx-auto px-4 mt-6 mb-14 relative z-[2]">
+    <a href={localizedPath(locale, "/contender/")} class="contender-feature">
+      <span class="contender-feature-glow" aria-hidden="true"></span>
+      <span class="relative flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
+        <span class="flex-1 block">
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--color-accent)] flex items-center gap-3 mb-4">
+            <span class="inline-block w-7 h-px bg-[var(--color-accent)]" aria-hidden="true"></span>
+            {feat.eyebrow}
+          </span>
+          <span class="block text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-ink)] mb-3 leading-tight">
+            {feat.title}
+          </span>
+          <span class="block text-[var(--color-muted)] leading-relaxed max-w-2xl mb-5">{feat.desc}</span>
+          <span class="flex flex-wrap items-center gap-3">
+            <span class="contender-feature-cta">{feat.cta} <span aria-hidden="true">→</span></span>
+            <span class="contender-feature-tag">{feat.tagSources}</span>
+            <span class="contender-feature-tag">{feat.tagFree}</span>
+          </span>
+        </span>
+        <span class="contender-feature-glyph" aria-hidden="true">
+          <svg width="120" height="120" viewBox="0 0 46 46" fill="none">
+            <circle cx="18" cy="23" r="13" stroke="var(--color-cool)" stroke-width="1.2" opacity="0.85"></circle>
+            <circle cx="28" cy="23" r="13" stroke="var(--color-accent)" stroke-width="1.2" opacity="0.85"></circle>
+            <path d="M23 16v14M16 23h14" stroke="var(--color-accent)" stroke-width="1.2" stroke-linecap="round"></path>
+          </svg>
+        </span>
+      </span>
+    </a>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-4 mb-16 relative z-[1]">
     <MissionBoard locale={locale} />
   </section>
+
+  <style>
+    .contender-feature {
+      position: relative;
+      display: block;
+      overflow: hidden;
+      padding: 1.75rem 1.9rem;
+      border-radius: var(--radius-card);
+      border: 1px solid color-mix(in oklch, var(--color-accent) 40%, var(--color-line));
+      background: var(--color-surface);
+      text-decoration: none;
+      transition: border-color 180ms ease, transform 180ms ease, box-shadow 220ms ease;
+    }
+    .contender-feature:hover {
+      transform: translateY(-2px);
+      border-color: var(--color-accent);
+      box-shadow: 0 20px 50px -22px rgba(175, 149, 104, 0.55);
+    }
+    .contender-feature-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(36rem 36rem at 4% -30%, rgba(175, 149, 104, 0.12), transparent 60%),
+        radial-gradient(36rem 36rem at 100% 130%, rgba(79, 105, 149, 0.12), transparent 60%);
+    }
+    .contender-feature-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--color-accent);
+      color: #0b0d12;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+    }
+    .contender-feature-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      color: var(--color-muted);
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--color-line);
+    }
+    .contender-feature-glyph { flex: none; align-self: center; opacity: 0.9; }
+    @media (max-width: 1023px) { .contender-feature-glyph { display: none; } }
+  </style>
 </BaseLayout>
