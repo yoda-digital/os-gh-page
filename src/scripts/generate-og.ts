@@ -171,6 +171,15 @@ function specsForGeneric(): OgSpec[] {
       metaLine: "opensource.yoda.digital/about/",
       accent: "warm",
     },
+    {
+      outPath: "contender.svg",
+      kicker: "CONTENDER · FIRST CHATGPT APP FROM MOLDOVA",
+      title: "Public-procurement integrity, inside ChatGPT",
+      subtitle:
+        "MTender + ANSC united in one conversation: integrity scores, red flags, appeals. 99% free and anonymous, law-anchored.",
+      metaLine: "contender.yoda.digital  ·  Yoda Digital × esempla systems",
+      accent: "cool",
+    },
   ];
 }
 

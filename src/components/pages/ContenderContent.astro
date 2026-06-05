@@ -1,0 +1,742 @@
+---
+import ProjectCard from "~/components/ProjectCard.astro";
+import {
+  CONTENDER_APP_URL,
+  CONTENDER_MCP_URL,
+  contenderCopy,
+  personaMeta,
+  relatedLinks,
+  sourceLinks,
+} from "~/data/contender";
+import { type PillarSlug, pillars } from "~/data/pillars";
+import { type Locale, repos } from "~/data/repos";
+import { absoluteUrl, localizedPath, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const c = contenderCopy[locale];
+const pathname = "/contender/";
+
+// The 14 widgets (language-agnostic identifiers) shown in the gallery.
+const widgetKeys = [
+  "tender-card",
+  "procurement-timeline",
+  "integrity-score-card",
+  "red-flag-radar",
+  "hearing-watcher",
+  "profile-dashboard",
+  "comparison-table",
+  "document-viewer",
+  "appeal-carousel",
+  "hearing-agenda",
+  "adversarial-graph",
+  "cpv-heatmap",
+  "text-card",
+  "filing-pack-viewer",
+];
+
+const reposBySlug = Object.fromEntries(repos.map((r) => [r.slug, r]));
+const relatedProjects = relatedLinks
+  .filter((l) => l.kind === "project")
+  .map((l) => reposBySlug[l.slug])
+  .filter((r) => r !== undefined);
+const relatedPillar = relatedLinks.find((l) => l.kind === "pillar");
+const pillarCfg = relatedPillar ? pillars[relatedPillar.slug as PillarSlug] : null;
+
+const copyLabel = locale === "ro" ? "Copiază" : locale === "ru" ? "Копировать" : "Copy";
+const copiedLabel = locale === "ro" ? "Copiat" : locale === "ru" ? "Скопировано" : "Copied";
+const freeLabel = locale === "ro" ? "Gratuit" : locale === "ru" ? "Бесплатно" : "Free";
+const paidLabel = locale === "ro" ? "5 USD" : "5 USD";
+const promptLabel =
+  locale === "ro"
+    ? "Prompt de copiat"
+    : locale === "ru"
+      ? "Промпт для копирования"
+      : "Prompt to copy";
+const seeAlsoLabel = locale === "ro" ? "Vezi și" : locale === "ru" ? "См. также" : "See also";
+const modeLabels = ["Inline", "Fullscreen", "Picture-in-Picture"];
+
+const softwareJsonLd = {
+  "@type": "SoftwareApplication",
+  name: "CONTender",
+  applicationCategory: "BusinessApplication",
+  applicationSubCategory: "ChatGPT App",
+  operatingSystem: "ChatGPT (OpenAI Apps SDK / MCP)",
+  url: CONTENDER_APP_URL,
+  inLanguage: ["ro", "ru", "en"],
+  description: c.meta.description,
+  author: { "@type": "Organization", name: "Yoda Digital", url: "https://yoda.digital" },
+  creator: { "@type": "Person", name: "Ion Calmîș", url: "https://nalyk.dev" },
+  offers: [
+    { "@type": "Offer", price: "0", priceCurrency: "USD", description: c.pricing.freeTitle },
+    { "@type": "Offer", price: "5", priceCurrency: "USD", description: c.pricing.paidTitle },
+  ],
+};
+
+const faqJsonLd = {
+  "@type": "FAQPage",
+  mainEntity: c.faq.items.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
+
+const breadcrumbJsonLd = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t(locale, "site.title"),
+      item: absoluteUrl(locale, "/"),
+    },
+    { "@type": "ListItem", position: 2, name: "CONTender", item: absoluteUrl(locale, pathname) },
+  ],
+};
+---
+
+<BaseLayout
+  locale={locale}
+  pathname={pathname}
+  title={c.meta.title}
+  description={c.meta.description}
+  ogType="article"
+  jsonLd={[softwareJsonLd, faqJsonLd, breadcrumbJsonLd]}
+>
+  <article class="contender">
+    {/* ───────────────────────── HERO ───────────────────────── */}
+    <header class="relative overflow-hidden border-b border-[var(--color-line)]">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="relative max-w-5xl mx-auto px-4 py-20 md:py-28 text-center">
+        <p class="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--color-accent)] mb-6 flex items-center justify-center gap-3">
+          <span class="inline-block w-8 h-px bg-[var(--color-accent)]" aria-hidden="true"></span>
+          {c.hero.eyebrow}
+          <span class="inline-block w-8 h-px bg-[var(--color-accent)]" aria-hidden="true"></span>
+        </p>
+
+        <div class="flex items-center justify-center gap-4 mb-8" aria-hidden="true">
+          <span class="source-tag source-tag--cool">{c.hero.mtenderTag}</span>
+          <svg class="merge-glyph" width="46" height="46" viewBox="0 0 46 46" fill="none" role="img">
+            <title>MTender ⊕ ANSC</title>
+            <defs>
+              <linearGradient id="mergeStroke" x1="0" y1="0" x2="46" y2="46">
+                <stop offset="0%" stop-color="var(--color-cool)"></stop>
+                <stop offset="100%" stop-color="var(--color-accent)"></stop>
+              </linearGradient>
+            </defs>
+            <circle cx="18" cy="23" r="13" stroke="var(--color-cool)" stroke-width="1.5" opacity="0.8"></circle>
+            <circle cx="28" cy="23" r="13" stroke="var(--color-accent)" stroke-width="1.5" opacity="0.8"></circle>
+            <path d="M23 16v14M16 23h14" stroke="url(#mergeStroke)" stroke-width="1.5" stroke-linecap="round"></path>
+          </svg>
+          <span class="source-tag source-tag--warm">{c.hero.anscTag}</span>
+        </div>
+
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] mb-6 tracking-tight max-w-4xl mx-auto">
+          {c.hero.h1}
+        </h1>
+        <p class="text-lg md:text-xl text-[var(--color-muted)] leading-relaxed max-w-3xl mx-auto mb-10">
+          {c.hero.lead}
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="#setup" class="cta-primary">{c.hero.ctaPrimary}</a>
+          <a href="#capabilities" class="cta-secondary">{c.hero.ctaSecondary}</a>
+        </div>
+      </div>
+    </header>
+
+    {/* ───────────────────────── TRUST STRIP ───────────────────────── */}
+    <div class="border-b border-[var(--color-line)] bg-[var(--color-surface)]/30">
+      <ul class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-mono text-[var(--color-muted)]">
+        {
+          c.trustStrip.map((item) => (
+            <li class="flex items-center gap-2">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]" aria-hidden="true" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {/* ───────────────────────── STATS ───────────────────────── */}
+    <section class="max-w-5xl mx-auto px-4 py-14">
+      <dl class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        {
+          c.stats.map((s) => (
+            <div class="stat">
+              <dd class="text-4xl md:text-5xl font-bold tracking-tight stat-num">{s.value}</dd>
+              <dt class="mt-2 text-sm text-[var(--color-muted)]">{s.label}</dt>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    {/* ───────────────────────── WHAT IT IS ───────────────────────── */}
+    <section class="border-t border-[var(--color-line)] bg-[var(--color-surface)]/20">
+      <div class="max-w-6xl mx-auto px-4 py-16 md:py-20 grid lg:grid-cols-[1.3fr_1fr] gap-12 items-center">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-semibold mb-6">{c.whatItIs.heading}</h2>
+          <div class="space-y-5 text-[var(--color-ink)] leading-relaxed">
+            {c.whatItIs.paragraphs.map((p) => <p>{p}</p>)}
+          </div>
+        </div>
+        <div class="dual-source">
+          <a href={sourceLinks.mtender} target="_blank" rel="noopener" class="src-card src-card--cool no-underline">
+            <span class="src-name">{c.whatItIs.mtenderName}</span>
+            <span class="src-desc">{c.whatItIs.mtenderDesc}</span>
+          </a>
+          <div class="src-merge" aria-hidden="true">
+            <span class="src-merge-line"></span>
+            <span class="src-merge-dot">CONTender</span>
+            <span class="src-merge-line"></span>
+          </div>
+          <a href={sourceLinks.ansc} target="_blank" rel="noopener" class="src-card src-card--warm no-underline">
+            <span class="src-name">{c.whatItIs.anscName}</span>
+            <span class="src-desc">{c.whatItIs.anscDesc}</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {/* ───────────────────────── HOW IT WORKS ───────────────────────── */}
+    <section class="max-w-6xl mx-auto px-4 py-16 md:py-20">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-3">{c.howItWorks.heading}</h2>
+      <p class="text-[var(--color-muted)] max-w-3xl mb-10 leading-relaxed">{c.howItWorks.intro}</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        {
+          c.howItWorks.types.map((ty) => (
+            <div class="type-card">
+              <div class="flex items-baseline justify-between mb-3">
+                <span class="font-mono text-[var(--color-accent)] text-sm">{ty.n}</span>
+                <span class="font-mono text-2xl font-bold text-[var(--color-ink)]">{ty.count}</span>
+              </div>
+              <h3 class="font-semibold mb-2">{ty.name}</h3>
+              <p class="text-sm text-[var(--color-muted)] leading-relaxed">{ty.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="chain-rail" role="img" aria-label="data tool → show_* → widget">
+        <span class="chain-node">audit_tender</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
+        <span class="chain-node chain-node--mid">show_audit</span>
+        <span class="chain-arrow" aria-hidden="true">→</span>
+        <span class="chain-node chain-node--end">procurement-timeline</span>
+      </div>
+      <p class="text-sm text-[var(--color-muted)] max-w-3xl mt-5 leading-relaxed italic">{c.howItWorks.chainNote}</p>
+    </section>
+
+    {/* ───────────────────────── CAPABILITIES ───────────────────────── */}
+    <section id="capabilities" class="border-t border-[var(--color-line)] bg-[var(--color-surface)]/20 scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-4 py-16 md:py-20">
+        <h2 class="text-2xl md:text-3xl font-semibold mb-3">{c.capabilities.heading}</h2>
+        <p class="text-[var(--color-muted)] max-w-3xl mb-10 leading-relaxed">{c.capabilities.intro}</p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {
+            c.capabilities.tools.map((tool) => (
+              <div class:list={["tool-card", { "tool-card--paid": !tool.free }]}>
+                <div class="flex items-start justify-between gap-3 mb-2">
+                  <code class="font-mono text-sm text-[var(--color-accent)] break-all">{tool.key}</code>
+                  <span class:list={["tool-badge", tool.free ? "tool-badge--free" : "tool-badge--paid"]}>
+                    {tool.free ? freeLabel : paidLabel}
+                  </span>
+                </div>
+                <h3 class="font-semibold mb-2 leading-snug">{tool.tagline}</h3>
+                <p class="text-sm text-[var(--color-muted)] leading-relaxed mb-3">{tool.returns}</p>
+                <div class="font-mono text-[11px] text-[var(--color-cool)] flex items-center gap-1.5">
+                  <span aria-hidden="true">▢</span>
+                  {tool.widget}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    {/* ───────────────────────── WIDGETS ───────────────────────── */}
+    <section class="max-w-6xl mx-auto px-4 py-16 md:py-20">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-3">{c.widgets.heading}</h2>
+      <p class="text-[var(--color-muted)] max-w-3xl mb-6 leading-relaxed">{c.widgets.intro}</p>
+      <div class="flex flex-wrap gap-2 mb-8">
+        {
+          modeLabels.map((m) => (
+            <span class="mode-pill">{m}</span>
+          ))
+        }
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        {
+          widgetKeys.map((w) => (
+            <div class="widget-chip">
+              <span class="widget-glyph" aria-hidden="true"></span>
+              <code class="font-mono text-xs text-[var(--color-ink)]">{w}</code>
+            </div>
+          ))
+        }
+      </div>
+      <p class="text-sm text-[var(--color-muted)] mt-6 leading-relaxed">{c.widgets.modesNote}</p>
+    </section>
+
+    {/* ───────────────────────── PERSONAS ───────────────────────── */}
+    <section class="border-t border-[var(--color-line)] bg-[var(--color-surface)]/20">
+      <div class="max-w-6xl mx-auto px-4 py-16 md:py-20">
+        <h2 class="text-2xl md:text-3xl font-semibold mb-3">{c.personas.heading}</h2>
+        <p class="text-[var(--color-muted)] max-w-3xl mb-10 leading-relaxed">{c.personas.intro}</p>
+        <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {
+            c.personas.items.map((p) => {
+              const meta = personaMeta[p.id];
+              return (
+                <div class="persona-card" style={`--persona:${meta.color};--persona-rgb:${meta.rgb}`}>
+                  <span class="persona-bar" aria-hidden="true"></span>
+                  <h3 class="persona-title">{p.title}</h3>
+                  <p class="text-sm text-[var(--color-ink)] leading-relaxed mb-3">{p.blurb}</p>
+                  <p class="text-sm text-[var(--color-muted)] leading-relaxed mb-4">{p.why}</p>
+                  <figure class="prompt-block">
+                    <figcaption class="prompt-cap">
+                      <span>{promptLabel}</span>
+                      <button type="button" class="copy-btn" data-copy={p.prompt} aria-label={copyLabel}>
+                        <span class="copy-default">{copyLabel}</span>
+                        <span class="copy-done" hidden>{copiedLabel}</span>
+                      </button>
+                    </figcaption>
+                    <p class="prompt-text">{p.prompt}</p>
+                  </figure>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </section>
+
+    {/* ───────────────────────── LEGAL ───────────────────────── */}
+    <section class="max-w-6xl mx-auto px-4 py-16 md:py-20">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-3">{c.legal.heading}</h2>
+      <p class="text-[var(--color-muted)] max-w-3xl mb-10 leading-relaxed">{c.legal.intro}</p>
+      <div class="grid lg:grid-cols-2 gap-5">
+        <div class="law-card law-card--current">
+          <h3 class="font-semibold mb-4 leading-snug">{c.legal.currentTitle}</h3>
+          <ul class="space-y-3">
+            {
+              c.legal.currentPoints.map((pt) => (
+                <li class="text-sm text-[var(--color-ink)] leading-relaxed flex gap-2">
+                  <span class="text-[var(--color-accent)] shrink-0" aria-hidden="true">§</span>
+                  <span>{pt}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="law-card law-card--old">
+          <h3 class="font-semibold mb-4 leading-snug text-[var(--color-muted)]">{c.legal.oldTitle}</h3>
+          <ul class="space-y-3">
+            {
+              c.legal.oldPoints.map((pt) => (
+                <li class="text-sm text-[var(--color-muted)] leading-relaxed flex gap-2">
+                  <span class="shrink-0" aria-hidden="true">§</span>
+                  <span>{pt}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <p class="text-sm text-[var(--color-muted)] max-w-3xl mt-6 leading-relaxed italic">{c.legal.note}</p>
+    </section>
+
+    {/* ───────────────────────── PRICING ───────────────────────── */}
+    <section class="border-t border-[var(--color-line)] bg-[var(--color-surface)]/20">
+      <div class="max-w-5xl mx-auto px-4 py-16 md:py-20">
+        <h2 class="text-2xl md:text-3xl font-semibold mb-3 text-center">{c.pricing.heading}</h2>
+        <p class="text-[var(--color-muted)] max-w-2xl mx-auto mb-10 leading-relaxed text-center">{c.pricing.intro}</p>
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div class="price-card">
+            <h3 class="price-title">{c.pricing.freeTitle}</h3>
+            <p class="text-sm text-[var(--color-muted)] leading-relaxed">{c.pricing.freeDesc}</p>
+          </div>
+          <div class="price-card price-card--accent">
+            <h3 class="price-title">{c.pricing.paidTitle}</h3>
+            <p class="text-sm text-[var(--color-muted)] leading-relaxed">{c.pricing.paidDesc}</p>
+          </div>
+          <div class="price-card">
+            <h3 class="price-title">{c.pricing.civicTitle}</h3>
+            <p class="text-sm text-[var(--color-muted)] leading-relaxed">{c.pricing.civicDesc}</p>
+          </div>
+          <div class="price-card">
+            <h3 class="price-title">{c.pricing.giveTitle}</h3>
+            <p class="text-sm text-[var(--color-muted)] leading-relaxed">{c.pricing.giveDesc}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ───────────────────────── SETUP ───────────────────────── */}
+    <section id="setup" class="max-w-4xl mx-auto px-4 py-16 md:py-20 scroll-mt-20">
+      <div class="flex flex-wrap items-baseline justify-between gap-3 mb-3">
+        <h2 class="text-2xl md:text-3xl font-semibold">{c.setup.heading}</h2>
+        <span class="font-mono text-xs text-[var(--color-accent)] uppercase tracking-wider">{c.setup.timeNote}</span>
+      </div>
+      <p class="text-[var(--color-muted)] mb-8 leading-relaxed">{c.setup.intro}</p>
+
+      <div class="url-block mb-10">
+        <span class="url-label">{c.setup.urlLabel}</span>
+        <div class="url-row">
+          <code class="url-code">{CONTENDER_MCP_URL}</code>
+          <button type="button" class="copy-btn copy-btn--url" data-copy={CONTENDER_MCP_URL} aria-label={copyLabel}>
+            <span class="copy-default">{copyLabel}</span>
+            <span class="copy-done" hidden>{copiedLabel}</span>
+          </button>
+        </div>
+      </div>
+
+      <ol class="setup-steps">
+        {
+          c.setup.steps.map((s, i) => (
+            <li class="setup-step">
+              <span class="setup-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3 class="font-semibold mb-1.5">{s.title}</h3>
+                <p class="text-sm text-[var(--color-muted)] leading-relaxed">{s.detail}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    {/* ───────────────────────── FAQ ───────────────────────── */}
+    <section class="border-t border-[var(--color-line)] bg-[var(--color-surface)]/20">
+      <div class="max-w-3xl mx-auto px-4 py-16 md:py-20">
+        <h2 class="text-2xl md:text-3xl font-semibold mb-8">{c.faq.heading}</h2>
+        <div class="divide-y divide-[var(--color-line)]">
+          {
+            c.faq.items.map((item) => (
+              <details class="faq-item">
+                <summary class="faq-q">
+                  <span>{item.q}</span>
+                  <span class="faq-chevron" aria-hidden="true">+</span>
+                </summary>
+                <div class="faq-a">
+                  <p class="text-sm text-[var(--color-muted)] leading-relaxed">{item.a}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    {/* ───────────────────────── BUILT BY ───────────────────────── */}
+    <section class="max-w-5xl mx-auto px-4 py-16 md:py-20">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-6">{c.builtBy.heading}</h2>
+      <p class="text-[var(--color-ink)] leading-relaxed max-w-3xl mb-10">{c.builtBy.story}</p>
+
+      <div class="lockup">
+        <div class="lockup-card">
+          <img src="/brand/contender/yoda.png" alt={c.partners.yoda} width="120" height="108" loading="lazy" decoding="async" />
+          <span class="lockup-name">{c.partners.yoda}</span>
+        </div>
+        <span class="lockup-x" aria-hidden="true">×</span>
+        <div class="lockup-card">
+          <img src="/brand/contender/esempla.png" alt={c.partners.esempla} width="100" height="108" loading="lazy" decoding="async" />
+          <span class="lockup-name">{c.partners.esempla}</span>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-5 mb-8">
+        <div class="role-card">
+          <p class="text-sm text-[var(--color-muted)] leading-relaxed">{c.builtBy.yodaRole}</p>
+        </div>
+        <div class="role-card">
+          <p class="text-sm text-[var(--color-muted)] leading-relaxed">{c.builtBy.esemplaRole}</p>
+        </div>
+      </div>
+      <p class="text-sm text-[var(--color-muted)] leading-relaxed mb-2">{c.builtBy.creatorDesc}</p>
+      <p class="text-sm text-[var(--color-muted)] leading-relaxed italic">{c.builtBy.firstAppNote}</p>
+    </section>
+
+    {/* ───────────────────────── CLOSING CTA ───────────────────────── */}
+    <section class="relative overflow-hidden border-t border-[var(--color-line)]">
+      <div class="hero-glow hero-glow--soft" aria-hidden="true"></div>
+      <div class="relative max-w-3xl mx-auto px-4 py-20 md:py-24 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-5">{c.closing.heading}</h2>
+        <p class="text-lg text-[var(--color-muted)] leading-relaxed mb-10">{c.closing.body}</p>
+        <a href="#setup" class="cta-primary cta-primary--lg">{c.closing.ctaLabel}</a>
+
+        {
+          (relatedProjects.length > 0 || pillarCfg) && (
+            <div class="mt-16 pt-10 border-t border-[var(--color-line)] text-left">
+              <h3 class="font-mono text-xs uppercase tracking-[0.25em] text-[var(--color-accent)] mb-5 text-center">
+                {seeAlsoLabel}
+              </h3>
+              {pillarCfg && (
+                <a
+                  href={localizedPath(locale, `/${pillarCfg.slug}/`)}
+                  class="block mb-4 text-center text-[var(--color-ink)] hover:text-[var(--color-cool)] no-underline"
+                >
+                  {pillarCfg.copy[locale].h1} →
+                </a>
+              )}
+              <div class="grid sm:grid-cols-2 gap-4 mt-4">
+                {relatedProjects.map((repo) => <ProjectCard locale={locale} repo={repo} />)}
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </section>
+  </article>
+
+  <style>
+    .contender { --persona: var(--color-accent); }
+
+    /* Hero glow — two radial discs that drift apart */
+    .hero-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(40rem 40rem at 18% 8%, rgba(175, 149, 104, 0.13), transparent 60%),
+        radial-gradient(40rem 40rem at 82% 92%, rgba(79, 105, 149, 0.13), transparent 60%);
+    }
+    .hero-glow--soft { opacity: 0.55; }
+
+    .source-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--color-line);
+      background: var(--color-surface);
+      white-space: nowrap;
+    }
+    .source-tag--cool { color: var(--color-cool); border-color: color-mix(in oklch, var(--color-cool) 35%, var(--color-line)); }
+    .source-tag--warm { color: var(--color-accent); border-color: color-mix(in oklch, var(--color-accent) 35%, var(--color-line)); }
+
+    .merge-glyph { flex: none; }
+
+    .cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--color-accent);
+      color: #0b0d12;
+      font-weight: 600;
+      padding: 0.8rem 1.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--color-accent);
+      transition: transform 150ms ease, box-shadow 200ms ease, background 200ms ease;
+    }
+    .cta-primary:hover {
+      color: #0b0d12;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px -8px rgba(175, 149, 104, 0.5);
+      background: color-mix(in oklch, var(--color-accent) 88%, white);
+    }
+    .cta-primary--lg { padding: 0.95rem 2rem; font-size: 1.05rem; }
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.8rem 1.4rem;
+      border-radius: 999px;
+      border: 1px solid var(--color-line);
+      color: var(--color-ink);
+      background: var(--color-surface);
+      transition: border-color 150ms ease, color 150ms ease;
+    }
+    .cta-secondary:hover { border-color: var(--color-accent); color: var(--color-ink); }
+
+    .stat-num {
+      background: linear-gradient(135deg, var(--color-accent), var(--color-cool));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Dual-source diagram */
+    .dual-source { display: flex; flex-direction: column; gap: 0; }
+    .src-card {
+      display: block;
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-card);
+      background: var(--color-surface);
+      padding: 1.1rem 1.25rem;
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+    .src-card:hover { transform: translateX(3px); }
+    .src-card--cool:hover { border-color: color-mix(in oklch, var(--color-cool) 55%, var(--color-line)); }
+    .src-card--warm:hover { border-color: color-mix(in oklch, var(--color-accent) 55%, var(--color-line)); }
+    .src-name { display: block; font-family: var(--font-mono); font-weight: 600; color: var(--color-ink); margin-bottom: 0.3rem; }
+    .src-card--cool .src-name { color: var(--color-cool); }
+    .src-card--warm .src-name { color: var(--color-accent); }
+    .src-desc { display: block; font-size: 0.8rem; color: var(--color-muted); line-height: 1.5; }
+    .src-merge { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0; }
+    .src-merge-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--color-cool), var(--color-accent)); opacity: 0.5; }
+    .src-merge-dot {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em;
+      color: var(--color-ink); padding: 0.25rem 0.6rem; border-radius: 999px;
+      border: 1px solid var(--color-line); background: var(--color-bg);
+    }
+
+    .type-card, .tool-card, .law-card, .price-card, .role-card {
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-card);
+      background: var(--color-surface);
+      padding: 1.25rem;
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+    .type-card:hover { border-color: color-mix(in oklch, var(--color-accent) 40%, var(--color-line)); }
+
+    /* Chain rail */
+    .chain-rail { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
+    .chain-node {
+      font-family: var(--font-mono); font-size: 0.8rem;
+      padding: 0.45rem 0.85rem; border-radius: 0.5rem;
+      border: 1px solid var(--color-line); background: var(--color-surface); color: var(--color-accent);
+    }
+    .chain-node--mid { color: var(--color-muted); }
+    .chain-node--end { color: var(--color-cool); border-color: color-mix(in oklch, var(--color-cool) 35%, var(--color-line)); }
+    .chain-arrow { color: var(--color-muted); font-family: var(--font-mono); }
+
+    /* Tool cards */
+    .tool-card { display: flex; flex-direction: column; }
+    .tool-card:hover { border-color: color-mix(in oklch, var(--color-cool) 45%, var(--color-line)); transform: translateY(-2px); }
+    .tool-card--paid { border-color: color-mix(in oklch, var(--color-accent) 45%, var(--color-line)); background: color-mix(in oklch, var(--color-accent) 6%, var(--color-surface)); }
+    .tool-card--paid:hover { border-color: var(--color-accent); }
+    .tool-badge { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em; padding: 0.2rem 0.5rem; border-radius: 999px; white-space: nowrap; flex: none; }
+    .tool-badge--free { color: var(--color-muted); border: 1px solid var(--color-line); }
+    .tool-badge--paid { color: #0b0d12; background: var(--color-accent); }
+
+    .mode-pill {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.05em;
+      padding: 0.3rem 0.7rem; border-radius: 999px;
+      border: 1px solid color-mix(in oklch, var(--color-cool) 30%, var(--color-line));
+      color: var(--color-cool); background: var(--color-surface);
+    }
+    .widget-chip {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 0.75rem; border-radius: 0.5rem;
+      border: 1px solid var(--color-line); background: var(--color-surface);
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+    .widget-chip:hover { border-color: color-mix(in oklch, var(--color-accent) 40%, var(--color-line)); transform: translateY(-1px); }
+    .widget-glyph { width: 0.5rem; height: 0.5rem; border-radius: 2px; flex: none; background: linear-gradient(135deg, var(--color-accent), var(--color-cool)); }
+
+    /* Persona cards */
+    .persona-card {
+      position: relative; overflow: hidden;
+      border: 1px solid var(--color-line);
+      border-radius: var(--radius-card);
+      background: var(--color-surface);
+      padding: 1.5rem 1.25rem 1.25rem;
+      transition: border-color 160ms ease, transform 160ms ease, box-shadow 200ms ease;
+    }
+    .persona-card:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in oklch, var(--persona) 55%, var(--color-line));
+      box-shadow: 0 14px 34px -16px rgba(var(--persona-rgb), 0.6);
+    }
+    .persona-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--persona); }
+    .persona-title { font-weight: 600; font-size: 1.05rem; margin-bottom: 0.6rem; color: color-mix(in oklch, var(--persona) 65%, var(--color-ink)); }
+
+    .prompt-block { border: 1px solid var(--color-line); border-radius: 0.6rem; background: var(--color-bg); overflow: hidden; }
+    .prompt-cap {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+      padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-line);
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted);
+    }
+    .prompt-text { padding: 0.75rem; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.55; color: var(--color-ink); }
+
+    .copy-btn {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em;
+      color: var(--color-accent); background: transparent; border: 1px solid var(--color-line);
+      padding: 0.2rem 0.5rem; border-radius: 0.35rem; cursor: pointer;
+      transition: border-color 150ms ease, color 150ms ease;
+    }
+    .copy-btn:hover { border-color: var(--color-accent); }
+    .copy-btn--url { font-size: 0.8rem; padding: 0.5rem 0.9rem; }
+
+    /* Legal */
+    .law-card--current { border-color: color-mix(in oklch, var(--color-accent) 40%, var(--color-line)); background: color-mix(in oklch, var(--color-accent) 5%, var(--color-surface)); }
+    .law-card--old { opacity: 0.92; }
+
+    /* Pricing */
+    .price-card { text-align: left; }
+    .price-card--accent { border-color: color-mix(in oklch, var(--color-accent) 50%, var(--color-line)); background: color-mix(in oklch, var(--color-accent) 7%, var(--color-surface)); }
+    .price-title { font-weight: 600; margin-bottom: 0.5rem; color: var(--color-ink); }
+
+    /* URL block */
+    .url-block { border: 1px solid color-mix(in oklch, var(--color-accent) 35%, var(--color-line)); border-radius: var(--radius-card); background: var(--color-surface); padding: 1rem 1.1rem; }
+    .url-label { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.6rem; }
+    .url-row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+    .url-code { font-family: var(--font-mono); font-size: 0.95rem; color: var(--color-accent); word-break: break-all; }
+
+    /* Setup steps */
+    .setup-steps { display: flex; flex-direction: column; gap: 0; counter-reset: step; }
+    .setup-step { display: flex; gap: 1.1rem; padding: 1.1rem 0; border-top: 1px solid var(--color-line); }
+    .setup-step:first-child { border-top: none; }
+    .setup-num { font-family: var(--font-mono); font-size: 0.9rem; color: var(--color-accent); flex: none; padding-top: 0.1rem; }
+
+    /* FAQ */
+    .faq-item { padding: 0; }
+    .faq-q {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      cursor: pointer; list-style: none; padding: 1.1rem 0; font-weight: 500; color: var(--color-ink);
+    }
+    .faq-q::-webkit-details-marker { display: none; }
+    .faq-chevron { font-family: var(--font-mono); color: var(--color-accent); transition: transform 200ms ease; flex: none; }
+    .faq-item[open] .faq-chevron { transform: rotate(45deg); }
+    .faq-a { padding: 0 0 1.1rem; }
+
+    /* Built-by lockup */
+    .lockup { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 2.5rem; }
+    .lockup-card {
+      display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+      background: #f6f7f8; border-radius: var(--radius-card); padding: 1.5rem 2rem; min-width: 200px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      transition: transform 180ms ease, box-shadow 200ms ease;
+    }
+    .lockup-card:hover { transform: translateY(-3px); box-shadow: 0 16px 34px -10px rgba(79, 105, 149, 0.4); }
+    .lockup-card img { height: 54px; width: auto; object-fit: contain; }
+    .lockup-name { font-family: var(--font-mono); font-size: 0.8rem; color: #1a1d24; font-weight: 600; }
+    .lockup-x { font-size: 1.5rem; color: var(--color-accent); font-weight: 300; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .merge-glyph { animation: mergePulse 6s ease-in-out infinite; }
+      @keyframes mergePulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.06); opacity: 0.85; }
+      }
+    }
+  </style>
+
+  <script is:inline>
+    document.addEventListener("click", function (e) {
+      const btn = e.target.closest("[data-copy]");
+      if (!btn) return;
+      const text = btn.getAttribute("data-copy");
+      const done = function () {
+        const d = btn.querySelector(".copy-default");
+        const k = btn.querySelector(".copy-done");
+        if (d && k) {
+          d.hidden = true;
+          k.hidden = false;
+          setTimeout(function () { d.hidden = false; k.hidden = true; }, 1600);
+        }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () {});
+      }
+    });
+  </script>
+</BaseLayout>
+
