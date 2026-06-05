@@ -809,7 +809,15 @@ const breadcrumbJsonLd = {
     .lockup-card:hover { transform: translateY(-3px); box-shadow: 0 16px 34px -10px rgba(79, 105, 149, 0.4); }
     .lockup-card img { height: 54px; width: auto; object-fit: contain; }
     .lockup-name { font-family: var(--font-mono); font-size: 0.8rem; color: #1a1d24; font-weight: 600; }
-    .lockup-x { font-size: 1.5rem; color: var(--color-accent); font-weight: 300; }
+    .lockup-x { font-size: 1.5rem; color: var(--color-accent); font-weight: 300; flex: none; }
+    /* Mobile: keep "Yoda × esempla" on ONE row so the partnership reads. */
+    @media (max-width: 560px) {
+      .lockup { flex-wrap: nowrap; gap: 0.6rem; }
+      .lockup-card { min-width: 0; flex: 1 1 0; padding: 1rem 0.6rem; gap: 0.6rem; }
+      .lockup-card img { height: 38px; }
+      .lockup-name { font-size: 0.66rem; }
+      .lockup-x { font-size: 1.15rem; }
+    }
 
     @media (prefers-reduced-motion: no-preference) {
       .merge-glyph { animation: mergePulse 6s ease-in-out infinite; }
