@@ -52,7 +52,7 @@ const pillarCfg = relatedPillar ? pillars[relatedPillar.slug as PillarSlug] : nu
 const copyLabel = locale === "ro" ? "Copiază" : locale === "ru" ? "Копировать" : "Copy";
 const copiedLabel = locale === "ro" ? "Copiat" : locale === "ru" ? "Скопировано" : "Copied";
 const freeLabel = locale === "ro" ? "Gratuit" : locale === "ru" ? "Бесплатно" : "Free";
-const paidLabel = locale === "ro" ? "5 USD" : "5 USD";
+const soonLabel = locale === "ro" ? "În curând" : locale === "ru" ? "Скоро" : "Coming soon";
 const promptLabel =
   locale === "ro"
     ? "Prompt de copiat"
@@ -80,8 +80,20 @@ const softwareJsonLd = {
     worksFor: { "@type": "Organization", name: "Yoda Digital", url: "https://yoda.digital" },
   },
   offers: [
-    { "@type": "Offer", price: "0", priceCurrency: "USD", description: c.pricing.freeTitle },
-    { "@type": "Offer", price: "5", priceCurrency: "USD", description: c.pricing.paidTitle },
+    {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+      description: c.pricing.freeTitle,
+      availability: "https://schema.org/InStock",
+    },
+    {
+      "@type": "Offer",
+      price: "5",
+      priceCurrency: "USD",
+      description: c.pricing.paidTitle,
+      availability: "https://schema.org/PreOrder",
+    },
   ],
 };
 
@@ -125,6 +137,9 @@ const breadcrumbJsonLd = {
           <span class="inline-block w-8 h-px bg-[var(--color-accent)]" aria-hidden="true"></span>
           {c.hero.eyebrow}
           <span class="inline-block w-8 h-px bg-[var(--color-accent)]" aria-hidden="true"></span>
+        </p>
+        <p class="mb-8">
+          <span class="beta-badge">{c.hero.betaTag}</span>
         </p>
 
         <div class="flex items-center justify-center gap-4 mb-8" aria-hidden="true">
@@ -253,7 +268,7 @@ const breadcrumbJsonLd = {
                 <div class="flex items-start justify-between gap-3 mb-2">
                   <code class="font-mono text-sm text-[var(--color-accent)] break-all">{tool.key}</code>
                   <span class:list={["tool-badge", tool.free ? "tool-badge--free" : "tool-badge--paid"]}>
-                    {tool.free ? freeLabel : paidLabel}
+                    {tool.free ? freeLabel : soonLabel}
                   </span>
                 </div>
                 <h3 class="font-semibold mb-2 leading-snug">{tool.tagline}</h3>
@@ -266,6 +281,7 @@ const breadcrumbJsonLd = {
             ))
           }
         </div>
+        <p class="filing-disclaimer">{c.capabilities.filingDisclaimer}</p>
       </div>
     </section>
 
@@ -365,7 +381,8 @@ const breadcrumbJsonLd = {
     <section class="border-t border-[var(--color-line)] bg-[var(--color-surface)]/20">
       <div class="max-w-5xl mx-auto px-4 py-16 md:py-20">
         <h2 class="text-2xl md:text-3xl font-semibold mb-3 text-center">{c.pricing.heading}</h2>
-        <p class="text-[var(--color-muted)] max-w-2xl mx-auto mb-10 leading-relaxed text-center">{c.pricing.intro}</p>
+        <p class="text-[var(--color-muted)] max-w-2xl mx-auto mb-6 leading-relaxed text-center">{c.pricing.intro}</p>
+        <p class="beta-note beta-note--center mb-10">{c.pricing.betaNote}</p>
         <div class="grid sm:grid-cols-2 gap-5">
           <div class="price-card">
             <h3 class="price-title">{c.pricing.freeTitle}</h3>
@@ -393,7 +410,8 @@ const breadcrumbJsonLd = {
         <h2 class="text-2xl md:text-3xl font-semibold">{c.setup.heading}</h2>
         <span class="font-mono text-xs text-[var(--color-accent)] uppercase tracking-wider">{c.setup.timeNote}</span>
       </div>
-      <p class="text-[var(--color-muted)] mb-8 leading-relaxed">{c.setup.intro}</p>
+      <p class="text-[var(--color-muted)] mb-5 leading-relaxed">{c.setup.intro}</p>
+      <p class="beta-note mb-8">{c.setup.betaNote}</p>
 
       <div class="url-block mb-10">
         <span class="url-label">{c.setup.urlLabel}</span>
@@ -586,6 +604,49 @@ const breadcrumbJsonLd = {
     .source-tag--warm { color: var(--color-accent); border-color: color-mix(in oklch, var(--color-accent) 35%, var(--color-line)); }
 
     .merge-glyph { flex: none; }
+
+    .beta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-cool);
+      background: color-mix(in oklch, var(--color-cool) 12%, var(--color-surface));
+      border: 1px solid color-mix(in oklch, var(--color-cool) 45%, var(--color-line));
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+    }
+    .beta-badge::before {
+      content: "";
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 999px;
+      background: var(--color-cool);
+    }
+
+    .beta-note {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--color-ink);
+      background: color-mix(in oklch, var(--color-cool) 8%, var(--color-surface));
+      border: 1px solid color-mix(in oklch, var(--color-cool) 35%, var(--color-line));
+      border-left-width: 3px;
+      border-radius: var(--radius-card);
+      padding: 0.9rem 1.1rem;
+    }
+    .beta-note--center { max-width: 42rem; margin-left: auto; margin-right: auto; text-align: left; }
+
+    .filing-disclaimer {
+      margin-top: 1.5rem;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--color-muted);
+      border-left: 3px solid color-mix(in oklch, var(--color-accent) 60%, var(--color-line));
+      padding: 0.5rem 0 0.5rem 0.9rem;
+    }
 
     .cta-primary {
       display: inline-flex;

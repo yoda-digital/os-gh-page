@@ -126,6 +126,7 @@ export interface ContenderCopy {
   meta: { title: string; description: string; keywords: string[] };
   hero: {
     eyebrow: string;
+    betaTag: string;
     h1: string;
     lead: string;
     ctaPrimary: string;
@@ -149,7 +150,12 @@ export interface ContenderCopy {
     types: { n: string; name: string; count: string; desc: string }[];
     chainNote: string;
   };
-  capabilities: { heading: string; intro: string; tools: ContenderTool[] };
+  capabilities: {
+    heading: string;
+    intro: string;
+    filingDisclaimer: string;
+    tools: ContenderTool[];
+  };
   widgets: { heading: string; intro: string; modesNote: string };
   personas: { heading: string; intro: string; items: ContenderPersona[] };
   legal: {
@@ -164,6 +170,7 @@ export interface ContenderCopy {
   pricing: {
     heading: string;
     intro: string;
+    betaNote: string;
     freeTitle: string;
     freeDesc: string;
     paidTitle: string;
@@ -176,6 +183,7 @@ export interface ContenderCopy {
   setup: {
     heading: string;
     intro: string;
+    betaNote: string;
     timeNote: string;
     urlLabel: string;
     steps: { title: string; detail: string }[];
@@ -224,6 +232,7 @@ contenderCopy.ro = {
   },
   hero: {
     eyebrow: "Primul ChatGPT App din Republica Moldova",
+    betaTag: "Beta · în testare",
     h1: "CONTender — integritatea achizițiilor publice, direct în ChatGPT",
     lead: "CONTender unește cele două surse oficiale ale achizițiilor publice din Moldova, MTender și ANSC, într-o singură conversație. Întrebi în limbaj firesc, iar răspunsul vine ca widget interactiv, cu datele combinate și calculate. 99% din parcurs este gratuit și anonim: nu cere cont și nu modifică nimic.",
     ctaPrimary: "Adaugă în ChatGPT",
@@ -279,8 +288,8 @@ contenderCopy.ro = {
       {
         n: "3",
         name: "Instrumente brute (proxy)",
-        count: "~29",
-        desc: "La pornire, CONTender descoperă și re-expune fiecare instrument al surselor exact așa cum este: 12 de la ANSC și 17 de la MTender. Acces granular direct la API-urile brute, pentru întrebări foarte precise.",
+        count: "32",
+        desc: "La pornire, CONTender descoperă și re-expune fiecare instrument al surselor exact așa cum este: 18 de la ANSC și 14 de la MTender. Acces granular direct la API-urile brute, pentru întrebări foarte precise.",
       },
       {
         n: "4",
@@ -295,7 +304,9 @@ contenderCopy.ro = {
   capabilities: {
     heading: "Ce poate face",
     intro:
-      "Cincisprezece instrumente de date, toate gratuite cu o singură excepție. Mai jos, zece dintre ele.",
+      "Cincisprezece instrumente de date, toate gratuite în această fază de testare. Mai jos, zece dintre ele; restul, în documentația completă de mai jos.",
+    filingDisclaimer:
+      "Pachetul de contestație generat este un draft informativ, nu consultanță juridică. Este un punct de plecare, de verificat cu un jurist înainte de depunere. Instrumentul este în pregătire și încă nu este activ.",
     tools: [
       {
         key: "audit_tender",
@@ -371,9 +382,9 @@ contenderCopy.ro = {
       },
       {
         key: "prepare_filing_pack",
-        tagline: "Pachet de contestație gata de depus",
+        tagline: "Schelet de contestație pre-completat",
         returns:
-          "Generează un pachet de contestație de calitate juridică, pre-completat pentru depunere la ANSC: top-5 temeiuri cu scor de tărie, calendar procedural, scrisoare-tip oficială în română, listă de probe, precedente citate și scor de probabilitate de succes.",
+          "Va genera un schelet de contestație pre-completat, ca punct de plecare pentru depunere la ANSC: top-5 temeiuri cu scor de tărie, calendar procedural, scrisoare-tip în română, listă de probe, precedente citate și o estimare orientativă a șanselor. (În pregătire — vezi nota de mai jos.)",
         widget: "filing-pack-viewer",
         free: false,
       },
@@ -459,24 +470,28 @@ contenderCopy.ro = {
   pricing: {
     heading: "Preț",
     intro:
-      "Parcursul de citire și investigare, adică 99% din utilizare, nu cere niciodată cont sau autentificare. Un singur instrument costă.",
+      "Parcursul de citire și investigare, adică 99% din utilizare, nu cere niciodată cont sau autentificare.",
+    betaNote:
+      "Aplicația este în fază de testare (preview), în Developer mode pe ChatGPT. Acum totul este gratuit, inclusiv pachetul de contestație. Prețul de 5 USD, tierul civic și Buy-One-Give-Ten descriu modelul planificat după lansarea oficială — nu sunt active încă.",
     freeTitle: "Gratuit și anonim",
     freeDesc:
       "Tot ce ține de citire, audit, scoruri, semnale roșii, profiluri și cronologii este gratuit și anonim. Fără cont, fără autentificare.",
-    paidTitle: "Pachetul de contestație — 5 USD o dată",
+    paidTitle: "Pachetul de contestație — 5 USD (planificat)",
     paidDesc:
-      "Singurul instrument plătit este prepare_filing_pack: 5 USD o singură dată, aproximativ 1% din onorariul unui avocat, cu rambursare în 7 zile.",
-    civicTitle: "Gratuit pentru uz civic",
+      "După lansarea oficială, singurul instrument care va costa va fi prepare_filing_pack: 5 USD o singură dată, aproximativ 1% din onorariul unui avocat, cu rambursare în 7 zile. Acum, în testare, este gratuit.",
+    civicTitle: "Gratuit pentru uz civic (planificat)",
     civicDesc:
-      "Jurnaliștii de investigație înregistrați, ONG-urile, cadrele academice și studenții la drept primesc pachetele gratuit, dintr-un fond comun de credite civice.",
-    giveTitle: "Buy-One-Give-Ten",
+      "În modelul planificat, jurnaliștii de investigație înregistrați, ONG-urile, cadrele academice și studenții la drept vor primi pachetele gratuit, dintr-un fond comun de credite civice.",
+    giveTitle: "Buy-One-Give-Ten (planificat)",
     giveDesc:
-      "Fiecare pachet plătit adaugă de 10 ori credite civice în fondul comun: o cumpărare „dăruiește” zece pachete civice gratuite.",
+      "Model planificat: fiecare pachet plătit va adăuga de 10 ori credite civice în fondul comun — o cumpărare „dăruiește” zece pachete civice gratuite.",
   },
   setup: {
     heading: "Cum îl adaugi în ChatGPT",
     intro:
       "Fără instalare și fără cod. Funcționează pe ChatGPT gratuit sau plătit, iar odată adăugat pe desktop apare și pe telefon. La final, conexiunea se face fără autentificare (No Auth).",
+    betaNote:
+      "Adăugarea se face prin Developer mode pentru că aplicația este în fază de testare (preview) și nu este încă publicată în directorul oficial OpenAI. Pașii de mai jos sunt normali pentru această etapă.",
     timeNote: "~3 minute, fără instalare",
     urlLabel: "Adresa pe care o lipești la pasul 5",
     steps: [
@@ -510,7 +525,11 @@ contenderCopy.ro = {
     items: [
       {
         q: "Trebuie să plătesc ca să-l folosesc?",
-        a: "Nu pentru aproape tot. 99% din parcurs — citire, audit, scoruri de integritate, semnale roșii, profiluri, cronologii — este gratuit și anonim. Singurul instrument plătit este pachetul de contestație, 5 USD o dată, gratuit pentru tierul civic.",
+        a: "Acum, în faza de testare, absolut tot este gratuit — inclusiv pachetul de contestație. Modelul cu un singur instrument plătit (5 USD), tierul civic și Buy-One-Give-Ten sunt planificate pentru după lansarea oficială; momentan nu sunt active.",
+      },
+      {
+        q: "Pachetul de contestație ține loc de avocat?",
+        a: "Nu. Pachetul este un draft informativ, un punct de plecare — nu consultanță juridică. Verifică-l întotdeauna cu un jurist înainte de a-l depune la ANSC. În plus, instrumentul este încă în pregătire în această fază de testare.",
       },
       {
         q: "Este sigur? De ce mă avertizează ChatGPT?",
@@ -577,7 +596,7 @@ contenderCopy.ro = {
       },
       {
         title: "Avocatul / juristul",
-        desc: "Termene exacte, bază legală citată corect și pachetul de contestație gata de depus.",
+        desc: "Termene exacte, bază legală citată corect și un draft de contestație ca punct de plecare.",
       },
       {
         title: "Operatorul economic",
@@ -623,6 +642,7 @@ contenderCopy.en = {
   },
   hero: {
     eyebrow: "The first ChatGPT App from the Republic of Moldova",
+    betaTag: "Beta · in testing",
     h1: "CONTender — public-procurement integrity, right inside ChatGPT",
     lead: "CONTender brings together Moldova's two official public-procurement sources, MTender and ANSC, in a single conversation. You ask in plain language, and the answer comes back as an interactive widget with the data already combined and computed. 99% of the path is free and anonymous: no account, and it never alters anything at the source.",
     ctaPrimary: "Add to ChatGPT",
@@ -678,8 +698,8 @@ contenderCopy.en = {
       {
         n: "3",
         name: "Raw (proxy) tools",
-        count: "~29",
-        desc: "At startup, CONTender discovers and re-exposes every source tool exactly as it is: 12 from ANSC and 17 from MTender. Direct, granular access to the raw APIs, for very precise questions.",
+        count: "32",
+        desc: "At startup, CONTender discovers and re-exposes every source tool exactly as it is: 18 from ANSC and 14 from MTender. Direct, granular access to the raw APIs, for very precise questions.",
       },
       {
         n: "4",
@@ -693,7 +713,10 @@ contenderCopy.en = {
   },
   capabilities: {
     heading: "What it can do",
-    intro: "Fifteen data tools, all free with a single exception. Below, ten of them.",
+    intro:
+      "Fifteen data tools, all free in this testing phase. Below, ten of them; the rest are in the full documentation below.",
+    filingDisclaimer:
+      "The appeal pack it generates is an informative draft, not legal advice. It is a starting point, to be checked by a lawyer before filing. The tool is still in preparation and not active yet.",
     tools: [
       {
         key: "audit_tender",
@@ -769,9 +792,9 @@ contenderCopy.en = {
       },
       {
         key: "prepare_filing_pack",
-        tagline: "Appeal pack ready to file",
+        tagline: "Pre-filled appeal-pack draft",
         returns:
-          "Generates a lawyer-grade appeal pack, pre-filled for filing at ANSC: top-5 grounds with strength scores, a procedural calendar, an official Romanian draft letter, an evidence checklist, cited precedents and a success-probability score.",
+          "Will generate a pre-filled appeal-pack draft as a starting point for filing at ANSC: top-5 grounds with strength scores, a procedural calendar, a Romanian draft letter, an evidence checklist, cited precedents and a rough success estimate. (In preparation — see the note below.)",
         widget: "filing-pack-viewer",
         free: false,
       },
@@ -855,24 +878,28 @@ contenderCopy.en = {
   pricing: {
     heading: "Price",
     intro:
-      "The reading and investigation path, which is 99% of use, never requires an account or sign-in. Only one tool costs anything.",
+      "The reading and investigation path, which is 99% of use, never requires an account or sign-in.",
+    betaNote:
+      "The app is in a testing phase (preview), in Developer mode on ChatGPT. Right now everything is free, including the appeal pack. The $5 price, the civic tier and Buy-One-Give-Ten describe the model planned for after the official launch — they are not active yet.",
     freeTitle: "Free and anonymous",
     freeDesc:
       "Everything to do with reading, audits, scores, red flags, profiles and timelines is free and anonymous. No account, no sign-in.",
-    paidTitle: "The appeal pack — $5 once",
+    paidTitle: "The appeal pack — $5 (planned)",
     paidDesc:
-      "The only paid tool is prepare_filing_pack: $5 one time, roughly 1% of a lawyer's fee, refundable within 7 days.",
-    civicTitle: "Free for civic use",
+      "After the official launch, the only tool that will cost anything is prepare_filing_pack: $5 one time, roughly 1% of a lawyer's fee, refundable within 7 days. For now, in testing, it is free.",
+    civicTitle: "Free for civic use (planned)",
     civicDesc:
-      "Registered investigative journalists, NGOs, academics and law students receive the packs for free, from a shared pool of civic credits.",
-    giveTitle: "Buy-One-Give-Ten",
+      "In the planned model, registered investigative journalists, NGOs, academics and law students will receive the packs for free, from a shared pool of civic credits.",
+    giveTitle: "Buy-One-Give-Ten (planned)",
     giveDesc:
-      'Every paid pack adds 10× civic credits to the common fund: one purchase "gifts" ten free civic packs.',
+      'A planned model: every paid pack will add 10× civic credits to the common fund — one purchase "gifts" ten free civic packs.',
   },
   setup: {
     heading: "How to add it to ChatGPT",
     intro:
       "No install and no code. It works on free or paid ChatGPT, and once added on desktop it appears on your phone too. At the end, the connection is made with no sign-in (No Auth).",
+    betaNote:
+      "You add it through Developer mode because the app is still in a testing phase (preview) and not yet published in OpenAI's official directory. The steps below are normal for this stage.",
     timeNote: "~3 minutes, no install",
     urlLabel: "The address you paste at step 5",
     steps: [
@@ -906,7 +933,11 @@ contenderCopy.en = {
     items: [
       {
         q: "Do I have to pay to use it?",
-        a: "Not for almost everything. 99% of the path — reading, audits, integrity scores, red flags, profiles, timelines — is free and anonymous. The only paid tool is the appeal pack, $5 once, free for the civic tier.",
+        a: "Right now, in the testing phase, everything is free — including the appeal pack. The single-paid-tool model ($5), the civic tier and Buy-One-Give-Ten are planned for after the official launch; they are not active yet.",
+      },
+      {
+        q: "Does the appeal pack replace a lawyer?",
+        a: "No. The pack is an informative draft, a starting point — not legal advice. Always check it with a lawyer before filing it at ANSC. On top of that, the tool is still in preparation during this testing phase.",
       },
       {
         q: "Is it safe? Why does ChatGPT warn me?",
@@ -973,7 +1004,7 @@ contenderCopy.en = {
       },
       {
         title: "The lawyer / legal counsel",
-        desc: "Exact deadlines, a correctly cited legal basis, and the appeal pack ready to file.",
+        desc: "Exact deadlines, a correctly cited legal basis, and a draft appeal pack to start from.",
       },
       {
         title: "The economic operator",
@@ -1019,6 +1050,7 @@ contenderCopy.ru = {
   },
   hero: {
     eyebrow: "Первое приложение ChatGPT из Республики Молдова",
+    betaTag: "Бета · в тестировании",
     h1: "CONTender — добросовестность госзакупок прямо в ChatGPT",
     lead: "CONTender объединяет два официальных источника данных о госзакупках Молдовы, MTender и ANSC, в одном диалоге. Вы спрашиваете на обычном языке, а ответ приходит интерактивным виджетом, с уже сведёнными и рассчитанными данными. 99% работы бесплатны и анонимны: аккаунт не нужен, и ничего не изменяется в источнике.",
     ctaPrimary: "Добавить в ChatGPT",
@@ -1074,8 +1106,8 @@ contenderCopy.ru = {
       {
         n: "3",
         name: "Сырые инструменты (proxy)",
-        count: "~29",
-        desc: "При запуске CONTender обнаруживает и заново публикует каждый инструмент источников ровно как есть: 12 от ANSC и 17 от MTender. Прямой гранулярный доступ к исходным API для очень точных запросов.",
+        count: "32",
+        desc: "При запуске CONTender обнаруживает и заново публикует каждый инструмент источников ровно как есть: 18 от ANSC и 14 от MTender. Прямой гранулярный доступ к исходным API для очень точных запросов.",
       },
       {
         n: "4",
@@ -1090,7 +1122,9 @@ contenderCopy.ru = {
   capabilities: {
     heading: "Что он умеет",
     intro:
-      "Пятнадцать инструментов данных, все бесплатны за единственным исключением. Ниже десять из них.",
+      "Пятнадцать инструментов данных, все бесплатны в этой фазе тестирования. Ниже десять из них; остальные — в полной документации ниже.",
+    filingDisclaimer:
+      "Формируемый пакет жалобы — это информативный черновик, а не юридическая консультация. Это отправная точка, которую нужно проверить у юриста перед подачей. Инструмент пока в подготовке и ещё не активен.",
     tools: [
       {
         key: "audit_tender",
@@ -1166,9 +1200,9 @@ contenderCopy.ru = {
       },
       {
         key: "prepare_filing_pack",
-        tagline: "Пакет жалобы для подачи",
+        tagline: "Предзаполненный черновик жалобы",
         returns:
-          "Формирует пакет жалобы юридического качества, предзаполненный для подачи в ANSC: топ-5 оснований с оценкой силы, процедурный календарь, официальное письмо-шаблон на румынском, перечень доказательств, цитируемые прецеденты и оценка вероятности успеха.",
+          "Сформирует предзаполненный черновик жалобы как отправную точку для подачи в ANSC: топ-5 оснований с оценкой силы, процедурный календарь, письмо-шаблон на румынском, перечень доказательств, цитируемые прецеденты и ориентировочную оценку шансов. (В подготовке — см. примечание ниже.)",
         widget: "filing-pack-viewer",
         free: false,
       },
@@ -1253,24 +1287,28 @@ contenderCopy.ru = {
   pricing: {
     heading: "Цена",
     intro:
-      "Путь чтения и расследования, то есть 99% использования, никогда не требует аккаунта или авторизации. Платный только один инструмент.",
+      "Путь чтения и расследования, то есть 99% использования, никогда не требует аккаунта или авторизации.",
+    betaNote:
+      "Приложение находится в фазе тестирования (preview), в режиме Developer mode в ChatGPT. Сейчас всё бесплатно, включая пакет жалобы. Цена 5 USD, гражданский тариф и Buy-One-Give-Ten описывают модель, запланированную после официального запуска, — они ещё не активны.",
     freeTitle: "Бесплатно и анонимно",
     freeDesc:
       "Всё, что связано с чтением, аудитом, оценками, красными флагами, профилями и хронологиями, бесплатно и анонимно. Без аккаунта, без авторизации.",
-    paidTitle: "Пакет жалобы — 5 USD один раз",
+    paidTitle: "Пакет жалобы — 5 USD (планируется)",
     paidDesc:
-      "Единственный платный инструмент — prepare_filing_pack: 5 USD единоразово, примерно 1% от гонорара адвоката, с возвратом средств в течение 7 дней.",
-    civicTitle: "Бесплатно для гражданского сектора",
+      "После официального запуска единственным платным инструментом станет prepare_filing_pack: 5 USD единоразово, примерно 1% от гонорара адвоката, с возвратом средств в течение 7 дней. Сейчас, в тестировании, он бесплатен.",
+    civicTitle: "Бесплатно для гражданского сектора (планируется)",
     civicDesc:
-      "Зарегистрированные журналисты-расследователи, НКО, академические сотрудники и студенты-юристы получают пакеты бесплатно из общего фонда гражданских кредитов.",
-    giveTitle: "Buy-One-Give-Ten",
+      "В планируемой модели зарегистрированные журналисты-расследователи, НКО, академические сотрудники и студенты-юристы будут получать пакеты бесплатно из общего фонда гражданских кредитов.",
+    giveTitle: "Buy-One-Give-Ten (планируется)",
     giveDesc:
-      "Каждый оплаченный пакет добавляет в общий фонд десятикратный объём гражданских кредитов: одна покупка «дарит» десять бесплатных гражданских пакетов.",
+      "Планируемая модель: каждый оплаченный пакет будет добавлять в общий фонд десятикратный объём гражданских кредитов — одна покупка «дарит» десять бесплатных гражданских пакетов.",
   },
   setup: {
     heading: "Как добавить в ChatGPT",
     intro:
       "Без установки и без кода. Работает на бесплатном или платном ChatGPT, и однажды добавленное на компьютере появляется и в телефоне. Подключение в конце выполняется без авторизации (No Auth).",
+    betaNote:
+      "Добавление выполняется через Developer mode, потому что приложение пока в фазе тестирования (preview) и ещё не опубликовано в официальном каталоге OpenAI. Шаги ниже нормальны для этого этапа.",
     timeNote: "~3 минуты, без установки",
     urlLabel: "Адрес, который вы вставляете на шаге 5",
     steps: [
@@ -1304,7 +1342,11 @@ contenderCopy.ru = {
     items: [
       {
         q: "Нужно ли платить, чтобы пользоваться?",
-        a: "Почти за всё — нет. 99% работы — чтение, аудит, оценки добросовестности, красные флаги, профили, хронологии — бесплатны и анонимны. Платный только пакет жалобы: 5 USD один раз, бесплатно для гражданского тарифа.",
+        a: "Сейчас, в фазе тестирования, всё бесплатно — включая пакет жалобы. Модель с единственным платным инструментом (5 USD), гражданский тариф и Buy-One-Give-Ten запланированы на период после официального запуска; пока они не активны.",
+      },
+      {
+        q: "Заменяет ли пакет жалобы адвоката?",
+        a: "Нет. Пакет — это информативный черновик, отправная точка, а не юридическая консультация. Всегда проверяйте его у юриста перед подачей в ANSC. К тому же инструмент пока в подготовке в этой фазе тестирования.",
       },
       {
         q: "Это безопасно? Почему ChatGPT меня предупреждает?",
@@ -1371,7 +1413,7 @@ contenderCopy.ru = {
       },
       {
         title: "Адвокат / юрист",
-        desc: "Точные сроки, корректно процитированное правовое основание и пакет жалобы для подачи.",
+        desc: "Точные сроки, корректно процитированное правовое основание и черновик пакета жалобы как отправную точку.",
       },
       {
         title: "Экономический оператор",
@@ -1405,27 +1447,27 @@ export const contenderHomeFeature: Record<
   { eyebrow: string; title: string; desc: string; cta: string; tagFree: string; tagSources: string }
 > = {
   ro: {
-    eyebrow: "Lansare · Primul ChatGPT App din Moldova",
+    eyebrow: "Beta · Primul ChatGPT App din Moldova",
     title: "CONTender — integritatea achizițiilor publice, în ChatGPT",
-    desc: "Unește MTender și ANSC într-o singură conversație: scor de integritate, semnale roșii, cronologii cu termene legale și pachet de contestație. 99% gratuit și anonim.",
+    desc: "Unește MTender și ANSC într-o singură conversație: scor de integritate, semnale roșii, cronologii cu termene legale și schelet de contestație. Gratuit și anonim în faza de testare.",
     cta: "Descoperă CONTender",
-    tagFree: "99% gratuit",
+    tagFree: "Gratuit în beta",
     tagSources: "MTender + ANSC",
   },
   en: {
-    eyebrow: "Launch · The first ChatGPT App from Moldova",
+    eyebrow: "Beta · The first ChatGPT App from Moldova",
     title: "CONTender — public-procurement integrity, in ChatGPT",
-    desc: "MTender and ANSC united in one conversation: integrity scores, red flags, timelines with legal deadlines, and an appeal pack. 99% free and anonymous.",
+    desc: "MTender and ANSC united in one conversation: integrity scores, red flags, timelines with legal deadlines, and a draft appeal pack. Free and anonymous during testing.",
     cta: "Discover CONTender",
-    tagFree: "99% free",
+    tagFree: "Free in beta",
     tagSources: "MTender + ANSC",
   },
   ru: {
-    eyebrow: "Запуск · Первое приложение ChatGPT из Молдовы",
+    eyebrow: "Бета · Первое приложение ChatGPT из Молдовы",
     title: "CONTender — добросовестность госзакупок, в ChatGPT",
-    desc: "MTender и ANSC в одном диалоге: оценка добросовестности, красные флаги, хронологии с юридическими сроками и пакет жалобы. 99% бесплатно и анонимно.",
+    desc: "MTender и ANSC в одном диалоге: оценка добросовестности, красные флаги, хронологии с юридическими сроками и черновик пакета жалобы. Бесплатно и анонимно в фазе тестирования.",
     cta: "Открыть CONTender",
-    tagFree: "99% бесплатно",
+    tagFree: "Бесплатно в бете",
     tagSources: "MTender + ANSC",
   },
 };
