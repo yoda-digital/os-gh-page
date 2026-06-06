@@ -66,19 +66,10 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={finalOg} />
 
-<link
-  rel="icon"
-  type="image/svg+xml"
-  href="/brand/yoda_opensource_logo_white.svg"
-  media="(prefers-color-scheme: dark)"
-/>
-<link
-  rel="icon"
-  type="image/svg+xml"
-  href="/brand/yoda_opensource_logo_black.svg"
-  media="(prefers-color-scheme: light)"
-/>
-<link rel="icon" type="image/svg+xml" href="/brand/yoda_opensource_logo_white.svg" />
-<link rel="apple-touch-icon" href="/brand/yoda_opensource_logo_white.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="mask-icon" href="/brand/yoda_mask.svg" color="#af9568" />
 <link rel="alternate" type="application/rss+xml" title={`${siteName} (${locale.toUpperCase()})`} href={`/rss-${locale}.xml`} />
 <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
