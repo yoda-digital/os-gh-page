@@ -70,6 +70,19 @@ const privacyLabel =
   locale === "ro" ? "Confidențialitate" : locale === "ru" ? "Конфиденциальность" : "Privacy";
 const modeLabels = ["Inline", "Fullscreen", "Picture-in-Picture"];
 
+// Partner role paragraphs lead with the company name, which we render as a
+// link. Slice the name off the (exact) copy so the visible text is unchanged.
+const roleLinks = {
+  yoda: { name: "Yoda Digital", url: "https://yoda.digital" },
+  esempla: { name: "Esempla Systems", url: "https://esempla.com/" },
+} as const;
+const yodaRest = c.builtBy.yodaRole.startsWith(roleLinks.yoda.name)
+  ? c.builtBy.yodaRole.slice(roleLinks.yoda.name.length)
+  : ` — ${c.builtBy.yodaRole}`;
+const esemplaRest = c.builtBy.esemplaRole.startsWith(roleLinks.esempla.name)
+  ? c.builtBy.esemplaRole.slice(roleLinks.esempla.name.length)
+  : ` — ${c.builtBy.esemplaRole}`;
+
 const softwareJsonLd = {
   "@type": "SoftwareApplication",
   name: "CONTender",
@@ -542,10 +555,14 @@ const breadcrumbJsonLd = {
 
       <div class="grid md:grid-cols-2 gap-5 mb-8">
         <div class="role-card">
-          <p class="text-sm text-[var(--color-muted)] leading-relaxed">{c.builtBy.yodaRole}</p>
+          <p class="text-sm text-[var(--color-muted)] leading-relaxed">
+            <a href={roleLinks.yoda.url} target="_blank" rel="noopener" class="creator-link">{roleLinks.yoda.name}</a>{yodaRest}
+          </p>
         </div>
         <div class="role-card">
-          <p class="text-sm text-[var(--color-muted)] leading-relaxed">{c.builtBy.esemplaRole}</p>
+          <p class="text-sm text-[var(--color-muted)] leading-relaxed">
+            <a href={roleLinks.esempla.url} target="_blank" rel="noopener" class="creator-link">{roleLinks.esempla.name}</a>{esemplaRest}
+          </p>
         </div>
       </div>
       <p class="text-sm text-[var(--color-muted)] leading-relaxed mb-2">
