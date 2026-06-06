@@ -72,13 +72,29 @@ function parseTable(section: string): McpEntity[] {
   const descIdx = header.findIndex((h) => /desc|summary|purpose/i.test(h));
   if (nameIdx === -1) return [];
 
+  // A README "Tools" section can hold several stacked pipe tables (e.g. one
+  // sub-table per category). We treat the whole section as one row stream, so
+  // every inner table's header row ("| name | … |") and separator row
+  // ("|---|---|") would otherwise be miscounted as tools. Skip them.
+  const isSeparatorCell = (x: string) => /^:?-{2,}:?$/.test(x.replace(/\s/g, ""));
+  const isNoise = (n: string) =>
+    !n || isSeparatorCell(n) || /^(name|tool|tools|prompt|prompts|resource|resources)$/i.test(n);
   const out: McpEntity[] = [];
   for (let i = 2; i < rows.length; i++) {
     const c = cells(rows[i]);
     if (!c[nameIdx]) continue;
-    const name = c[nameIdx].replace(/[`*_]/g, "").trim();
+    // Markdown separator row (all cells are dashes).
+    if (c.every((x) => x === "" || isSeparatorCell(x))) continue;
     const description = (descIdx > -1 ? c[descIdx] : "").replace(/[`*]/g, "").trim();
-    if (name) out.push({ name, description });
+    // A single cell can group related tools with " / " (spaced slash), e.g.
+    //   `get_budget` / `get_funding_source`
+    // Split on the SPACED slash only, so resource URIs like
+    // `mtender://tenders/latest` (no surrounding spaces) are never split.
+    for (const part of c[nameIdx].split(/\s+\/\s+/)) {
+      const name = part.replace(/[`*]/g, "").trim();
+      if (isNoise(name)) continue;
+      out.push({ name, description });
+    }
   }
   return out;
 }

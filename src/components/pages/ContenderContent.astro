@@ -60,6 +60,14 @@ const promptLabel =
       ? "Промпт для копирования"
       : "Prompt to copy";
 const seeAlsoLabel = locale === "ro" ? "Vezi și" : locale === "ru" ? "См. также" : "See also";
+const methodologyLabel =
+  locale === "ro"
+    ? "Cum se calculează scorul →"
+    : locale === "ru"
+      ? "Как считается оценка →"
+      : "How the score is computed →";
+const privacyLabel =
+  locale === "ro" ? "Confidențialitate" : locale === "ru" ? "Конфиденциальность" : "Privacy";
 const modeLabels = ["Inline", "Fullscreen", "Picture-in-Picture"];
 
 const softwareJsonLd = {
@@ -282,6 +290,9 @@ const breadcrumbJsonLd = {
           }
         </div>
         <p class="filing-disclaimer">{c.capabilities.filingDisclaimer}</p>
+        <p class="mt-6">
+          <a href={localizedPath(locale, "/contender/methodology/")} class="doc-link">{methodologyLabel}</a>
+        </p>
       </div>
     </section>
 
@@ -551,6 +562,12 @@ const breadcrumbJsonLd = {
         <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-5">{c.closing.heading}</h2>
         <p class="text-lg text-[var(--color-muted)] leading-relaxed mb-10">{c.closing.body}</p>
         <a href="#setup" class="cta-primary cta-primary--lg">{c.closing.ctaLabel}</a>
+
+        <p class="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
+          <a href={localizedPath(locale, "/contender/privacy/")} class="doc-link">{privacyLabel}</a>
+          <span class="text-[var(--color-line)]" aria-hidden="true">·</span>
+          <a href={localizedPath(locale, "/contender/methodology/")} class="doc-link">{methodologyLabel}</a>
+        </p>
 
         {
           (relatedProjects.length > 0 || pillarCfg) && (
@@ -845,6 +862,8 @@ const breadcrumbJsonLd = {
 
     .creator-link { color: var(--color-accent); border-bottom: 1px solid color-mix(in oklch, var(--color-accent) 40%, transparent); }
     .creator-link:hover { color: var(--color-cool); }
+    .doc-link { color: var(--color-accent); font-family: var(--font-mono); font-size: 0.85rem; }
+    .doc-link:hover { color: var(--color-cool); }
 
     /* FAQ */
 

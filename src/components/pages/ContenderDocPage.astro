@@ -1,0 +1,93 @@
+---
+import type { ContenderDoc } from "~/data/contender";
+import type { Locale } from "~/data/repos";
+import { absoluteUrl, localizedPath, t } from "~/i18n/ui";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+
+interface Props {
+  locale: Locale;
+  doc: ContenderDoc;
+  slug: string; // e.g. "privacy" | "methodology"
+}
+const { locale, doc, slug } = Astro.props;
+const pathname = `/contender/${slug}/`;
+
+const breadcrumbJsonLd = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t(locale, "site.title"),
+      item: absoluteUrl(locale, "/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "CONTender",
+      item: absoluteUrl(locale, "/contender/"),
+    },
+    { "@type": "ListItem", position: 3, name: doc.h1, item: absoluteUrl(locale, pathname) },
+  ],
+};
+---
+
+<BaseLayout
+  locale={locale}
+  pathname={pathname}
+  title={doc.meta.title}
+  description={doc.meta.description}
+  ogType="article"
+  jsonLd={[breadcrumbJsonLd]}
+>
+  <article class="max-w-3xl mx-auto px-4 py-16 md:py-20">
+    <a
+      href={localizedPath(locale, "/contender/")}
+      class="inline-flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-ink)] no-underline mb-8"
+    >
+      <span aria-hidden="true">←</span> {doc.backLabel}
+    </a>
+
+    <p class="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--color-accent)] mb-4 flex items-center gap-3">
+      <span class="inline-block w-8 h-px bg-[var(--color-accent)]" aria-hidden="true"></span>
+      {doc.eyebrow}
+    </p>
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-3 leading-tight">{doc.h1}</h1>
+    <p class="font-mono text-xs text-[var(--color-muted)] mb-8">{doc.updatedLabel}</p>
+    <p class="text-lg text-[var(--color-muted)] leading-relaxed mb-12">{doc.intro}</p>
+
+    <div class="space-y-10">
+      {
+        doc.sections.map((s) => (
+          <section>
+            <h2 class="text-xl md:text-2xl font-semibold mb-4">{s.heading}</h2>
+            {s.paragraphs?.map((p) => (
+              <p class="text-[var(--color-ink)] leading-relaxed mb-3">{p}</p>
+            ))}
+            {s.bullets && (
+              <ul class="space-y-2 mt-2">
+                {s.bullets.map((b) => (
+                  <li class="flex gap-3 text-[var(--color-ink)] leading-relaxed">
+                    <span class="text-[var(--color-accent)] shrink-0" aria-hidden="true">
+                      —
+                    </span>
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))
+      }
+    </div>
+
+    <div class="mt-14 pt-8 border-t border-[var(--color-line)]">
+      <a
+        href={localizedPath(locale, "/contender/")}
+        class="inline-flex items-center gap-2 text-sm text-[var(--color-accent)] hover:text-[var(--color-cool)] no-underline"
+      >
+        <span aria-hidden="true">←</span> {doc.backLabel}
+      </a>
+    </div>
+  </article>
+</BaseLayout>

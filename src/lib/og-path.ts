@@ -45,7 +45,7 @@ export function ogPathFor(pathname: string): string {
   if (stripped === "/") return "/og/home.png";
   if (stripped === "/faq/") return "/og/faq.png";
   if (stripped === "/about/") return "/og/about.png";
-  if (stripped === "/contender/") return "/og/contender.png";
+  if (stripped.startsWith("/contender/")) return "/og/contender.png";
 
   // Pillar pages — one-segment paths matching known pillar slugs
   const pillarMatch = p.match(PILLAR_MATCH);

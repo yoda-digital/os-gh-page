@@ -288,8 +288,8 @@ contenderCopy.ro = {
       {
         n: "3",
         name: "Instrumente brute (proxy)",
-        count: "32",
-        desc: "La pornire, CONTender descoperă și re-expune fiecare instrument al surselor exact așa cum este: 18 de la ANSC și 14 de la MTender. Acces granular direct la API-urile brute, pentru întrebări foarte precise.",
+        count: "29",
+        desc: "La pornire, CONTender descoperă și re-expune fiecare instrument al surselor exact așa cum este: 12 de la ANSC și 17 de la MTender. Acces granular direct la API-urile brute, pentru întrebări foarte precise.",
       },
       {
         n: "4",
@@ -320,7 +320,7 @@ contenderCopy.ro = {
         key: "integrity_score",
         tagline: "Scor de integritate 0–100",
         returns:
-          "Un scor compozit de la 0 la 100 (100 = curat), cu detaliere pe factori: rata de contestare, suspendări și anulări în instanță, severitatea deciziilor ANSC. Determinist, nu ghicit.",
+          "Un scor compozit de la 0 la 100, calculat din semnalele ANSC: rata contestațiilor, suspendări și anulări în instanță, severitatea deciziilor. Scor mare = procedură curată; scor mic = semnale de risc (100 = niciun risc detectat). Determinist, nu ghicit; datele MTender oferă context, nu intră în scor.",
         widget: "integrity-score-card",
         free: true,
       },
@@ -451,7 +451,7 @@ contenderCopy.ro = {
   legal: {
     heading: "Ancorat în lege",
     intro:
-      "Termenele și temeiurile nu sunt aproximate. CONTender încarcă la pornire articolele relevante și le citează structural: etichetă, articol, rezumat, sursă și data intrării în vigoare. Comută automat între regimuri în funcție de data procedurii.",
+      "Termenele sunt calculate pe baza datelor disponibile și a regimului legal aplicabil, iar temeiurile sunt citate structural: etichetă, articol, rezumat, sursă și data intrării în vigoare (articolele se încarcă la pornire). CONTender comută automat între regimuri în funcție de data procedurii.",
     currentTitle:
       "Legea 20/2026 — privind remediile și căile de atac în achizițiile publice (regimul curent)",
     currentPoints: [
@@ -507,7 +507,7 @@ contenderCopy.ro = {
       {
         title: "Activează Developer mode",
         detail:
-          "Pornește „Developer mode” (toggle-ul devine albastru). Apare „ELEVATED RISK” — este avertismentul standard pentru orice aplicație adăugată manual. Lasă „Enforce CSP” pe OFF.",
+          "Pornește „Developer mode” (toggle-ul devine albastru). Apare „ELEVATED RISK” — avertismentul standard pentru orice aplicație adăugată manual. „Enforce CSP” este un setting ChatGPT separat; în faza de testare prin Developer mode îl lași pe OFF, iar CONTender are oricum o politică CSP strictă definită la nivel de widget.",
       },
       {
         title: "Apasă Create app",
@@ -533,7 +533,7 @@ contenderCopy.ro = {
       },
       {
         q: "Este sigur? De ce mă avertizează ChatGPT?",
-        a: "Da. CONTender doar citește; niciun instrument nu modifică datele sursă, deci îl poți rula de oricâte ori. Avertismentul „ELEVATED RISK” apare pentru orice aplicație adăugată manual în modul dezvoltator, nu este specific acestei aplicații.",
+        a: "CONTender funcționează doar în citire (read-only): interoghează surse publice — MTender și ANSC — și nu modifică nimic la sursă, deci îl poți rula de oricâte ori. Avertismentul „ELEVATED RISK” apare pentru orice aplicație adăugată manual în modul dezvoltator; nu este specific CONTender.",
       },
       {
         q: "Funcționează pe telefon?",
@@ -568,11 +568,11 @@ contenderCopy.ro = {
     yodaRole:
       "Yoda Digital (yoda.digital) — studio de infrastructură AI-nativă și inginerie civic-tech. Întreține cele două servere open-source pe care stă CONTender, ansc-mcp-server și mtender-mcp-server, care împachetează sursele oficiale ca servicii MCP. Pentru că sunt open-source, stratul de integritate este auditabil și reutilizabil, nu o cutie neagră.",
     esemplaRole:
-      "esempla systems (esempla.com) — companie gov-tech din Chișinău, activă din 2009, care construiește platforme de e-guvernare și interoperabilitate de date pentru statul moldovenesc. A dezvoltat e-licitatie.md, una dintre platformele de tranzacționare ale sistemului MTender, și a asigurat interoperabilitatea acestuia cu alte registre de stat; tot ei au livrat eApostille, eIntegrity (declarații de avere și interese) și eGuarantee. Cunosc din interior chiar infrastructura de achiziții pe care CONTender o interoghează.",
+      "esempla systems (esempla.com) — companie gov-tech din Chișinău, activă din 2009, care construiește platforme de e-guvernare și interoperabilitate de date pentru statul moldovenesc. A dezvoltat e-licitatie.md, una dintre platformele de tranzacționare ale sistemului MTender, și a asigurat interoperabilitatea acestuia cu alte registre de stat; tot ei au livrat eApostille, eIntegrity (declarații de avere și interese) și eGuarantee. Această experiență tehnică în gov-tech dă context relevant — însă CONTender folosește exclusiv surse publice și nu are acces privilegiat la date.",
     creatorName: "Ion Calmîș",
     creatorRole: "CTO la Yoda Digital",
     firstAppNote:
-      "Primul ChatGPT App din Republica Moldova: o echipă mică a ajuns pe o suprafață globală de distribuție nou-nouță în același moment cu toți ceilalți și a plantat acolo civic-tech.",
+      "Primul ChatGPT App din Republica Moldova (după informațiile publice disponibile la momentul publicării): o echipă mică a ajuns pe o suprafață globală de distribuție nou-nouță în același moment cu toți ceilalți și a plantat acolo civic-tech.",
   },
   resources: {
     heading: "Documentație și ghiduri",
@@ -698,8 +698,8 @@ contenderCopy.en = {
       {
         n: "3",
         name: "Raw (proxy) tools",
-        count: "32",
-        desc: "At startup, CONTender discovers and re-exposes every source tool exactly as it is: 18 from ANSC and 14 from MTender. Direct, granular access to the raw APIs, for very precise questions.",
+        count: "29",
+        desc: "At startup, CONTender discovers and re-exposes every source tool exactly as it is: 12 from ANSC and 17 from MTender. Direct, granular access to the raw APIs, for very precise questions.",
       },
       {
         n: "4",
@@ -730,7 +730,7 @@ contenderCopy.en = {
         key: "integrity_score",
         tagline: "Integrity score, 0 to 100",
         returns:
-          "A composite score from 0 to 100 (100 = clean), broken down by factor: appeal rate, court suspensions and annulments, ANSC decision severity. Deterministic, not guessed.",
+          "A composite score from 0 to 100, computed from ANSC signals: appeal rate, court suspensions and annulments, decision severity. A high score means a clean procedure; a low score flags risk (100 = no risk detected). Deterministic, not guessed; MTender data is context and does not enter the score.",
         widget: "integrity-score-card",
         free: true,
       },
@@ -859,7 +859,7 @@ contenderCopy.en = {
   legal: {
     heading: "Anchored in law",
     intro:
-      "Deadlines and legal grounds are not approximated. At startup CONTender loads the relevant articles and cites them structurally: label, article, summary, source and in-force date. It switches automatically between regimes based on the procedure's date.",
+      "Deadlines are computed from the available data and the applicable legal regime, and the grounds are cited structurally: label, article, summary, source and in-force date (the articles load at startup). CONTender switches automatically between regimes based on the procedure's date.",
     currentTitle:
       "Law 20/2026 — on remedies and means of appeal in public procurement (the current regime)",
     currentPoints: [
@@ -915,7 +915,7 @@ contenderCopy.en = {
       {
         title: "Turn on Developer mode",
         detail:
-          'Switch on "Developer mode" (the toggle turns blue). "ELEVATED RISK" appears — it is the standard warning for any manually added app. Leave "Enforce CSP" OFF.',
+          'Switch on "Developer mode" (the toggle turns blue). "ELEVATED RISK" appears — the standard warning for any manually added app. "Enforce CSP" is a separate ChatGPT setting; during testing via Developer mode you leave it OFF, and CONTender ships a strict widget-level CSP anyway.',
       },
       {
         title: "Click Create app",
@@ -941,7 +941,7 @@ contenderCopy.en = {
       },
       {
         q: "Is it safe? Why does ChatGPT warn me?",
-        a: 'Yes. CONTender only reads; no tool modifies the source data, so you can run it as many times as you like. The "ELEVATED RISK" warning appears for any app added manually in developer mode; it is not specific to this app.',
+        a: 'CONTender is read-only: it queries public sources — MTender and ANSC — and changes nothing at the source, so you can run it as many times as you like. The "ELEVATED RISK" warning appears for any app added manually in developer mode; it is not specific to CONTender.',
       },
       {
         q: "Does it work on a phone?",
@@ -976,11 +976,11 @@ contenderCopy.en = {
     yodaRole:
       "Yoda Digital (yoda.digital) — an AI-native infrastructure and civic-tech engineering studio. It maintains the two open-source servers CONTender stands on, ansc-mcp-server and mtender-mcp-server, which wrap the official sources as MCP services. Because they are open source, the integrity layer is auditable and reusable, not a black box.",
     esemplaRole:
-      "esempla systems (esempla.com) — a Chișinău gov-tech company, active since 2009, building e-government platforms and data interoperability for the Moldovan state. It developed e-licitatie.md, one of the trading platforms on the MTender system, and wired MTender's interoperability with other state registries; it also delivered eApostille, eIntegrity (asset and interest declarations) and eGuarantee. They know first-hand the very procurement infrastructure CONTender queries.",
+      "esempla systems (esempla.com) — a Chișinău gov-tech company, active since 2009, building e-government platforms and data interoperability for the Moldovan state. It developed e-licitatie.md, one of the trading platforms on the MTender system, and wired MTender's interoperability with other state registries; it also delivered eApostille, eIntegrity (asset and interest declarations) and eGuarantee. That hands-on gov-tech experience gives relevant context — but CONTender uses only public sources and has no privileged access to data.",
     creatorName: "Ion Calmîș",
     creatorRole: "CTO at Yoda Digital",
     firstAppNote:
-      "The first ChatGPT App from the Republic of Moldova: a small team reached a brand-new global distribution surface at the same moment as everyone else and planted civic-tech there.",
+      "The first ChatGPT App from the Republic of Moldova (to the best of public knowledge at the time of writing): a small team reached a brand-new global distribution surface at the same moment as everyone else and planted civic-tech there.",
   },
   resources: {
     heading: "Documentation and guides",
@@ -1106,8 +1106,8 @@ contenderCopy.ru = {
       {
         n: "3",
         name: "Сырые инструменты (proxy)",
-        count: "32",
-        desc: "При запуске CONTender обнаруживает и заново публикует каждый инструмент источников ровно как есть: 18 от ANSC и 14 от MTender. Прямой гранулярный доступ к исходным API для очень точных запросов.",
+        count: "29",
+        desc: "При запуске CONTender обнаруживает и заново публикует каждый инструмент источников ровно как есть: 12 от ANSC и 17 от MTender. Прямой гранулярный доступ к исходным API для очень точных запросов.",
       },
       {
         n: "4",
@@ -1138,7 +1138,7 @@ contenderCopy.ru = {
         key: "integrity_score",
         tagline: "Оценка добросовестности 0–100",
         returns:
-          "Сводная оценка от 0 до 100 (100 = чисто) с разбивкой по факторам: доля обжалований, судебные приостановления и аннулирования, тяжесть решений ANSC. Детерминированная, не угаданная.",
+          "Сводная оценка от 0 до 100, рассчитанная по сигналам ANSC: доля обжалований, судебные приостановления и аннулирования, тяжесть решений. Высокая оценка = чистая процедура; низкая = сигналы риска (100 = риск не выявлен). Детерминированная, не угаданная; данные MTender дают контекст и не входят в оценку.",
         widget: "integrity-score-card",
         free: true,
       },
@@ -1269,7 +1269,7 @@ contenderCopy.ru = {
   legal: {
     heading: "Опирается на закон",
     intro:
-      "Сроки и основания не приблизительны. При запуске CONTender загружает релевантные статьи и цитирует их структурно: метка, статья, краткое содержание, источник и дата вступления в силу. Автоматически переключается между режимами в зависимости от даты процедуры.",
+      "Сроки рассчитываются по доступным данным и применимому правовому режиму, а основания цитируются структурно: метка, статья, краткое содержание, источник и дата вступления в силу (статьи загружаются при запуске). CONTender автоматически переключается между режимами в зависимости от даты процедуры.",
     currentTitle:
       "Закон 20/2026 — о средствах правовой защиты и способах обжалования в сфере госзакупок (действующий режим)",
     currentPoints: [
@@ -1324,7 +1324,7 @@ contenderCopy.ru = {
       {
         title: "Включите Developer mode",
         detail:
-          "Включите «Developer mode» (переключатель станет синим). Появится «ELEVATED RISK» — это стандартное предупреждение для любого приложения, добавленного вручную. Оставьте «Enforce CSP» в положении OFF.",
+          "Включите «Developer mode» (переключатель станет синим). Появится «ELEVATED RISK» — стандартное предупреждение для любого приложения, добавленного вручную. «Enforce CSP» — это отдельная настройка ChatGPT; в фазе тестирования через Developer mode оставьте её OFF, а у CONTender в любом случае есть строгая CSP-политика на уровне виджета.",
       },
       {
         title: "Нажмите Create app",
@@ -1350,7 +1350,7 @@ contenderCopy.ru = {
       },
       {
         q: "Это безопасно? Почему ChatGPT меня предупреждает?",
-        a: "Да. CONTender только читает; ни один инструмент не изменяет исходные данные, поэтому запускать его можно сколько угодно раз. Предупреждение «ELEVATED RISK» появляется для любого приложения, добавленного вручную в режиме разработчика, и не относится конкретно к этому приложению.",
+        a: "CONTender работает только на чтение (read-only): он запрашивает публичные источники — MTender и ANSC — и ничего не меняет в источнике, поэтому запускать его можно сколько угодно раз. Предупреждение «ELEVATED RISK» появляется для любого приложения, добавленного вручную в режиме разработчика; оно не относится конкретно к CONTender.",
       },
       {
         q: "Работает ли на телефоне?",
@@ -1385,11 +1385,11 @@ contenderCopy.ru = {
     yodaRole:
       "Yoda Digital (yoda.digital) — студия AI-нативной инфраструктуры и civic-tech-инженерии. Поддерживает два open-source-сервера, на которых стоит CONTender, ansc-mcp-server и mtender-mcp-server, которые упаковывают официальные источники как MCP-сервисы. Поскольку они open-source, слой добросовестности можно проверять и переиспользовать, это не чёрный ящик.",
     esemplaRole:
-      "esempla systems (esempla.com) — gov-tech-компания из Кишинёва, работающая с 2009 года, которая строит платформы электронного правительства и интероперабельность данных для молдавского государства. Она разработала e-licitatie.md — одну из торговых площадок системы MTender — и обеспечила её взаимодействие с другими государственными реестрами; ею же реализованы eApostille, eIntegrity (декларации об имуществе и интересах) и eGuarantee. Они знают изнутри ту самую закупочную инфраструктуру, которую запрашивает CONTender.",
+      "esempla systems (esempla.com) — gov-tech-компания из Кишинёва, работающая с 2009 года, которая строит платформы электронного правительства и интероперабельность данных для молдавского государства. Она разработала e-licitatie.md — одну из торговых площадок системы MTender — и обеспечила её взаимодействие с другими государственными реестрами; ею же реализованы eApostille, eIntegrity (декларации об имуществе и интересах) и eGuarantee. Этот технический опыт в gov-tech даёт релевантный контекст — но CONTender использует только публичные источники и не имеет привилегированного доступа к данным.",
     creatorName: "Ион Калмыш",
     creatorRole: "CTO в Yoda Digital",
     firstAppNote:
-      "Первое приложение ChatGPT из Республики Молдова: небольшая команда вышла на совершенно новую глобальную площадку распространения одновременно со всеми остальными и поставила там civic-tech.",
+      "Первое приложение ChatGPT из Республики Молдова (по публично доступным сведениям на момент публикации): небольшая команда вышла на совершенно новую глобальную площадку распространения одновременно со всеми остальными и поставила там civic-tech.",
   },
   resources: {
     heading: "Документация и руководства",
@@ -1469,5 +1469,433 @@ export const contenderHomeFeature: Record<
     cta: "Открыть CONTender",
     tagFree: "Бесплатно в бете",
     tagSources: "MTender + ANSC",
+  },
+};
+
+// ── Standalone doc pages (privacy + scoring methodology) ─────────────────────
+// Plain prose, anchored strictly in the CONTender server code. Rendered by
+// ContenderDocPage.astro. One entry per locale.
+export interface ContenderDocSection {
+  heading: string;
+  paragraphs?: string[];
+  bullets?: string[];
+}
+export interface ContenderDoc {
+  meta: { title: string; description: string };
+  eyebrow: string;
+  h1: string;
+  updatedLabel: string;
+  intro: string;
+  sections: ContenderDocSection[];
+  backLabel: string;
+}
+
+export const contenderPrivacy: Record<Locale, ContenderDoc> = {
+  ro: {
+    meta: {
+      title: "Confidențialitate · CONTender",
+      description:
+        "Politica de confidențialitate a aplicației CONTender: fără cont, fără persistență, doar citire. Ancorat în codul serverului MCP.",
+    },
+    eyebrow: "CONTender · Confidențialitate",
+    h1: "Politica de confidențialitate",
+    updatedLabel: "Actualizat: 6 iunie 2026",
+    intro:
+      "CONTender este o aplicație ChatGPT (server MCP) pentru integritatea achizițiilor publice. Această politică descrie exact ce face serverul, conform codului sursă — nimic în plus.",
+    sections: [
+      {
+        heading: "Pe scurt",
+        bullets: [
+          "Fără cont și fără autentificare pentru parcursul de citire (No Auth).",
+          "Fără persistență: nicio bază de date, nicio scriere pe disc. Totul stă în memorie și se resetează la repornire.",
+          "Doar citire: interoghează surse publice și nu modifică nimic la sursă.",
+        ],
+      },
+      {
+        heading: "Cont și autentificare",
+        paragraphs: [
+          "Modul implicit este „No Auth”: nu se creează niciun cont de utilizator și nu se cere autentificare. O identitate stabilă (subject) este folosită doar pentru un eventual instrument plătit și provine din contextul oferit de host (ChatGPT), nu dintr-un cont CONTender. Autentificarea OAuth există în cod, dar este opțională și inactivă în această fază.",
+        ],
+      },
+      {
+        heading: "Ce stocăm",
+        paragraphs: [
+          "Nimic persistent. Nu există bază de date și nu se scrie pe disc. Stările aplicației sunt strict în memorie și dispar la repornirea serverului:",
+        ],
+        bullets: [
+          "Drepturile/creditele pentru pachetul de contestație — într-o structură în memorie (cu fereastră de rambursare de 7 zile).",
+          "Registrul „uz civic” și contorul Buy-One-Give-Ten — variabile în memorie.",
+          "Cache pentru datele oficiale: MTender (TTL ~10 minute) și ANSC (LRU), ambele în memorie, pentru a evita re-interogarea acelorași înregistrări.",
+        ],
+      },
+      {
+        heading: "Jurnalizare (logging)",
+        paragraphs: [
+          "Serverul scrie jurnale operaționale doar la stderr (fără fișier, fără bază de date). Acestea pot include numele instrumentului apelat, argumentele apelului, un identificator de sesiune și metadate despre rezultat. Retenția jurnalelor nu este definită în aplicație — depinde de mediul de găzduire (container/host).",
+        ],
+      },
+      {
+        heading: "Servicii terțe",
+        paragraphs: [
+          "Serverul comunică doar cu sursele oficiale ale achizițiilor publice: MTender (public.mtender.gov.md, storage.mtender.gov.md) și ANSC (ansc.md / elo.ansc.md). La acestea se adaugă ChatGPT ca platformă-gazdă și Stripe — dar numai dacă plata este configurată (inactivă în faza curentă). Nu există analytics sau telemetrie de la terți în server.",
+        ],
+      },
+      {
+        heading: "Documente încărcate",
+        paragraphs: [
+          "Când analizezi un document, serverul primește un URL (pentru fișierele încărcate în ChatGPT, URL-ul este obținut de widget). Conținutul este descărcat și extras în memorie (text + imagini per pagină), apoi returnat. Serverul nu stochează fișierul și nu îl scrie pe disc.",
+        ],
+      },
+      {
+        heading: "Acest site",
+        paragraphs: [
+          "Pagina pe care o citești acum (opensource.yoda.digital) folosește Google Analytics în mod agregat, doar după ce accepți cookie-urile. Aceasta este o măsurătoare a site-ului și este complet separată de serverul MCP al aplicației CONTender.",
+        ],
+      },
+      {
+        heading: "Contact",
+        paragraphs: [
+          "Întrebări despre confidențialitate: dev.ungheni@gmail.com (Ion Calmîș, Yoda Digital).",
+        ],
+      },
+    ],
+    backLabel: "Înapoi la CONTender",
+  },
+  en: {
+    meta: {
+      title: "Privacy · CONTender",
+      description:
+        "CONTender's privacy policy: no account, no persistence, read-only. Anchored in the MCP server's source code.",
+    },
+    eyebrow: "CONTender · Privacy",
+    h1: "Privacy policy",
+    updatedLabel: "Updated: 6 June 2026",
+    intro:
+      "CONTender is a ChatGPT App (MCP server) for public-procurement integrity. This policy describes exactly what the server does, per its source code — nothing more.",
+    sections: [
+      {
+        heading: "In short",
+        bullets: [
+          "No account and no sign-in for the reading path (No Auth).",
+          "No persistence: no database, no disk writes. Everything is in memory and resets on restart.",
+          "Read-only: it queries public sources and changes nothing at the source.",
+        ],
+      },
+      {
+        heading: "Account and authentication",
+        paragraphs: [
+          'The default mode is "No Auth": no user account is created and no sign-in is required. A stable identity (subject) is used only for a possible paid tool and comes from the host (ChatGPT) context, not from a CONTender account. OAuth exists in the code but is optional and inactive in this phase.',
+        ],
+      },
+      {
+        heading: "What we store",
+        paragraphs: [
+          "Nothing persistent. There is no database and nothing is written to disk. Application state is strictly in memory and disappears when the server restarts:",
+        ],
+        bullets: [
+          "Entitlements/credits for the appeal pack — in an in-memory store (with a 7-day refund window).",
+          "The civic-use ledger and the Buy-One-Give-Ten counter — in-memory variables.",
+          "Caches for the official data: MTender (~10-minute TTL) and ANSC (LRU), both in memory, to avoid re-fetching the same records.",
+        ],
+      },
+      {
+        heading: "Logging",
+        paragraphs: [
+          "The server writes operational logs to stderr only (no file, no database). These may include the called tool's name, the call arguments, a session identifier, and result metadata. Log retention is not defined in the application — it depends on the hosting environment (container/host).",
+        ],
+      },
+      {
+        heading: "Third-party services",
+        paragraphs: [
+          "The server talks only to the official procurement sources: MTender (public.mtender.gov.md, storage.mtender.gov.md) and ANSC (ansc.md / elo.ansc.md). Add to that ChatGPT as the host platform and Stripe — but only if payment is configured (inactive in the current phase). There is no third-party analytics or telemetry in the server.",
+        ],
+      },
+      {
+        heading: "Uploaded documents",
+        paragraphs: [
+          "When you analyze a document, the server receives a URL (for files uploaded into ChatGPT, the URL is resolved by the widget). The content is downloaded and extracted in memory (text + per-page images), then returned. The server does not store the file and never writes it to disk.",
+        ],
+      },
+      {
+        heading: "This website",
+        paragraphs: [
+          "The page you are reading now (opensource.yoda.digital) uses Google Analytics in aggregate, only after you accept cookies. That is website measurement and is entirely separate from the CONTender app's MCP server.",
+        ],
+      },
+      {
+        heading: "Contact",
+        paragraphs: ["Privacy questions: dev.ungheni@gmail.com (Ion Calmîș, Yoda Digital)."],
+      },
+    ],
+    backLabel: "Back to CONTender",
+  },
+  ru: {
+    meta: {
+      title: "Конфиденциальность · CONTender",
+      description:
+        "Политика конфиденциальности CONTender: без аккаунта, без хранения, только чтение. Опирается на исходный код MCP-сервера.",
+    },
+    eyebrow: "CONTender · Конфиденциальность",
+    h1: "Политика конфиденциальности",
+    updatedLabel: "Обновлено: 6 июня 2026",
+    intro:
+      "CONTender — это приложение ChatGPT (MCP-сервер) для добросовестности госзакупок. Эта политика описывает ровно то, что делает сервер согласно исходному коду, — не больше.",
+    sections: [
+      {
+        heading: "Коротко",
+        bullets: [
+          "Без аккаунта и без авторизации для пути чтения (No Auth).",
+          "Без хранения: нет базы данных, нет записи на диск. Всё в памяти и сбрасывается при перезапуске.",
+          "Только чтение: запрашивает публичные источники и ничего не меняет в источнике.",
+        ],
+      },
+      {
+        heading: "Аккаунт и аутентификация",
+        paragraphs: [
+          "Режим по умолчанию — «No Auth»: аккаунт пользователя не создаётся и авторизация не требуется. Стабильный идентификатор (subject) используется только для возможного платного инструмента и приходит из контекста хоста (ChatGPT), а не из аккаунта CONTender. OAuth есть в коде, но он опционален и неактивен в этой фазе.",
+        ],
+      },
+      {
+        heading: "Что мы храним",
+        paragraphs: [
+          "Ничего постоянного. Базы данных нет, на диск ничего не пишется. Состояние приложения строго в памяти и исчезает при перезапуске сервера:",
+        ],
+        bullets: [
+          "Права/кредиты на пакет жалобы — в хранилище в памяти (с окном возврата 7 дней).",
+          "Реестр «гражданского использования» и счётчик Buy-One-Give-Ten — переменные в памяти.",
+          "Кэш официальных данных: MTender (TTL ~10 минут) и ANSC (LRU), оба в памяти, чтобы не запрашивать одни и те же записи повторно.",
+        ],
+      },
+      {
+        heading: "Логирование",
+        paragraphs: [
+          "Сервер пишет операционные логи только в stderr (без файла, без базы данных). Они могут включать имя вызванного инструмента, аргументы вызова, идентификатор сессии и метаданные результата. Срок хранения логов в приложении не задан — он зависит от среды хостинга (контейнер/хост).",
+        ],
+      },
+      {
+        heading: "Сторонние сервисы",
+        paragraphs: [
+          "Сервер обращается только к официальным источникам закупок: MTender (public.mtender.gov.md, storage.mtender.gov.md) и ANSC (ansc.md / elo.ansc.md). К ним добавляются ChatGPT как хост-платформа и Stripe — но только если оплата настроена (в текущей фазе неактивна). Сторонней аналитики или телеметрии в сервере нет.",
+        ],
+      },
+      {
+        heading: "Загруженные документы",
+        paragraphs: [
+          "При анализе документа сервер получает URL (для файлов, загруженных в ChatGPT, URL определяет виджет). Содержимое скачивается и извлекается в памяти (текст + изображения по страницам), затем возвращается. Сервер не хранит файл и не записывает его на диск.",
+        ],
+      },
+      {
+        heading: "Этот сайт",
+        paragraphs: [
+          "Страница, которую вы сейчас читаете (opensource.yoda.digital), использует Google Analytics в агрегированном виде и только после вашего согласия на cookie. Это измерение сайта, и оно полностью отделено от MCP-сервера приложения CONTender.",
+        ],
+      },
+      {
+        heading: "Контакт",
+        paragraphs: [
+          "Вопросы по конфиденциальности: dev.ungheni@gmail.com (Ион Калмыш, Yoda Digital).",
+        ],
+      },
+    ],
+    backLabel: "Назад к CONTender",
+  },
+};
+
+export const contenderMethodology: Record<Locale, ContenderDoc> = {
+  ro: {
+    meta: {
+      title: "Metodologia scorului de integritate · CONTender",
+      description:
+        "Cum se calculează scorul de integritate CONTender: 4 factori, ponderi, formule, praguri. Determinist, doar din date ANSC.",
+    },
+    eyebrow: "CONTender · Metodologie",
+    h1: "Cum se calculează scorul de integritate",
+    updatedLabel: "Actualizat: 6 iunie 2026",
+    intro:
+      "Scorul de integritate (0–100) este determinist și verificabil. Aici este formula exactă din codul serverului. Scor mare = procedură curată; scor mic = semnale de risc.",
+    sections: [
+      {
+        heading: "Ce măsoară",
+        paragraphs: [
+          "Un scor compozit de la 0 la 100 pentru o procedură. 100 înseamnă niciun factor de risc detectat în datele disponibile; un scor mic înseamnă că au fost detectate semnale (contestații, suspendări sau anulări în instanță, decizii severe).",
+        ],
+      },
+      {
+        heading: "Cei patru factori și ponderile",
+        bullets: [
+          "Contestații (appeals) — pondere 0,25.",
+          "Suspendări de către instanță (court_suspensions) — pondere 0,30.",
+          "Anulări de către instanță (court_reversals) — pondere 0,20.",
+          "Severitatea deciziilor (decision_content) — pondere 0,25.",
+        ],
+      },
+      {
+        heading: "Sub-scoruri (fiecare limitat la 0–100)",
+        bullets: [
+          "Contestații = 100 − (număr contestații × 20)",
+          "Suspendări în instanță = 100 − (număr suspendări × 50)",
+          "Anulări în instanță = 100 − (număr anulări × 50)",
+          "Decizii severe = 100 − (număr decizii severe × 25)",
+          "Decizii „severe” = ProcedureCanceled, ProcedurePartiallyCanceled, RemedialMeasures, ComplaintUpheld, ComplaintPartiallyUpheld.",
+        ],
+      },
+      {
+        heading: "Agregare și praguri",
+        paragraphs: [
+          "Scorul final = rotunjirea sumei (sub-scor × pondere) pentru cei patru factori.",
+        ],
+        bullets: [
+          "≥ 80 → curat (high)",
+          "50–79 → mediu (medium)",
+          "< 50 → risc (low)",
+          "100 = niciun risc detectat.",
+        ],
+      },
+      {
+        heading: "Sursă și determinism",
+        paragraphs: [
+          "Toți cei patru factori provin exclusiv din ANSC (contestații, decizii, suspendări/anulări în instanță). Datele MTender oferă context, dar nu intră în scor. Calculul este pur aritmetic: aceeași intrare produce mereu același rezultat, fără AI și fără aleatoriu.",
+        ],
+      },
+      {
+        heading: "Limitări (transparent)",
+        bullets: [
+          "Dacă apelurile către ANSC eșuează parțial, listele rămân goale, iar scorul tinde spre 100 — cu o notă despre eroare în rezultat. Citește întotdeauna notele.",
+          "Scorul reflectă doar ce există în datele ANSC, nu calitatea intrinsecă a procedurii.",
+          "Aplicația este în fază de testare; metodologia poate evolua.",
+        ],
+      },
+    ],
+    backLabel: "Înapoi la CONTender",
+  },
+  en: {
+    meta: {
+      title: "Integrity-score methodology · CONTender",
+      description:
+        "How CONTender computes its integrity score: 4 factors, weights, formulas, thresholds. Deterministic, ANSC data only.",
+    },
+    eyebrow: "CONTender · Methodology",
+    h1: "How the integrity score is computed",
+    updatedLabel: "Updated: 6 June 2026",
+    intro:
+      "The integrity score (0–100) is deterministic and verifiable. Here is the exact formula from the server's code. A high score means a clean procedure; a low score flags risk.",
+    sections: [
+      {
+        heading: "What it measures",
+        paragraphs: [
+          "A composite score from 0 to 100 for a procedure. 100 means no risk factor detected in the available data; a low score means signals were detected (appeals, court suspensions or annulments, severe decisions).",
+        ],
+      },
+      {
+        heading: "The four factors and their weights",
+        bullets: [
+          "Appeals — weight 0.25.",
+          "Court suspensions — weight 0.30.",
+          "Court reversals (annulments) — weight 0.20.",
+          "Decision severity (decision_content) — weight 0.25.",
+        ],
+      },
+      {
+        heading: "Sub-scores (each clamped to 0–100)",
+        bullets: [
+          "Appeals = 100 − (appeal count × 20)",
+          "Court suspensions = 100 − (suspension count × 50)",
+          "Court reversals = 100 − (reversal count × 50)",
+          "Severe decisions = 100 − (severe-decision count × 25)",
+          '"Severe" decisions = ProcedureCanceled, ProcedurePartiallyCanceled, RemedialMeasures, ComplaintUpheld, ComplaintPartiallyUpheld.',
+        ],
+      },
+      {
+        heading: "Aggregation and thresholds",
+        paragraphs: [
+          "Final score = the rounded sum of (sub-score × weight) across the four factors.",
+        ],
+        bullets: [
+          "≥ 80 → clean (high)",
+          "50–79 → medium",
+          "< 50 → risk (low)",
+          "100 = no risk detected.",
+        ],
+      },
+      {
+        heading: "Source and determinism",
+        paragraphs: [
+          "All four factors come exclusively from ANSC (appeals, decisions, court suspensions/annulments). MTender data provides context but does not enter the score. The computation is pure arithmetic: the same input always yields the same result, with no AI and no randomness.",
+        ],
+      },
+      {
+        heading: "Limitations (stated plainly)",
+        bullets: [
+          "If the ANSC calls partially fail, the lists stay empty and the score tends toward 100 — with an error note in the result. Always read the notes.",
+          "The score reflects only what exists in the ANSC data, not the intrinsic quality of the procedure.",
+          "The app is in a testing phase; the methodology may evolve.",
+        ],
+      },
+    ],
+    backLabel: "Back to CONTender",
+  },
+  ru: {
+    meta: {
+      title: "Методология оценки добросовестности · CONTender",
+      description:
+        "Как CONTender вычисляет оценку добросовестности: 4 фактора, веса, формулы, пороги. Детерминированно, только данные ANSC.",
+    },
+    eyebrow: "CONTender · Методология",
+    h1: "Как вычисляется оценка добросовестности",
+    updatedLabel: "Обновлено: 6 июня 2026",
+    intro:
+      "Оценка добросовестности (0–100) детерминирована и проверяема. Здесь — точная формула из кода сервера. Высокая оценка = чистая процедура; низкая = сигналы риска.",
+    sections: [
+      {
+        heading: "Что измеряется",
+        paragraphs: [
+          "Сводная оценка от 0 до 100 для процедуры. 100 означает, что в доступных данных не выявлено факторов риска; низкая оценка означает, что обнаружены сигналы (жалобы, судебные приостановления или аннулирования, тяжёлые решения).",
+        ],
+      },
+      {
+        heading: "Четыре фактора и их веса",
+        bullets: [
+          "Жалобы (appeals) — вес 0,25.",
+          "Судебные приостановления (court_suspensions) — вес 0,30.",
+          "Судебные аннулирования (court_reversals) — вес 0,20.",
+          "Тяжесть решений (decision_content) — вес 0,25.",
+        ],
+      },
+      {
+        heading: "Под-оценки (каждая ограничена 0–100)",
+        bullets: [
+          "Жалобы = 100 − (число жалоб × 20)",
+          "Судебные приостановления = 100 − (число приостановлений × 50)",
+          "Судебные аннулирования = 100 − (число аннулирований × 50)",
+          "Тяжёлые решения = 100 − (число тяжёлых решений × 25)",
+          "«Тяжёлые» решения = ProcedureCanceled, ProcedurePartiallyCanceled, RemedialMeasures, ComplaintUpheld, ComplaintPartiallyUpheld.",
+        ],
+      },
+      {
+        heading: "Агрегация и пороги",
+        paragraphs: ["Итоговая оценка = округлённая сумма (под-оценка × вес) по четырём факторам."],
+        bullets: [
+          "≥ 80 → чисто (high)",
+          "50–79 → средне (medium)",
+          "< 50 → риск (low)",
+          "100 = риск не выявлен.",
+        ],
+      },
+      {
+        heading: "Источник и детерминизм",
+        paragraphs: [
+          "Все четыре фактора берутся исключительно из ANSC (жалобы, решения, судебные приостановления/аннулирования). Данные MTender дают контекст, но не входят в оценку. Вычисление — чистая арифметика: одинаковый вход всегда даёт одинаковый результат, без ИИ и без случайности.",
+        ],
+      },
+      {
+        heading: "Ограничения (честно)",
+        bullets: [
+          "Если вызовы к ANSC частично не удаются, списки остаются пустыми, и оценка стремится к 100 — с примечанием об ошибке в результате. Всегда читайте примечания.",
+          "Оценка отражает только то, что есть в данных ANSC, а не внутреннее качество процедуры.",
+          "Приложение в фазе тестирования; методология может развиваться.",
+        ],
+      },
+    ],
+    backLabel: "Назад к CONTender",
   },
 };
