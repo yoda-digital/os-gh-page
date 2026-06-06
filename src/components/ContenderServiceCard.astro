@@ -1,0 +1,122 @@
+---
+/**
+ * Featured "service" card for CONTender. Unlike ProjectCard (which renders a
+ * repo/tool with stars, version and an install command), CONTender is a hosted
+ * ChatGPT App — a service — so it gets its own distinct, lightly-highlighted
+ * card. Stands out without shouting. Reuses the home-feature copy.
+ */
+import { contenderHomeFeature } from "~/data/contender";
+import type { Locale } from "~/data/repos";
+import { localizedPath } from "~/i18n/ui";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const f = contenderHomeFeature[locale];
+const kind =
+  locale === "ro"
+    ? "Serviciu · ChatGPT App"
+    : locale === "ru"
+      ? "Сервис · ChatGPT App"
+      : "Service · ChatGPT App";
+---
+
+<a href={localizedPath(locale, "/contender/")} class="svc-card">
+  <span class="svc-glow" aria-hidden="true"></span>
+  <span class="relative flex flex-col sm:flex-row sm:items-center gap-5">
+    <span class="flex-1 block">
+      <span class="svc-kind">
+        <span class="svc-dot" aria-hidden="true"></span>
+        {kind}
+      </span>
+      <span class="block text-xl md:text-2xl font-bold tracking-tight text-[var(--color-ink)] mt-3 mb-2 leading-snug">
+        {f.title}
+      </span>
+      <span class="block text-sm text-[var(--color-muted)] leading-relaxed max-w-2xl">{f.desc}</span>
+      <span class="mt-4 flex flex-wrap items-center gap-2">
+        <span class="svc-tag">{f.tagSources}</span>
+        <span class="svc-tag">{f.tagFree}</span>
+      </span>
+    </span>
+    <span class="svc-cta">
+      {f.cta}
+      <span aria-hidden="true">→</span>
+    </span>
+  </span>
+</a>
+
+<style>
+  .svc-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    padding: 1.5rem 1.6rem;
+    border-radius: var(--radius-card);
+    border: 1px solid color-mix(in oklch, var(--color-accent) 38%, var(--color-line));
+    background: color-mix(in oklch, var(--color-accent) 4%, var(--color-surface));
+    text-decoration: none;
+    transition: border-color 180ms ease, transform 180ms ease, box-shadow 220ms ease;
+  }
+  .svc-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+    box-shadow: 0 16px 40px -20px rgba(175, 149, 104, 0.5);
+  }
+  .svc-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(28rem 28rem at 2% -40%, rgba(175, 149, 104, 0.1), transparent 60%),
+      radial-gradient(28rem 28rem at 100% 140%, rgba(79, 105, 149, 0.1), transparent 60%);
+  }
+  .svc-kind {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  .svc-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-accent) 22%, transparent);
+  }
+  .svc-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: var(--color-bg);
+  }
+  .svc-cta {
+    flex: none;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #0b0d12;
+    background: var(--color-accent);
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+  }
+  .svc-card:hover .svc-cta {
+    background: color-mix(in oklch, var(--color-accent) 88%, white);
+  }
+  @media (min-width: 640px) {
+    .svc-cta {
+      align-self: center;
+    }
+  }
+</style>

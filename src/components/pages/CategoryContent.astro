@@ -1,4 +1,5 @@
 ---
+import ContenderServiceCard from "~/components/ContenderServiceCard.astro";
 import ProjectCard from "~/components/ProjectCard.astro";
 import { type Category, type Locale, reposByCategory } from "~/data/repos";
 import { absoluteUrl, categoryLabels, t } from "~/i18n/ui";
@@ -11,16 +12,31 @@ interface Props {
 const { locale, category } = Astro.props;
 const items = reposByCategory(category);
 const label = categoryLabels[locale][category];
+// CONTender is a hosted service (not a repo) but belongs to the Moldova
+// public-procurement category — surface it as a featured card here too.
+const showContender = category === "moldova-public-procurement";
 
 const collection = {
   "@type": "CollectionPage",
   name: label,
   url: absoluteUrl(locale, `/categories/${category}/`),
-  hasPart: items.map((r) => ({
-    "@type": "SoftwareApplication",
-    name: r.slug,
-    url: absoluteUrl(locale, `/projects/${r.slug}/`),
-  })),
+  hasPart: [
+    ...(showContender
+      ? [
+          {
+            "@type": "SoftwareApplication",
+            name: "CONTender",
+            applicationCategory: "BusinessApplication",
+            url: absoluteUrl(locale, "/contender/"),
+          },
+        ]
+      : []),
+    ...items.map((r) => ({
+      "@type": "SoftwareApplication",
+      name: r.slug,
+      url: absoluteUrl(locale, `/projects/${r.slug}/`),
+    })),
+  ],
 };
 
 const breadcrumb = {
@@ -60,7 +76,14 @@ const breadcrumb = {
       {t(locale, "nav.categories")}
     </p>
     <h1 class="text-4xl md:text-5xl font-bold mb-3">{label}</h1>
-    <p class="text-[var(--color-muted)] max-w-2xl mb-10">{t(locale, "page.category.intro")}</p>
+    <p class="text-[var(--color-muted)] max-w-2xl mb-8">{t(locale, "page.category.intro")}</p>
+    {
+      showContender && (
+        <div class="mb-8">
+          <ContenderServiceCard locale={locale} />
+        </div>
+      )
+    }
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {items.map((repo) => <ProjectCard locale={locale} repo={repo} />)}
     </div>
